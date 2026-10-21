@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Polo Oeste | Gestión de Información</title>
+    <link
+        rel="icon"
+        type="image/png"
+        href="assets/img/polo-oeste-marca.png"
+    >
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/estilos.css?v=20261004-1">
+    <link rel="stylesheet" href="assets/css/actividades.css?v=20260901-1">
+    <link rel="stylesheet" href="assets/css/mapa-calor-3d.css?v=20261003-1">
+    <link rel="stylesheet" href="assets/css/reportes.css?v=20261005-2">
+    <link rel="stylesheet" href="assets/css/selector-rango-fechas.css?v=20261004-1">
+    <link rel="stylesheet" href="assets/css/dashboards.css?v=20261019-1">
+    <link rel="stylesheet" href="assets/css/refinamiento-visual.css?v=20261003-3">
+    <link rel="stylesheet" href="assets/css/explicaciones-calculo.css?v=20261016-2">
+    <link rel="stylesheet" href="assets/css/intro-logo.css?v=20261004-2">
+    <style>
+        .sesion-usuario .acceso-mi-perfil {
+            appearance: none;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            text-align: inherit;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .sesion-usuario .acceso-mi-perfil:hover strong,
+        .sesion-usuario .acceso-mi-perfil.activo strong {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .sesion-usuario .acceso-mi-perfil:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 4px;
+        }
+        @media (min-width: 821px) {
+            .sidebar {
+                overflow-y: auto;
+            }
+            .sidebar nav {
+                min-height: 100%;
+            }
+            .sidebar nav > * {
+                flex-shrink: 0;
+            }
+            .sidebar nav > .separador-menu {
+                margin-top: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section id="pantalla-autenticacion" class="pantalla-autenticacion">
+        <canvas
+            id="dotfield-acceso"
+            class="dotfield-acceso"
+            aria-hidden="true"
+        ></canvas>
+
+        <div class="marca-acceso" aria-label="Polo Oeste">
+            <svg class="marca-logo" viewBox="0 0 1254 1254" aria-hidden="true" focusable="false">
+                <polygon class="logo-gris" points="320,175 320,580 720,580"></polygon>
+                <polygon class="logo-gris" points="724,584 724,997 1131,997"></polygon>
+                <polygon class="logo-verde" points="320,584 320,997 722,997"></polygon>
+            </svg>
+            <span>Polo Oeste</span>
+        </div>
+
+        <button
+            type="button"
+            class="boton-tema boton-tema-acceso"
+            data-alternar-tema
+            aria-label="Activar modo oscuro"
+        >
+            ◐ Modo oscuro
+        </button>
+
+        <div
+            id="configuracion-inicial"
+            class="tarjeta-autenticacion"
+            hidden
+        >
+            <p class="etiqueta-seguridad">Configuración inicial</p>
+            <h1>Crear administrador</h1>
+            <p>
+                Esta será la primera cuenta con permiso para administrar
+                personal y usuarios.
+            </p>
+
+            <form id="form-configuracion-inicial" autocomplete="off">
+                <div class="campo">
+                    <label for="nombre-admin">Nombre completo</label>
+                    <input id="nombre-admin" type="text" required>
+                </div>
+
+                <div class="campo">
+                    <label for="usuario-admin">Usuario</label>
+                    <input
+                        id="usuario-admin"
+                        type="text"
+                        minlength="3"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="clave-admin">Contraseña</label>
+                    <input
+                        id="clave-admin"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="confirmar-clave-admin">
+                        Confirmar contraseña
+                    </label>
+                    <input
+                        id="confirmar-clave-admin"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="boton-primario boton-ancho">
+                    Crear administrador
+                </button>
+            </form>
+
+            <p id="mensaje-configuracion" class="mensaje" aria-live="polite"></p>
+        </div>
+
+        <div id="inicio-sesion" class="tarjeta-autenticacion" hidden>
+            <p class="etiqueta-seguridad">Acceso seguro</p>
+            <h1>Gestión de Información</h1>
+            <p>Ingresá con el usuario asignado por un administrador.</p>
+
+            <form id="form-login" autocomplete="on">
+                <div class="campo">
+                    <label for="usuario-login">Usuario</label>
+                    <input
+                        id="usuario-login"
+                        type="text"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="clave-login">Contraseña</label>
+                    <input
+                        id="clave-login"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="boton-primario boton-ancho">
+                    Iniciar sesión
+                </button>
+            </form>
+
+            <p id="mensaje-login" class="mensaje" aria-live="polite"></p>
+        </div>
+
+        <div id="cambio-clave-inicial" class="tarjeta-autenticacion" hidden>
+            <p class="etiqueta-seguridad">Primer ingreso</p>
+            <h1>Creá tu contraseña</h1>
+            <p>
+                La clave inicial de <strong id="usuario-cambio-clave"></strong>
+                es temporal. Elegí una nueva para continuar.
+            </p>
+
+            <form id="form-cambio-clave-inicial" autocomplete="off">
+                <div class="campo">
+                    <label for="nueva-clave-inicial">Nueva contraseña</label>
+                    <input
+                        id="nueva-clave-inicial"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="confirmar-nueva-clave-inicial">
+                        Confirmar nueva contraseña
+                    </label>
+                    <input
+                        id="confirmar-nueva-clave-inicial"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="boton-primario boton-ancho">
+                    Guardar contraseña y continuar
+                </button>
+            </form>
+
+            <p
+                id="mensaje-cambio-clave"
+                class="mensaje"
+                aria-live="polite"
+            ></p>
+        </div>
+    </section>
+
+    <div id="aplicacion" hidden>
+        <header class="header">
+            <div class="marca-aplicacion" aria-label="Polo Oeste">
+                <svg class="marca-logo" viewBox="0 0 1254 1254" aria-hidden="true" focusable="false">
+                    <polygon class="logo-gris" points="320,175 320,580 720,580"></polygon>
+                    <polygon class="logo-gris" points="724,584 724,997 1131,997"></polygon>
+                    <polygon class="logo-verde" points="320,584 320,997 722,997"></polygon>
+                </svg>
+                <div>
+                    <span class="marca-nombre">Polo Oeste</span>
+                    <span class="marca-modulo">Gestión de Información</span>
+                </div>
+            </div>
+
+            <div class="sesion-usuario">
+                <div>
+                    <button type="button" class="acceso-mi-perfil" data-page="mi-perfil" title="Mi perfil">
+                        <strong id="usuario-sesion"></strong>
+                    </button>
+                    <span id="rol-sesion" class="insignia-rol"></span>
+                </div>
+                <button
+                    type="button"
+                    class="boton-tema"
+                    data-alternar-tema
+                    aria-label="Activar modo oscuro"
+                >
+                    ◐ Modo oscuro
+                </button>
+                <button id="cerrar-sesion" type="button" class="boton-secundario">
+                    Cerrar sesión
+                </button>
+            </div>
+        </header>
+
+        <div class="layout">
+            <aside class="sidebar">
+                <nav>
+                    <button type="button" data-page="inicio">
+                        Inicio
+                    </button>
+
+                    <div class="grupo-menu">
+                        <button
+                            type="button"
+                            class="boton-grupo-menu"
+                            aria-expanded="false"
+                            aria-controls="submenu-personal"
+                        >
+                            <span>Personal</span>
+                            <span class="indicador-grupo-menu">▸</span>
+                        </button>
+                        <div id="submenu-personal" class="submenu-menu" hidden>
+                            <button type="button" data-page="operarios">
+                                Operarios
+                            </button>
+                            <button type="button" data-page="usuarios" data-admin-only="true">
+                                Usuarios
+                            </button>
+                            <button type="button" data-page="horas">
+                                Horas
+                            </button>
+                            <button type="button" data-page="inasistencias">
+                                Inasistencias
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grupo-menu">
+                        <button
+                            type="button"
+                            class="boton-grupo-menu"
+                            aria-expanded="false"
+                            aria-controls="submenu-actividades"
+                        >
+                            <span>Actividades</span>
+                            <span class="indicador-grupo-menu">▸</span>
+                        </button>
+                        <div id="submenu-actividades" class="submenu-menu" hidden>
+                            <button type="button" data-page="actividades">
+                                Consulta de tareas
+                            </button>
+                            <button type="button" data-page="tareas-activas">
+                                Tareas activas
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="button" data-page="embarques">
+                        Gestión de embarques
+                    </button>
+                    <button type="button" data-page="reportes">
+                        Reportes y dashboards
+                    </button>
+                    <button type="button" data-page="directorio">
+                        Directorio
+                    </button>
+
+                    <div class="separador-menu"></div>
+
+                    <button type="button" data-page="backlog">
+                        Backlog de cambios
+                    </button>
+                </nav>
+            </aside>
+
+            <main id="contenido"></main>
+        </div>
+    </div>
+
+    <script src="assets/vendor/jszip.min.js"></script>
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/tema.js?v=20261004-1"></script>
+    <script src="assets/js/dotfield.js"></script>
+    <script src="assets/js/auth.js?v=20261004-4"></script>
+    <script src="assets/js/intro-logo.js?v=20261004-1"></script>
+    <script src="assets/js/attachments.js"></script>
+    <script src="assets/js/catalogo-empresas.js?v=20261004-1"></script>
+    <script src="assets/js/ui.js?v=20261004-1"></script>
+    <script src="assets/js/embarques.js"></script>
+    <script src="assets/js/reglas-trace.js?v=20260828-5"></script>
+    <script src="assets/js/catalogo-actividades.js?v=20261004-1"></script>
+    <script src="assets/js/actividades.js?v=20261016-1"></script>
+    <script src="assets/js/tareas-activas.js?v=20261016-1"></script>
+    <script src="assets/js/reportes.js?v=20261019-1"></script>
+    <script src="assets/js/usuarios-importacion.js"></script>
+    <script src="assets/js/mapa-calor.js?v=20261019-1"></script>
+    <script src="assets/js/mapa-calor-3d.js?v=20261019-1"></script>
+    <script src="assets/js/inicio-personalizacion.js"></script>
+    <script src="assets/js/inicio-reportes.js?v=20261016-1"></script>
+    <script src="assets/js/dashboards.js?v=20261019-1"></script>
+    <script src="assets/js/exportador.js?v=20261004-1"></script>
+    <script src="assets/js/selector-rango-fechas.js?v=20261004-1"></script>
+    <script src="assets/js/router.js?v=20261019-1"></script>
+    <script src="assets/js/app.js?v=20260828-3"></script>
+
+    <script src="assets/js/datos-demo-embarques.js?v=20260902-1"></script>
+    <script src="assets/js/datos-demo-agosto-en-meta.js?v=20260902-1"></script>
+    <script src="assets/js/datos-demo-embarques-historico.js?v=20261005-1"></script>
+    <script src="assets/js/datos-demo-trace-mezzanine.js?v=20261005-1"></script>
+    <script src="assets/js/datos-demo-tareas-activas.js?v=20261016-1"></script>
+    <script src="assets/js/perfiles-organizacionales.js?v=20260902-1"></script>
+    <script src="assets/js/mi-perfil.js?v=20260902-1"></script>
+    <script src="assets/js/organizacion.js?v=20260903-1"></script>
+    <script src="assets/js/explicaciones-calculo.js?v=20261019-1"></script>
+    <script>
+        document.querySelectorAll(".boton-grupo-menu").forEach((boton) => {
+            const submenu = document.getElementById(boton.getAttribute("aria-controls"));
+            if (!submenu) return;
+            boton.addEventListener("click", () => {
+                const expandido = boton.getAttribute("aria-expanded") !== "true";
+                boton.setAttribute("aria-expanded", String(expandido));
+                submenu.hidden = !expandido;
+            });
+        });
+    </script>
+</body>
+
+</html>

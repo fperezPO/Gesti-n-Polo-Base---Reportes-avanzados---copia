@@ -1,0 +1,384 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: #e9eeea;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--gris-950);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.acceso-handheld-web,
+.aplicacion-handheld-web {
+    width: min(100%, 480px);
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--blanco);
+    box-shadow: 0 0 55px rgba(41, 45, 43, 0.18);
+}
+
+.acceso-handheld-web {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 28px 22px;
+    background:
+        radial-gradient(circle at 100% 0, rgba(130, 189, 58, 0.18), transparent 38%),
+        linear-gradient(165deg, #f7faf6, #edf2ee);
+}
+
+.marca-acceso-handheld,
+.marca-aplicacion-handheld {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.marca-acceso-handheld {
+    margin: 0 auto 22px;
+}
+
+.marca-acceso-handheld img,
+.marca-aplicacion-handheld img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.marca-acceso-handheld strong,
+.marca-acceso-handheld span,
+.marca-aplicacion-handheld strong,
+.marca-aplicacion-handheld span {
+    display: block;
+}
+
+.marca-acceso-handheld strong,
+.marca-aplicacion-handheld strong {
+    font-size: 18px;
+}
+
+.marca-acceso-handheld span,
+.marca-aplicacion-handheld span {
+    margin-top: 2px;
+    color: var(--gris-600);
+    font-size: 12px;
+}
+
+.tarjeta-login-handheld {
+    padding: 28px 24px;
+    border: 1px solid var(--gris-200);
+    border-radius: 18px;
+    background: var(--blanco);
+    box-shadow: 0 18px 48px rgba(41, 45, 43, 0.12);
+}
+
+.etiqueta-handheld,
+.presentacion-handheld > span,
+.estado-actividad-handheld > span,
+.tiempo-actividad-handheld span,
+.datos-actividad-handheld span {
+    color: var(--verde-profundo);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.tarjeta-login-handheld h1 {
+    margin: 7px 0 6px;
+    font-size: 29px;
+    letter-spacing: -0.04em;
+}
+
+.tarjeta-login-handheld > p {
+    margin: 0 0 22px;
+    color: var(--gris-600);
+}
+
+.tarjeta-login-handheld label,
+.configuracion-tarea-handheld label {
+    display: block;
+    margin-bottom: 15px;
+    color: var(--gris-700);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.tarjeta-login-handheld input,
+.configuracion-tarea-handheld input,
+.configuracion-tarea-handheld select {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 7px;
+    padding: 10px 12px;
+    border: 1px solid var(--gris-300);
+    border-radius: 10px;
+    background: #fcfdfc;
+    color: var(--gris-950);
+}
+
+.tarjeta-login-handheld input:focus,
+.configuracion-tarea-handheld input:focus,
+.configuracion-tarea-handheld select:focus {
+    border-color: var(--verde-marca);
+    outline: 3px solid rgba(130, 189, 58, 0.17);
+}
+
+.tarjeta-login-handheld button {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--verde-hover);
+    border-radius: 11px;
+    background: var(--verde-marca);
+    color: var(--gris-950);
+    font-weight: 850;
+}
+
+.cabecera-aplicacion-handheld {
+    position: sticky;
+    z-index: 5;
+    top: 0;
+    display: flex;
+    min-height: 76px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(120deg, #2c322e, #414a43);
+    color: var(--blanco);
+}
+
+.marca-aplicacion-handheld span {
+    color: #cfd6d1;
+}
+
+.estado-dispositivo-handheld {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.conexion-handheld {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dff4cc;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.conexion-handheld i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--verde-marca);
+    box-shadow: 0 0 9px rgba(130, 189, 58, 0.85);
+}
+
+.panel-handheld-web {
+    padding: 25px 20px 32px;
+    background:
+        radial-gradient(circle at 100% 0, rgba(130, 189, 58, 0.09), transparent 24rem),
+        var(--gris-50);
+}
+
+.presentacion-handheld h1 {
+    margin: 6px 0 5px;
+    font-size: 28px;
+    letter-spacing: -0.04em;
+}
+
+.presentacion-handheld p {
+    margin: 0 0 20px;
+    color: var(--gris-600);
+    line-height: 1.45;
+}
+
+.configuracion-tarea-handheld {
+    display: grid;
+    grid-template-columns: minmax(0, 240px);
+    gap: 11px;
+}
+
+.configuracion-tarea-handheld input:disabled,
+.configuracion-tarea-handheld select:disabled {
+    background: var(--gris-100);
+    color: var(--gris-600);
+}
+
+.estado-actividad-handheld {
+    padding: 22px;
+    border: 1px solid #465149;
+    border-radius: 17px;
+    background:
+        radial-gradient(circle at 100% 0, rgba(130, 189, 58, 0.22), transparent 43%),
+        linear-gradient(145deg, #303632, #242925);
+    color: var(--blanco);
+    box-shadow: 0 16px 34px rgba(41, 45, 43, 0.18);
+}
+
+.estado-actividad-handheld > span,
+.tiempo-actividad-handheld span,
+.datos-actividad-handheld span {
+    color: #c3cbc5;
+}
+
+.estado-actividad-handheld > strong {
+    display: block;
+    margin-top: 7px;
+    font-size: 24px;
+}
+
+.estado-actividad-handheld > strong.activa {
+    color: #bce891;
+}
+
+.estado-actividad-handheld > strong.pausada {
+    color: #ffe19a;
+}
+
+.estado-actividad-handheld > p {
+    min-height: 38px;
+    margin: 7px 0 17px;
+    color: #d5dbd7;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.tiempo-actividad-handheld {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tiempo-actividad-handheld strong {
+    font-size: clamp(28px, 9vw, 39px);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
+}
+
+.datos-actividad-handheld {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding-top: 16px;
+}
+
+.datos-actividad-handheld strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 4px;
+    font-size: 17px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.acciones-principales-handheld {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.boton-principal-handheld,
+.boton-finalizar-handheld {
+    min-height: 56px;
+    padding: 10px 17px;
+    border-radius: 12px;
+    font-weight: 850;
+}
+
+.boton-principal-handheld {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--verde-hover);
+    background: linear-gradient(135deg, var(--verde-marca), #99ce58);
+    color: var(--gris-950);
+    box-shadow: 0 10px 22px rgba(83, 129, 39, 0.23);
+}
+
+.boton-principal-handheld.pausar {
+    border-color: #d2ad4c;
+    background: linear-gradient(135deg, #f8d676, #eeba44);
+}
+
+.boton-principal-handheld span {
+    font-size: 19px;
+}
+
+.boton-finalizar-handheld {
+    border: 1px solid var(--gris-300);
+    background: var(--blanco);
+    color: var(--gris-800);
+}
+
+.boton-finalizar-handheld:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.mensaje-handheld {
+    min-height: 21px;
+    margin: 10px 0 0;
+    font-size: 12px;
+}
+
+.mensaje-handheld.error {
+    color: var(--rojo);
+}
+
+.mensaje-handheld.exito {
+    color: var(--verde-profundo);
+}
+
+.cerrar-sesion-handheld {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px;
+    border: 0;
+    background: transparent;
+    color: var(--gris-600);
+    font-weight: 750;
+}
+
+@media (max-width: 390px) {
+    .configuracion-tarea-handheld,
+    .acciones-principales-handheld {
+        grid-template-columns: 1fr;
+    }
+
+    .tiempo-actividad-handheld {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

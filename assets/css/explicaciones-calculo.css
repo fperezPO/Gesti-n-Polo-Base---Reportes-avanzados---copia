@@ -1,0 +1,185 @@
+/*
+ * Ícono "Cómo se calcula" y su globo (assets/js/explicaciones-calculo.js).
+ * Usa las variables de variables.css, por lo que respeta el modo oscuro.
+ */
+
+.boton-calculo {
+    display: inline-grid;
+    width: 22px;
+    height: 22px;
+    min-height: 0;
+    flex: 0 0 auto;
+    padding: 0;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--gris-600);
+    box-shadow: none;
+    cursor: help;
+    transition:
+        color var(--duracion-rapida, 140ms) ease,
+        background-color var(--duracion-rapida, 140ms) ease,
+        border-color var(--duracion-rapida, 140ms) ease;
+}
+
+.boton-calculo:hover,
+.boton-calculo[aria-expanded="true"] {
+    border-color: var(--verde-borde);
+    background: var(--verde-suave);
+    color: var(--verde-profundo);
+}
+
+.boton-calculo svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.6;
+    pointer-events: none;
+}
+
+.boton-calculo .punto-icono-calculo {
+    fill: currentColor;
+    stroke: none;
+}
+
+/* Esquina superior derecha del indicador. */
+[data-calculo]:not([data-calculo-en-linea]) {
+    position: relative;
+}
+
+[data-calculo]:not([data-calculo-en-linea]) > .boton-calculo {
+    position: absolute;
+    z-index: 2;
+    top: var(--margen-boton-calculo, 12px);
+    right: var(--margen-boton-calculo, 12px);
+}
+
+/* El primer bloque deja lugar al ícono para que no se superpongan. */
+[data-calculo]:not([data-calculo-en-linea]) > :first-child {
+    padding-right: 26px;
+}
+
+.cifras-embarques-inicio > [data-calculo],
+.resumen-comparacion-mapa > [data-calculo] {
+    --margen-boton-calculo: 7px;
+}
+
+/* Bloques angostos de handhelds: el ícono va sobre el rótulo, que no se corta. */
+.estado-handheld-unificado[data-calculo] {
+    --margen-boton-calculo: 4px;
+}
+
+.estado-handheld-unificado[data-calculo] > :first-child {
+    padding-right: 0;
+}
+
+/* En línea: al final de un encabezado de tabla, leyenda o rótulo. */
+[data-calculo-en-linea] > .boton-calculo {
+    width: 18px;
+    height: 18px;
+    margin: -3px 0 -3px 4px;
+    vertical-align: middle;
+}
+
+[data-calculo-en-linea] > .boton-calculo svg {
+    width: 14px;
+    height: 14px;
+}
+
+.globo-calculo {
+    position: fixed;
+    z-index: 1000;
+    width: max-content;
+    max-width: min(340px, calc(100vw - 16px));
+    padding: 11px 13px 12px;
+    border: 1px solid var(--gris-200);
+    border-radius: 10px;
+    background: var(--blanco);
+    color: var(--gris-800);
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+    box-shadow: var(--sombra-elevada);
+    pointer-events: auto;
+}
+
+.globo-calculo[hidden] {
+    display: none;
+}
+
+.etiqueta-globo-calculo {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--verde-profundo);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+}
+
+.formula-globo-calculo {
+    margin: 0;
+    color: var(--gris-950);
+    font-weight: 700;
+}
+
+.nota-globo-calculo,
+.contexto-globo-calculo {
+    margin: 6px 0 0;
+    color: var(--gris-600);
+    font-size: 12px;
+}
+
+/* La cuenta con los números del período (KPIs de Reportes y dashboards). */
+.operacion-globo-calculo {
+    display: grid;
+    gap: 4px;
+    margin: 8px 0 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--gris-50);
+    list-style: none;
+}
+
+.operacion-globo-calculo li {
+    color: var(--gris-950);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.contexto-globo-calculo {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--gris-200);
+}
+
+/* Tarjetas de KPI: el ícono cierra la fila del título, arriba a la derecha. */
+.cabecera-kpi-dashboards > .boton-calculo {
+    width: 22px;
+    height: 22px;
+    margin: -2px -4px 0 0;
+}
+
+.cabecera-kpi-dashboards > .boton-calculo svg {
+    width: 16px;
+    height: 16px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .globo-calculo:not([hidden]) {
+        animation: aparicion-globo-calculo var(--duracion-media, 220ms) ease-out backwards;
+    }
+}
+
+@keyframes aparicion-globo-calculo {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+}

@@ -1,0 +1,195 @@
+<section class="pagina">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Personal</h2>
+            <p>Registro y administración de operarios.</p>
+        </div>
+
+        <button
+            type="button"
+            class="boton-exportar"
+            data-exportar-excel="personal"
+        >
+            Exportar Excel
+        </button>
+    </div>
+
+    <div id="aviso-solo-lectura" class="aviso-informativo" hidden>
+        Tu usuario tiene acceso de lectura. Solo un administrador puede
+        registrar, modificar o eliminar personal.
+    </div>
+
+    <details id="gestor-perfiles-organizacionales" class="tarjeta gestor-perfiles" data-requiere-admin>
+        <summary><strong>Perfiles organizacionales</strong><span>Agregar o quitar opciones disponibles para Personal</span></summary>
+        <div class="cuerpo-gestor-perfiles">
+            <p class="texto-secundario">Quitar un perfil lo oculta para nuevas asignaciones, pero conserva el historial. Un perfil asignado no puede quitarse hasta reasignar a las personas que lo utilizan.</p>
+            <form id="form-perfil-organizacional" autocomplete="off">
+                <div class="form-grid">
+                    <div class="campo"><label for="nombre-perfil-organizacional">Nombre del perfil</label><input id="nombre-perfil-organizacional" maxlength="80" placeholder="Ej.: Analista financiero" required></div>
+                    <div class="campo"><label for="area-perfil-organizacional">Ãrea</label><input id="area-perfil-organizacional" maxlength="80" placeholder="Ej.: Finanzas" required></div>
+                    <div class="campo"><label for="nivel-perfil-organizacional">Nivel jerÃ¡rquico</label><select id="nivel-perfil-organizacional" required><option value="colaborador">Colaborador</option><option value="referente">Referente</option><option value="jefe">Jefe de Ã¡rea</option><option value="gerente">Gerente de Ã¡rea</option><option value="gerente_general">Gerente general</option><option value="externo">Externo</option></select></div>
+                    <div class="campo"><label for="metodo-perfil-organizacional">Registro de trabajo</label><select id="metodo-perfil-organizacional" required><option value="automatico_wis">AutomÃ¡tico WIS</option><option value="manual">Manual</option><option value="manual_asignado" selected>Manual y asignado</option><option value="solo_consulta">Solo consulta</option></select></div>
+                </div>
+                <button type="submit" class="boton-primario">Agregar perfil</button>
+            </form>
+            <p id="mensaje-perfiles-organizacionales" class="mensaje" aria-live="polite"></p>
+            <div class="contenedor-tabla"><table><thead><tr><th>Perfil</th><th>Ãrea</th><th>Nivel</th><th>Registro</th><th>Estado</th><th>AcciÃ³n</th></tr></thead><tbody id="tabla-perfiles-organizacionales"></tbody></table></div>
+        </div>
+    </details>
+    <div class="tarjeta" data-requiere-admin>
+        <h3>Agregar persona y usuario</h3>
+        <p class="texto-secundario">
+            Al guardar el operario también se creará su cuenta de acceso.
+        </p>
+
+        <form id="form-operario" autocomplete="off">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="legajo-operario">Legajo</label>
+                    <input
+                        type="text"
+                        id="legajo-operario"
+                        placeholder="Ejemplo: OP-001"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="nombre-operario">Nombre completo</label>
+                    <input
+                        type="text"
+                        id="nombre-operario"
+                        placeholder="Nombre y apellido"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="cargo-operario">Cargo</label>
+                    <select id="cargo-operario" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Operario">Operario</option>
+                        <option value="Administrativo">Administrativo</option>
+                        <option value="Supervisor">Supervisor</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="operativa-operario">Operativa</label>
+                    <select id="operativa-operario" required>
+                        <option value="">Seleccionar</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="turno-operario">Turno</label>
+                    <select id="turno-operario" required>
+                        <option value="">Seleccionar</option>
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noche">Noche</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="estado-operario">Estado</label>
+                    <select id="estado-operario" required>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
+            <fieldset class="grupo-cuenta">
+                <legend>Cuenta de acceso</legend>
+
+                <div class="form-grid">
+                    <div class="campo">
+                        <label for="usuario-operario">Usuario</label>
+                        <input
+                            id="usuario-operario"
+                            type="text"
+                            minlength="3"
+                            placeholder="Ejemplo: jperez"
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="clave-operario">Contraseña inicial</label>
+                        <input
+                            id="clave-operario"
+                            type="password"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="confirmar-clave-operario">
+                            Confirmar contraseña
+                        </label>
+                        <input
+                            id="confirmar-clave-operario"
+                            type="password"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="rol-operario">Tipo de usuario</label>
+                        <select id="rol-operario" required>
+                            <option value="normal">Usuario normal</option>
+                            <option value="administrador">Administrador</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="boton-primario">
+                Guardar operario y usuario
+            </button>
+        </form>
+
+        <p id="mensaje-operarios" class="mensaje" aria-live="polite"></p>
+    </div>
+
+    <div class="tarjeta">
+        <div class="cabecera-listado">
+            <div>
+                <h3>Personal registrado</h3>
+                <p id="resultado-filtro-operarios" class="detalle-filtro"></p>
+            </div>
+
+            <div class="campo campo-filtro">
+                <label for="filtro-operativa-operarios">
+                    Filtrar por operativa
+                </label>
+                <select id="filtro-operativa-operarios"></select>
+            </div>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Legajo</th>
+                        <th>Nombre</th>
+                        <th>Cargo</th>
+                        <th>Operativa</th>
+                        <th>Turno</th>
+                        <th>Estado</th>
+                        <th>Usuario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla-operarios"></tbody>
+            </table>
+        </div>
+    </div>
+</section>

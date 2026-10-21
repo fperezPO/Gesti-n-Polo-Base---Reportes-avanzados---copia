@@ -1,0 +1,54 @@
+﻿[
+    {
+        "id":  "114e5000-41b5-44f9-b036-fa14c6c4c2d2",
+        "nombre":  "fperez",
+        "nombreUsuario":  "fperez",
+        "hashClave":  "IqXQq+BCrEYLgkIE6hgJHaa+fTONV1/MFes4uNlhkGU=",
+        "salt":  "Zifes/yeQDE8BDkurqAt+A==",
+        "rol":  "administrador",
+        "operarioId":  null,
+        "activo":  true,
+        "debeCambiarClave":  false,
+        "fechaRegistro":  "2026-09-02T10:28:17.059Z",
+        "operativa":  "Sin asignar"
+    },
+    {
+        "id":  "711fb649-a013-43f3-9811-c76f1523385a",
+        "nombre":  "martin martinez",
+        "nombreUsuario":  "mmartinez",
+        "hashClave":  "DtN62vMH/Su2CQRDr8Lh51ukBtawv3mPZ/T24C54Jm0=",
+        "salt":  "NJ59VG3S6YLRMIgWkKZagg==",
+        "rol":  "normal",
+        "operarioId":  "da2d4b39-d5d9-4895-a506-3a0a18756c3d",
+        "activo":  true,
+        "debeCambiarClave":  false,
+        "fechaRegistro":  "2026-09-03T00:10:02.784Z",
+        "operativa":  "Decathlon"
+    },
+    {
+        "id":  "2be7aea5-c3c0-4263-a931-1426eed9590c",
+        "nombre":  "juan juanez",
+        "nombreUsuario":  "jjuanez",
+        "hashClave":  "w67UgJ8R8BMPU7K89cxthVBmODFJ1QYTIkql+cg6kjs=",
+        "salt":  "kI5UrW6wY1mXJCOsk8um6g==",
+        "rol":  "normal",
+        "operarioId":  "c71ebe3e-b566-4ea7-88eb-0035e330a43a",
+        "activo":  true,
+        "debeCambiarClave":  false,
+        "fechaRegistro":  "2026-09-03T00:26:01.809Z",
+        "operativa":  "Sin asignar"
+    },
+    {
+        "id":  "9cfd427c-e880-446b-9fb5-de1bb944fe7c",
+        "nombre":  "Kevin Teliz",
+        "nombreUsuario":  "kteliz",
+        "hashClave":  "JaziU30ggJprHmpJqTApepH7fWAmREqWpPAl9RDsSMw=",
+        "salt":  "l8c+MP0ujSJD/GJVxipS+Q==",
+        "rol":  "normal",
+        "operarioId":  "fcf76651-f9e7-49b0-b93d-7c1ee08d39fe",
+        "activo":  true,
+        "debeCambiarClave":  false,
+        "fechaRegistro":  "2026-09-03T00:27:51.977Z",
+        "operativa":  "Decathlon"
+    }
+]

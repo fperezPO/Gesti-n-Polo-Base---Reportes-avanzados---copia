@@ -1,0 +1,139 @@
+<section class="pagina pagina-tareas-activas">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Tareas activas</h2>
+            <p>
+                Seguimiento operativo de los handhelds y la actividad del
+                personal.
+            </p>
+        </div>
+        <div class="acciones-cabecera-tareas">
+            <a
+                class="boton-primario enlace-handheld-web"
+                href="handheld.html"
+                target="_blank"
+                rel="noopener"
+            >
+                Abrir handheld web
+            </a>
+            <button
+                type="button"
+                class="boton-exportar"
+                data-exportar-excel="tareas-activas"
+            >
+                Exportar filtrado
+            </button>
+        </div>
+    </div>
+
+    <section class="resumen-supervision-tareas">
+        <article class="tarjeta tarjeta-estado-handhelds">
+            <div class="cabecera-tarjeta-supervision">
+                <div>
+                    <span>Estado de dispositivos</span>
+                    <h3>Handhelds</h3>
+                </div>
+                <strong id="actualizacion-tareas-activas">Actualizado ahora</strong>
+            </div>
+            <div class="estados-handhelds-unificados">
+                <div class="estado-handheld-unificado activo" data-calculo="tareas-activos">
+                    <span>Activos</span>
+                    <strong id="handhelds-activos">0</strong>
+                    <small>En operación</small>
+                </div>
+                <div class="estado-handheld-unificado pausado" data-calculo="tareas-pausados">
+                    <span>Pausados</span>
+                    <strong id="handhelds-pausados">0</strong>
+                    <small>Contador detenido</small>
+                </div>
+                <div class="estado-handheld-unificado disponible" data-calculo="tareas-disponibles">
+                    <span>Disponibles</span>
+                    <strong id="handhelds-disponibles">0</strong>
+                    <small>Sin actividad abierta</small>
+                </div>
+            </div>
+        </article>
+
+        <article id="tarjeta-alarma-general" class="tarjeta tarjeta-incidencia-supervision tarjeta-alarma-supervision" data-calculo="tareas-alarma">
+            <h3>Alarma antipérdida</h3>
+            <div class="estado-incidencia-supervision">
+                <i id="luz-alarma-general" class="luz-incidencia-supervision" aria-hidden="true"></i>
+                <strong id="estado-alarma-general">Sin incidencias</strong>
+            </div>
+        </article>
+
+        <article id="tarjeta-bateria-general" class="tarjeta tarjeta-incidencia-supervision tarjeta-bateria-supervision" data-calculo="tareas-bateria">
+            <h3>Batería baja</h3>
+            <div class="estado-incidencia-supervision">
+                <i id="luz-bateria-general" class="luz-incidencia-supervision" aria-hidden="true"></i>
+                <strong id="estado-bateria-general">Sin incidencias</strong>
+            </div>
+        </article>
+    </section>
+
+    <section class="tarjeta listado-tareas-activas">
+        <div class="cabecera-listado cabecera-listado-tareas">
+            <div>
+                <h3>Actividad registrada</h3>
+                <p id="alcance-listado-tareas" class="texto-secundario">
+                    Seguimiento de registros guardados en este navegador.
+                </p>
+            </div>
+            <span id="resumen-listado-tareas" class="resultado-filtros">0 registros</span>
+        </div>
+
+        <div class="filtros-tareas-activas">
+            <div class="campo" data-rango-fechas>
+                <label class="etiqueta-rango-fechas">Fecha o período</label>
+                <input id="filtro-desde-tareas" type="date" data-rango-desde hidden>
+                <input id="filtro-hasta-tareas" type="date" data-rango-hasta hidden>
+            </div>
+            <div class="campo">
+                <label for="filtro-funcionario-tareas">Funcionario</label>
+                <input
+                    id="filtro-funcionario-tareas"
+                    type="search"
+                    placeholder="Nombre o usuario"
+                >
+            </div>
+            <div class="campo">
+                <label for="filtro-consulta-tareas">Buscar</label>
+                <input
+                    id="filtro-consulta-tareas"
+                    type="search"
+                    placeholder="Actividad, estado o colector"
+                >
+            </div>
+            <button
+                id="quitar-filtros-tareas"
+                type="button"
+                class="boton-secundario"
+            >
+                Quitar filtros
+            </button>
+        </div>
+
+        <p id="mensaje-panel-tareas" class="mensaje" aria-live="polite"></p>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Funcionario</th>
+                        <th>Actividad</th>
+                        <th>Estado</th>
+                        <th data-calculo="tareas-tiempo" data-calculo-en-linea>Tiempo total</th>
+                        <th data-calculo="tareas-pausas" data-calculo-en-linea>Pausas</th>
+                        <th>Colector</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-tareas-activas"></tbody>
+            </table>
+        </div>
+        <p id="sin-tareas-activas" class="estado-vacio" hidden>
+            No hay actividades para los filtros seleccionados.
+        </p>
+    </section>
+</section>

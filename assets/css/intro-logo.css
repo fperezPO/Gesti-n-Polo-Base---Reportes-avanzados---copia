@@ -1,0 +1,452 @@
+/*
+ * Intro animada del logo al iniciar sesión (assets/js/intro-logo.js).
+ *
+ * Línea de tiempo aproximada:
+ *   0–1150 ms   los tres triángulos llegan girando y se ensamblan
+ *   1150 ms     latido, ondas y chispas desde el punto de unión
+ *   1300 ms     destello que recorre el logo
+ *   950–1800 ms nombre letra por letra, módulo y saludo
+ *   2300 ms     el logo vuela hasta la cabecera y el fondo se desvanece
+ */
+
+.intro-logo {
+    --intro-fondo: #f7f9f7;
+    --intro-texto: #343836;
+    --intro-texto-suave: #747a76;
+    --intro-verde: #82bd3a;
+    --intro-verde-profundo: #426c25;
+    --intro-gris-logo: #6f7072;
+    --intro-puntos: rgba(116, 122, 118, 0.2);
+    --intro-ficha: #ffffff;
+    --intro-ficha-borde: #e2e6e3;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+}
+
+body.modo-oscuro .intro-logo {
+    --intro-fondo: #111612;
+    --intro-texto: #e8ede9;
+    --intro-texto-suave: #a8b3ab;
+    --intro-verde-profundo: #a7d47e;
+    --intro-gris-logo: #a4a8aa;
+    --intro-puntos: rgba(168, 179, 171, 0.13);
+    --intro-ficha: #171e19;
+    --intro-ficha-borde: #3a463d;
+}
+
+/* Fondo: va en su propia capa para desvanecerse mientras el logo vuela. */
+.intro-logo-fondo {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 40%, rgba(130, 189, 58, 0.2), transparent 38%),
+        var(--intro-fondo);
+    transition: opacity 520ms ease 140ms;
+}
+
+.intro-logo-fondo::before {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--intro-puntos) 1.2px, transparent 1.6px);
+    background-size: 22px 22px;
+    content: "";
+    mask-image: radial-gradient(circle at 50% 42%, #000 0 18%, transparent 62%);
+    -webkit-mask-image: radial-gradient(circle at 50% 42%, #000 0 18%, transparent 62%);
+    animation: intro-puntos 2200ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.intro-logo-escena {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 16px;
+    text-align: center;
+}
+
+/* La caja de la marca imita a .marca-logo de la cabecera: ficha con 12 % de margen. */
+.intro-logo-marca {
+    position: relative;
+    width: clamp(190px, 40vmin, 300px);
+    aspect-ratio: 1;
+    padding: 12%;
+    border-radius: 20%;
+    animation: intro-latido 480ms cubic-bezier(0.3, 0, 0.3, 1) 1150ms both;
+}
+
+.intro-logo-marca::before {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--intro-ficha-borde);
+    border-radius: inherit;
+    background: var(--intro-ficha);
+    box-shadow: 0 7px 18px rgba(41, 45, 43, 0.09);
+    content: "";
+    opacity: 0;
+    transform: scale(0.86);
+    transition: opacity 360ms ease, transform 360ms ease;
+}
+
+.intro-logo-marca svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.intro-tri {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: 860ms cubic-bezier(0.2, 0.9, 0.25, 1.12) both;
+}
+
+.intro-tri-gris {
+    fill: var(--intro-gris-logo);
+}
+
+.intro-tri-verde {
+    fill: var(--intro-verde);
+}
+
+.intro-tri-superior {
+    animation-name: intro-tri-superior;
+    animation-delay: 80ms;
+}
+
+.intro-tri-derecho {
+    animation-name: intro-tri-derecho;
+    animation-delay: 200ms;
+}
+
+.intro-tri-verde {
+    animation-name: intro-tri-verde;
+    animation-delay: 320ms;
+    animation-duration: 900ms;
+    animation-timing-function: cubic-bezier(0.34, 1.45, 0.5, 1);
+}
+
+.intro-logo-onda {
+    fill: none;
+    stroke: var(--intro-verde);
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: intro-onda 1100ms cubic-bezier(0.1, 0.6, 0.3, 1) 1120ms both;
+}
+
+.intro-logo-onda-segunda {
+    animation-delay: 1300ms;
+}
+
+.intro-logo-destello {
+    transform: translateX(0) skewX(-18deg);
+    animation: intro-destello 760ms cubic-bezier(0.5, 0, 0.3, 1) 1320ms both;
+}
+
+/* Chispas: triangulitos que salen del punto donde se unen las tres piezas. */
+.intro-logo-chispas {
+    position: absolute;
+    top: 47.3%;
+    left: 55.8%;
+    pointer-events: none;
+}
+
+.intro-logo-chispas i {
+    position: absolute;
+    width: var(--tam);
+    height: var(--tam);
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    opacity: 0;
+    animation: intro-chispa 950ms cubic-bezier(0.15, 0.7, 0.3, 1) 1130ms both;
+}
+
+.intro-logo-chispas .chispa-verde {
+    background: var(--intro-verde);
+}
+
+.intro-logo-chispas .chispa-gris {
+    background: var(--intro-gris-logo);
+}
+
+.intro-logo-textos {
+    margin-top: 22px;
+    transition: opacity 280ms ease, transform 280ms ease;
+}
+
+.intro-logo-nombre {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding-bottom: 0.08em;
+    overflow: hidden;
+    color: var(--intro-texto);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 780;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+}
+
+.intro-logo-nombre span {
+    display: inline-block;
+    animation: intro-letra 640ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(950ms + var(--i) * 45ms);
+}
+
+.intro-logo-modulo {
+    margin: 8px 0 0;
+    color: var(--intro-verde-profundo);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    animation: intro-tracking 760ms cubic-bezier(0.2, 0.8, 0.2, 1) 1380ms both;
+}
+
+.intro-logo-saludo {
+    margin: 18px 0 0;
+    color: var(--intro-texto-suave);
+    font-size: 15px;
+    animation: intro-subir 520ms ease 1620ms both;
+}
+
+.intro-logo-progreso {
+    width: 150px;
+    height: 3px;
+    margin: 18px auto 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(116, 122, 118, 0.18);
+    animation: intro-subir 400ms ease 1000ms both;
+}
+
+.intro-logo-progreso span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--intro-verde), #b9de8a);
+    transform-origin: 0 50%;
+    animation: intro-progreso 1250ms cubic-bezier(0.6, 0, 0.2, 1) 1050ms both;
+}
+
+/* Salida: el fondo y los textos se van; la marca toma la ficha de la cabecera. */
+.intro-logo.saliendo {
+    pointer-events: none;
+}
+
+.intro-logo.saliendo .intro-logo-fondo {
+    opacity: 0;
+}
+
+.intro-logo.saliendo .intro-logo-textos {
+    opacity: 0;
+    transform: translateY(14px);
+}
+
+.intro-logo.saliendo .intro-logo-marca::before {
+    opacity: 1;
+    transform: none;
+}
+
+.intro-logo.saliendo .intro-logo-chispas,
+.intro-logo.saliendo .intro-logo-onda {
+    visibility: hidden;
+}
+
+/* Logo de la cabecera: oculto mientras dura la intro, con un rebote al recibirla. */
+.marca-logo.intro-logo-destino {
+    visibility: hidden;
+}
+
+.marca-logo.intro-logo-aterrizaje {
+    animation: intro-aterrizaje 560ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes intro-puntos {
+    from {
+        opacity: 0;
+        transform: scale(1.12);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-tri-superior {
+    from {
+        opacity: 0;
+        transform: translate(-60%, -190%) rotate(-135deg) scale(0.35);
+    }
+
+    55% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-tri-derecho {
+    from {
+        opacity: 0;
+        transform: translate(220%, -45%) rotate(160deg) scale(0.35);
+    }
+
+    55% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-tri-verde {
+    from {
+        opacity: 0;
+        transform: translate(-130%, 175%) rotate(-210deg) scale(0.35);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-latido {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    35% {
+        transform: scale(1.07);
+    }
+
+    70% {
+        transform: scale(0.985);
+    }
+}
+
+@keyframes intro-onda {
+    from {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+
+    8% {
+        opacity: 0.85;
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(8);
+    }
+}
+
+@keyframes intro-destello {
+    from {
+        transform: translateX(0) skewX(-18deg);
+    }
+
+    to {
+        transform: translateX(2050px) skewX(-18deg);
+    }
+}
+
+@keyframes intro-chispa {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(0) scale(0.3);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 0.9;
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--giro)) scale(1);
+    }
+}
+
+@keyframes intro-letra {
+    from {
+        opacity: 0;
+        transform: translateY(105%) rotate(8deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-tracking {
+    from {
+        opacity: 0;
+        letter-spacing: 0.6em;
+    }
+
+    to {
+        opacity: 1;
+        letter-spacing: 0.22em;
+    }
+}
+
+@keyframes intro-subir {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes intro-progreso {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes intro-aterrizaje {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.14);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

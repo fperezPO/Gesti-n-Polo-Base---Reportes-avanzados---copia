@@ -1,0 +1,56 @@
+﻿[
+    {
+        "codigo":  "AJUSTE_MANUAL",
+        "nombre":  "Ajuste de inventario",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "REC510",
+        "nombre":  "Almacenamiento agrupado",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "REC522",
+        "nombre":  "Almacenamiento fraccionado",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "PRD500",
+        "nombre":  "Devolución de picking",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "EXP040",
+        "nombre":  "Expedición",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "INV414",
+        "nombre":  "Inventario",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "INV540",
+        "nombre":  "Inventario",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "PRD095",
+        "nombre":  "Preparación de picking",
+        "operativa":  "*",
+        "origen":  "wis"
+    },
+    {
+        "codigo":  "REC501",
+        "nombre":  "Recepción",
+        "operativa":  "*",
+        "origen":  "wis"
+    }
+]

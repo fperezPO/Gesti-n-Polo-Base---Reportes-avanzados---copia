@@ -1,0 +1,679 @@
+<section class="pagina pagina-reportes">
+    <div class="encabezado-pagina encabezado-reportes">
+        <div class="titulo-dashboards">
+            <span class="icono-dashboards" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                    <polyline points="3 17 9 11 13 15 21 7"></polyline>
+                    <polyline points="15 7 21 7 21 13"></polyline>
+                </svg>
+            </span>
+            <div>
+                <h2>Reportes y dashboards</h2>
+                <p>
+                    Elegí operativa y período y tocá Consultar: los
+                    indicadores, el mapa de calor y la base facturable se
+                    cargan juntos.
+                </p>
+            </div>
+        </div>
+
+        <div
+            id="menu-excel-reportes"
+            class="acciones-reportes"
+            role="group"
+            aria-label="Acciones de Excel"
+        >
+            <button
+                type="button"
+                class="boton-secundario boton-accion-reporte"
+                data-accion-reporte="descargar-plantilla"
+                title="Descargar la plantilla vacía del Trace de stock WIS"
+            >
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 15.5h12"/></svg>
+                Plantilla
+            </button>
+            <button
+                type="button"
+                class="boton-secundario boton-accion-reporte"
+                data-accion-reporte="exportar"
+                title="Exportar a Excel los indicadores, la base facturable, la tendencia y la comparación diaria"
+            >
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V4m0 0L6.5 7.5M10 4l3.5 3.5M4 15.5h12"/></svg>
+                Exportar Excel
+            </button>
+            <button
+                type="button"
+                class="boton-primario boton-accion-reporte"
+                data-accion-reporte="importar"
+                data-requiere-admin-reportes
+            >
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>
+                Importar Excel
+            </button>
+        </div>
+    </div>
+
+    <dialog
+        id="dialogo-operativa-importacion"
+        class="dialogo-operativa-importacion"
+    >
+        <form id="form-operativa-importacion" method="dialog">
+            <span class="etiqueta-estado-reporte">Nueva importación</span>
+            <h3 id="titulo-dialogo-importacion">
+                ¿A qué operativa pertenecen estos datos?
+            </h3>
+            <p id="detalle-dialogo-importacion">
+                La selección vinculará el archivo con su mapa de almacén y
+                no podrá cambiarse después de completar la carga.
+            </p>
+
+            <div class="campo">
+                <label for="operativa-importacion-reportes">Operativa</label>
+                <select
+                    id="operativa-importacion-reportes"
+                    data-requiere-admin-reportes
+                    data-bloqueo-reportes
+                    required
+                ></select>
+            </div>
+
+            <div class="acciones-dialogo-operativa">
+                <button
+                    type="button"
+                    class="boton-secundario"
+                    data-cancelar-operativa-importacion
+                >
+                    Cancelar
+                </button>
+                <label class="boton-primario boton-archivo-dialogo">
+                    Elegir archivo
+                    <input
+                        id="archivo-reporte-excel"
+                        type="file"
+                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    >
+                </label>
+            </div>
+        </form>
+    </dialog>
+
+    <div id="aviso-reportes-lectura" class="aviso-informativo" hidden>
+        Tu usuario tiene acceso de consulta y exportación. Solo un
+        administrador puede importar o eliminar archivos.
+    </div>
+
+    <p id="mensaje-reportes" class="mensaje" aria-live="polite"></p>
+
+    <section class="tarjeta tarjeta-filtros-reportes filtros-dashboards" aria-labelledby="titulo-filtros-reportes">
+        <span class="etiqueta-estado-reporte">Selección</span>
+        <h3 id="titulo-filtros-reportes" class="titulo-filtros-dashboards">Operativa y período</h3>
+
+        <div class="grilla-filtros-dashboards">
+            <div class="campo">
+                <label for="filtro-operativa-pickeos">Operativa</label>
+                <select id="filtro-operativa-pickeos"></select>
+            </div>
+            <div class="campo">
+                <label for="mes-facturacion-reportes">Mes de referencia</label>
+                <input id="mes-facturacion-reportes" type="month">
+            </div>
+            <div class="campo" data-rango-fechas>
+                <label class="etiqueta-rango-fechas">Período</label>
+                <input id="filtro-desde-reportes" type="date" data-rango-desde hidden>
+                <input id="filtro-hasta-reportes" type="date" data-rango-hasta hidden>
+            </div>
+        </div>
+
+        <div class="acciones-periodo-inicio">
+            <span>Períodos rápidos:</span>
+            <button id="aplicar-ciclo-facturacion" type="button" class="boton-secundario boton-periodo-inicio activo" aria-pressed="true">
+                Ciclo 21–20
+            </button>
+            <button id="aplicar-mes-reportes" type="button" class="boton-secundario boton-periodo-inicio" aria-pressed="false">
+                Mes completo
+            </button>
+            <strong id="detalle-periodo-dashboards">Período activo: ciclo de facturación 21–20</strong>
+        </div>
+
+        <div class="consulta-reportes">
+            <label class="opcion-historial-reportes">
+                <input id="incluir-historial-reportes" type="checkbox">
+                <span>
+                    <strong>Incluir historial completo</strong>
+                    <small>
+                        Suma la evolución por ciclo 21–20 y las ubicaciones
+                        nunca movidas del mapa. Tarda más en cargar.
+                    </small>
+                </span>
+            </label>
+
+            <div class="accion-consulta-reportes">
+                <p id="estado-consulta-reportes" class="estado-consulta-reportes" aria-live="polite"></p>
+                <button id="consultar-reportes" type="button" class="boton-primario boton-consultar-reportes pendiente">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5"/><path d="m12.5 12.5 4 4"/></svg>
+                    Consultar
+                </button>
+            </div>
+        </div>
+
+        <p id="estado-dashboards" class="detalle-filtro estado-dashboards" aria-live="polite">
+            Todavía no se cargó ningún movimiento.
+        </p>
+    </section>
+
+    <section id="aviso-consulta-reportes" class="tarjeta aviso-consulta-reportes">
+        <span class="etiqueta-estado-reporte">Sin consultar</span>
+        <h3>Elegí qué querés ver</h3>
+        <p>
+            Para que la página abra al instante, los movimientos del Trace WIS
+            se leen recién cuando tocás <strong>Consultar</strong>, y solo los
+            necesarios: el período, el período anterior con el que se compara y
+            los 3 meses previos que usa la inactividad del mapa.
+        </p>
+        <p>
+            Lo que ya se leyó queda en memoria: volver a un período cargado o
+            cambiar de operativa es inmediato.
+        </p>
+    </section>
+
+    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-servicio" data-resultado-reportes hidden>
+        <div class="cabecera-bloque-dashboards">
+            <span class="etiqueta-estado-reporte">Nivel de servicio</span>
+            <h3 id="titulo-kpi-servicio">KPIs principales</h3>
+            <p class="detalle-filtro">Comparados contra el período anterior equivalente. El color indica si se cumple la meta.</p>
+        </div>
+        <div id="kpis-principales-dashboards" class="grilla-kpi-dashboards"></div>
+    </section>
+
+    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-operacion" data-resultado-reportes hidden>
+        <div class="cabecera-bloque-dashboards">
+            <span class="etiqueta-estado-reporte">Operación</span>
+            <h3 id="titulo-kpi-operacion">Flujo del depósito</h3>
+            <p class="detalle-filtro">Entradas, movimientos internos, salidas y productividad del picking.</p>
+        </div>
+        <div id="kpis-operacion-dashboards" class="grilla-kpi-dashboards grilla-kpi-compacta"></div>
+    </section>
+
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comparacion-dashboards" data-resultado-reportes hidden>
+        <div class="cabecera-listado cabecera-tendencia-dashboards">
+            <div>
+                <span class="etiqueta-estado-reporte">Comparación</span>
+                <h3 data-calculo="dashboards-comparacion" data-calculo-en-linea><span id="titulo-comparacion-dashboards">Unidades por día contra el período anterior</span></h3>
+                <p id="detalle-comparacion-dashboards" class="detalle-filtro">Cargando unidades del Trace WIS…</p>
+            </div>
+            <span id="pico-comparacion-dashboards" class="insignia" hidden></span>
+        </div>
+        <div class="leyenda-comparacion-dashboards" aria-label="Referencias del gráfico">
+            <span><i class="muestra-actual-dashboards"></i><span id="etiqueta-periodo-actual-dashboards">Período seleccionado</span></span>
+            <span><i class="muestra-anterior-dashboards"></i><span id="etiqueta-periodo-anterior-dashboards">Período anterior</span></span>
+            <span><b class="muestra-pico-dashboards">1.234</b>Valor de cada pico</span>
+        </div>
+        <div id="grafico-comparacion-dashboards" class="grafico-tendencia-dashboards grafico-comparacion-dashboards" role="img" aria-label="Unidades por día contra el período anterior"></div>
+    </section>
+
+    <section
+        id="bloque-mapa-reportes"
+        class="bloque-mapa-reportes"
+        aria-labelledby="titulo-plano-mapa"
+        data-resultado-reportes
+        hidden
+    >
+        <div class="cabecera-listado cabecera-mapa-calor">
+            <div>
+                <span class="etiqueta-estado-reporte">Mapa de calor</span>
+                <h3 id="titulo-plano-mapa">Trace de stock WIS · Mezzanine</h3>
+                <p id="estado-fuente-mapa" class="detalle-filtro">
+                    Cargando información de los archivos importados…
+                </p>
+            </div>
+
+            <div class="controles-mapa-calor">
+                <div class="grupo-herramienta-mapa selector-mapa-calor">
+                    <label for="filtro-mapa-calor">Mapa</label>
+                    <select id="filtro-mapa-calor">
+                        <option value="Mezzanine">Mezzanine</option>
+                        <option value="E4">E4</option>
+                        <option value="Integra">Integra</option>
+                        <option value="Vehículos">Vehículos</option>
+                        <option value="Paraguay">Paraguay</option>
+                    </select>
+                </div>
+
+                <div
+                    class="leyenda-mapa-calor"
+                    aria-label="Escala de actividad"
+                    data-calculo="mapa-escala"
+                    data-calculo-en-linea
+                >
+                    <span>Baja</span>
+                    <i data-nivel="1"></i>
+                    <i data-nivel="2"></i>
+                    <i data-nivel="3"></i>
+                    <i data-nivel="4"></i>
+                    <i data-nivel="5"></i>
+                    <span>Alta</span>
+                </div>
+
+                <div
+                    class="leyenda-inactividad-mapa"
+                    aria-live="polite"
+                    title="Ubicaciones candidatas a reubicación"
+                    data-calculo="mapa-inactividad"
+                    data-calculo-en-linea
+                >
+                    <i aria-hidden="true"></i>
+                    <span id="estado-inactividad-mapa">
+                        Inactividad de 3 meses
+                    </span>
+                </div>
+
+                <div
+                    class="leyenda-inactividad-mapa leyenda-nunca-mapa"
+                    aria-live="polite"
+                    title="Ubicaciones sin ningún movimiento en el historial importado"
+                    data-calculo="mapa-nunca"
+                    data-calculo-en-linea
+                >
+                    <i aria-hidden="true"></i>
+                    <span id="estado-nunca-mapa">Nunca movidas</span>
+                </div>
+
+                <div
+                    id="leyenda-estructural-mapa"
+                    class="leyenda-estructural-mapa"
+                    title="Espacio del plano todavía no incluido en la referencia maestra"
+                >
+                    <i aria-hidden="true"></i>
+                    <span>Sin referencia maestra</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filtros-mapa-reportes">
+            <div
+                id="campo-filtro-operacion-trace-wis"
+                class="campo campo-filtro campo-operacion-trace"
+                hidden
+            >
+                <label for="filtro-operacion-trace-wis">Tarea en el mapa</label>
+                <select id="filtro-operacion-trace-wis">
+                    <option value="Todas">Todas las tareas</option>
+                </select>
+            </div>
+
+            <div
+                id="controles-mezzanine-mapa"
+                class="controles-mezzanine-mapa"
+                hidden
+            >
+                <div class="campo campo-filtro selector-mezzanine-mapa">
+                    <label for="filtro-tipo-ubicacion-mapa">
+                        Tipo de ubicación
+                    </label>
+                    <select id="filtro-tipo-ubicacion-mapa">
+                        <option value="Todos">Todos los tipos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="herramientas-visualizacion-mapa"
+            class="herramientas-visualizacion-mapa"
+            hidden
+        >
+            <div class="grupo-herramienta-mapa grupo-dimension-mapa">
+                <span class="etiqueta-herramienta-mapa">Visualización</span>
+                <div class="botones-modo-mapa" role="group" aria-label="Dimensión del mapa">
+                    <button
+                        type="button"
+                        class="activo"
+                        data-dimension-mapa="2d"
+                        aria-pressed="true"
+                    >Plano 2D</button>
+                    <button
+                        type="button"
+                        data-dimension-mapa="3d"
+                        aria-pressed="false"
+                    >Vista 3D</button>
+                </div>
+            </div>
+
+            <div class="grupo-herramienta-mapa grupo-modo-pisos-mapa">
+                <span class="etiqueta-herramienta-mapa">Vista</span>
+                <div class="botones-modo-mapa" role="group" aria-label="Vista de pisos">
+                    <button
+                        type="button"
+                        class="activo"
+                        data-modo-vista-mapa="individual"
+                    >Un piso</button>
+                    <button type="button" data-modo-vista-mapa="todos">
+                        Todos
+                    </button>
+                    <button type="button" data-modo-vista-mapa="comparar">
+                        Comparar
+                    </button>
+                </div>
+            </div>
+
+            <div id="control-piso-principal-mapa" class="grupo-herramienta-mapa">
+                <label for="filtro-piso-mapa">Piso visible</label>
+                <select id="filtro-piso-mapa">
+                    <option value="X">X · Piso cero</option>
+                    <option value="Y" selected>Y · Segundo piso</option>
+                    <option value="Z">Z · Tercer piso</option>
+                </select>
+            </div>
+
+            <div
+                id="controles-comparacion-mapa"
+                class="controles-comparacion-mapa"
+                hidden
+            >
+                <div class="grupo-herramienta-mapa">
+                    <label for="piso-comparacion-a-mapa">Piso A</label>
+                    <select id="piso-comparacion-a-mapa">
+                        <option value="X">Piso X</option>
+                        <option value="Y" selected>Piso Y</option>
+                        <option value="Z">Piso Z</option>
+                    </select>
+                </div>
+                <div class="grupo-herramienta-mapa">
+                    <label for="piso-comparacion-b-mapa">Piso B</label>
+                    <select id="piso-comparacion-b-mapa">
+                        <option value="X">Piso X</option>
+                        <option value="Y">Piso Y</option>
+                        <option value="Z" selected>Piso Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grupo-herramienta-mapa">
+                <label for="metrica-visual-mapa">Color según</label>
+                <select id="metrica-visual-mapa">
+                    <option value="actividad">Actividad</option>
+                    <option value="visitas">Visitas por ubicación</option>
+                </select>
+            </div>
+
+            <div id="grupo-zoom-mapa" class="grupo-herramienta-mapa controles-zoom-mapa">
+                <span class="etiqueta-herramienta-mapa">Zoom</span>
+                <div>
+                    <button id="reducir-zoom-mapa" type="button" aria-label="Reducir zoom">−</button>
+                    <button id="ajustar-zoom-mapa" type="button">Ajustar</button>
+                    <button id="restablecer-zoom-mapa" type="button">100%</button>
+                    <button id="aumentar-zoom-mapa" type="button" aria-label="Aumentar zoom">+</button>
+                    <output id="valor-zoom-mapa">100%</output>
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="herramientas-3d-mapa"
+            class="herramientas-visualizacion-mapa herramientas-3d-mapa"
+            hidden
+        >
+            <div class="grupo-herramienta-mapa">
+                <span class="etiqueta-herramienta-mapa">Representación</span>
+                <div class="botones-modo-mapa" role="group" aria-label="Representación 3D">
+                    <button
+                        type="button"
+                        class="activo"
+                        data-representacion-mapa-3d="racks"
+                        title="Un bloque por altura: 10, 20, 30 y 40"
+                    >Racks por altura</button>
+                    <button
+                        type="button"
+                        data-representacion-mapa-3d="barras"
+                        title="Una barra por módulo; su alto indica la actividad"
+                    >Barras por módulo</button>
+                </div>
+            </div>
+
+            <div class="grupo-herramienta-mapa">
+                <span class="etiqueta-herramienta-mapa">Cámara</span>
+                <div class="botones-modo-mapa" role="group" aria-label="Cámara 3D">
+                    <button type="button" data-camara-mapa-3d="aerea">Aérea</button>
+                    <button
+                        type="button"
+                        class="activo"
+                        data-camara-mapa-3d="isometrica"
+                    >Isométrica</button>
+                    <button type="button" data-camara-mapa-3d="lateral">Lateral</button>
+                </div>
+            </div>
+
+            <fieldset class="grupo-herramienta-mapa alturas-mapa-3d">
+                <legend class="etiqueta-herramienta-mapa">Alturas visibles</legend>
+                <div>
+                    <label><input type="checkbox" name="altura-mapa-3d" value="10" checked> 10</label>
+                    <label><input type="checkbox" name="altura-mapa-3d" value="20" checked> 20</label>
+                    <label><input type="checkbox" name="altura-mapa-3d" value="30" checked> 30</label>
+                    <label><input type="checkbox" name="altura-mapa-3d" value="40" checked> 40</label>
+                </div>
+            </fieldset>
+
+            <div class="grupo-herramienta-mapa">
+                <label for="calle-mapa-3d">Calle</label>
+                <select id="calle-mapa-3d">
+                    <option value="Todas">Todas las calles</option>
+                </select>
+            </div>
+
+            <div class="grupo-herramienta-mapa">
+                <label for="disposicion-mapa-3d">Disposición</label>
+                <select id="disposicion-mapa-3d">
+                    <option value="enfrentada">Pares e impares enfrentados</option>
+                    <option value="plano">Igual al plano 2D</option>
+                </select>
+            </div>
+
+            <div
+                id="grupo-separacion-pisos-mapa-3d"
+                class="grupo-herramienta-mapa"
+                hidden
+            >
+                <label for="separacion-pisos-mapa-3d">Separación entre pisos</label>
+                <input
+                    id="separacion-pisos-mapa-3d"
+                    type="range"
+                    min="0"
+                    max="30"
+                    step="1"
+                    value="12"
+                >
+            </div>
+
+            <div class="grupo-herramienta-mapa opciones-mapa-3d">
+                <span class="etiqueta-herramienta-mapa">Opciones</span>
+                <label>
+                    <input id="ocultar-sin-actividad-mapa-3d" type="checkbox">
+                    Ocultar sin actividad
+                </label>
+                <label>
+                    <input id="mostrar-estructura-mapa-3d" type="checkbox">
+                    Mostrar posiciones sin referencia
+                </label>
+            </div>
+        </div>
+
+        <div
+            id="resumen-comparacion-mapa"
+            class="resumen-comparacion-mapa"
+            hidden
+            aria-live="polite"
+        ></div>
+
+        <p id="mensaje-mapa-calor" class="mensaje" aria-live="polite"></p>
+
+        <div class="grilla-kpi-dashboards grilla-kpi-compacta resumen-mapa-calor">
+            <article class="tarjeta-kpi-dashboards">
+                <div class="cabecera-kpi-dashboards" data-calculo="kpi:visitasMapa" data-calculo-en-linea>
+                    <h4>Visitas en el plano</h4>
+                </div>
+                <p id="ubicaciones-visitadas-mapa" class="valor-kpi-dashboards">0</p>
+                <p class="detalle-kpi-dashboards">Movimientos con ubicación en los pisos visibles</p>
+            </article>
+
+            <article class="tarjeta-kpi-dashboards">
+                <div class="cabecera-kpi-dashboards" data-calculo="kpi:coberturaMapa" data-calculo-en-linea>
+                    <h4>Cobertura</h4>
+                </div>
+                <p id="cobertura-mapa" class="valor-kpi-dashboards">0%</p>
+                <p id="detalle-cobertura-mapa" class="detalle-kpi-dashboards">Ubicaciones visibles con movimiento</p>
+            </article>
+        </div>
+
+        <div id="detalle-ubicacion-mapa" class="detalle-ubicacion-mapa">
+            Pasá el cursor por el plano para consultar una ubicación.
+        </div>
+
+        <div id="mapa-calor-vacio" class="estado-vacio-mapa" hidden></div>
+
+        <div id="mapa-calor-scroll" class="mapa-calor-scroll">
+            <div
+                id="mapa-calor-contenedor"
+                class="plano-calor"
+                aria-label="Mapa de actividad por ubicación"
+            ></div>
+        </div>
+
+        <div id="mapa-calor-3d" class="mapa-calor-3d" hidden>
+            <div id="lienzo-mapa-3d" class="lienzo-mapa-3d">
+                <p id="estado-mapa-3d" class="estado-mapa-3d" hidden></p>
+                <div id="tooltip-mapa-3d" class="tooltip-mapa-3d" hidden></div>
+            </div>
+            <div class="pie-mapa-3d">
+                <span data-calculo="mapa-3d" data-calculo-en-linea><span id="resumen-mapa-3d"></span></span>
+                <span>
+                    Arrastrá para rotar · clic derecho o Shift + arrastre
+                    para desplazar · rueda para acercar · clic para fijar
+                    una ubicación · Esc para soltarla
+                </span>
+            </div>
+            <p id="fuera-plano-mapa-3d" class="fuera-plano-mapa-3d" hidden></p>
+        </div>
+    </section>
+
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-tendencia-dashboards" data-resultado-reportes hidden>
+        <div class="cabecera-listado cabecera-tendencia-dashboards">
+            <div>
+                <span class="etiqueta-estado-reporte">Tendencia</span>
+                <h3 data-calculo="dashboards-tendencia" data-calculo-en-linea><span id="titulo-tendencia-dashboards">Evolución por ciclo 21–20</span></h3>
+                <p id="detalle-tendencia-dashboards" class="detalle-filtro">Ciclos de facturación del año contra el año anterior.</p>
+            </div>
+            <div class="campo campo-metrica-dashboards">
+                <label for="metrica-tendencia-dashboards">Indicador</label>
+                <select id="metrica-tendencia-dashboards">
+                    <option value="lineasPicking">Pickeos (líneas)</option>
+                    <option value="unidadesPicking">Unidades pickeadas</option>
+                    <option value="embarques">Embarques recibidos</option>
+                    <option value="unidadesRecibidas">Unidades recibidas</option>
+                    <option value="unidadesExpedidas">Unidades expedidas</option>
+                    <option value="sla">SLA embarques (%)</option>
+                    <option value="fillRate">Fill rate (%)</option>
+                    <option value="ira">IRA · ajustes de inventario (%)</option>
+                    <option value="productividad">Productividad picking (unidades/h)</option>
+                </select>
+            </div>
+        </div>
+        <div class="leyenda-comparacion-dashboards leyenda-tendencia-dashboards" aria-label="Referencias del gráfico">
+            <span><i class="muestra-barra-actual-dashboards"></i><span id="etiqueta-ano-actual-tendencia">Año actual</span></span>
+            <span><i class="muestra-barra-anterior-dashboards"></i><span id="etiqueta-ano-anterior-tendencia">Año anterior</span></span>
+            <span><b class="muestra-variacion-dashboards">+8 %</b>Variación contra el año anterior</span>
+        </div>
+        <div id="grafico-tendencia-dashboards" class="grafico-tendencia-dashboards" role="img" aria-label="Evolución por ciclo"></div>
+    </section>
+
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comercial-dashboards" data-resultado-reportes hidden>
+        <div class="cabecera-listado">
+            <div>
+                <span class="etiqueta-estado-reporte">Comercial</span>
+                <h3 id="titulo-comercial-dashboards">Base facturable por operativa</h3>
+                <p id="detalle-comercial-dashboards" class="detalle-filtro">Conceptos que normalmente se cobran a cada cliente en el período.</p>
+            </div>
+        </div>
+        <div class="contenedor-tabla">
+            <table class="tabla-comercial-dashboards">
+                <thead>
+                    <tr>
+                        <th>Operativa</th>
+                        <th data-calculo="comercial-embarques" data-calculo-en-linea>Embarques</th>
+                        <th data-calculo="comercial-contenedores" data-calculo-en-linea>Contenedores</th>
+                        <th data-calculo="comercial-bultos" data-calculo-en-linea>Bultos</th>
+                        <th data-calculo="comercial-recibidas" data-calculo-en-linea>Unid. recibidas</th>
+                        <th data-calculo="comercial-lineas-picking" data-calculo-en-linea>Líneas de picking</th>
+                        <th data-calculo="comercial-pickeadas" data-calculo-en-linea>Unid. pickeadas</th>
+                        <th data-calculo="comercial-expedidas" data-calculo-en-linea>Unid. expedidas</th>
+                        <th data-calculo="comercial-posiciones" data-calculo-en-linea>Posiciones usadas</th>
+                        <th data-calculo="comercial-fill-rate" data-calculo-en-linea>Fill rate</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-comercial-dashboards"></tbody>
+                <tfoot id="total-comercial-dashboards"></tfoot>
+            </table>
+        </div>
+    </section>
+
+    <div class="tarjeta">
+        <div class="cabecera-listado">
+            <div>
+                <h3>Historial de importaciones</h3>
+                <p class="detalle-filtro">
+                    Permite identificar y revertir cada carga por separado.
+                </p>
+            </div>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Tipo</th>
+                        <th>Operativa</th>
+                        <th>Período</th>
+                        <th data-calculo="reportes-historial-registros" data-calculo-en-linea>Registros</th>
+                        <th data-calculo="reportes-historial-unidades" data-calculo-en-linea>Unidades</th>
+                        <th>Importado por</th>
+                        <th>Fecha de importación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-importaciones-reportes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <details class="tarjeta metodologia-dashboards">
+        <summary>¿Cómo se calcula cada indicador?</summary>
+        <dl>
+            <dt>Carga de datos</dt>
+            <dd>Los movimientos del Trace WIS se leen al tocar Consultar, y solo los de los archivos que tocan el período, el período anterior y los 3 meses previos que usa la inactividad del mapa. Se leen con todas sus operativas porque la productividad reparte las horas de cada operario entre las operativas en las que trabajó ese día. La evolución por ciclo y las ubicaciones nunca movidas necesitan «Incluir historial completo».</dd>
+            <dt>Pickeos</dt>
+            <dd>Cada fila del Trace WIS clasificada como picking (PRD095 negativo) es una línea. Las unidades son la suma de las cantidades.</dd>
+            <dt>Embarques recibidos</dt>
+            <dd>Embarques de Gestión de embarques con llegada confirmada dentro del período.</dd>
+            <dt>SLA embarques</dt>
+            <dd>Embarques que cumplieron los tiempos acordados: control / ingreso dentro de las 48 h y crossdocking o almacenamiento dentro de su meta, igual que en Gestión de embarques. Se calcula sobre los embarques ya evaluables; los que siguen dentro del plazo no cuentan todavía. La tarjeta indica en qué etapa quedaron fuera de meta.</dd>
+            <dt>Fill rate</dt>
+            <dd>Unidades expedidas (EXP040 a muelle 1MPUE) sobre unidades pickeadas. Es una aproximación: el Trace no trae lo pedido por el cliente.</dd>
+            <dt>IRA (ajustes de inventario)</dt>
+            <dd>1 − ubicaciones con ajuste de inventario (INV414, INV540, ajuste manual) sobre ubicaciones con movimiento en el período. Un conteo sin diferencia no deja movimiento en el Trace, por eso cada ubicación movida se toma como verificada.</dd>
+            <dt>Unidades por día</dt>
+            <dd>Suma diaria de las unidades de las tareas marcadas en Actividades para la comparación diaria (por defecto: recepción, almacenamiento, picking y expedición), contra los mismos días del período anterior. Cada pico muestra el número al que llegó. Si el período está en curso, el total se compara con la misma cantidad de días del anterior.</dd>
+            <dt>Productividad de picking</dt>
+            <dd>Unidades pickeadas por hora: el tiempo de cada operario es el lapso entre su primer y su último pickeo del día, más 5 minutos.</dd>
+            <dt>Dock to stock</dt>
+            <dd>Horas promedio entre la llegada del embarque y su almacenamiento (o crossdocking).</dd>
+            <dt>Ajuste neto de inventario</dt>
+            <dd>Suma con signo de los ajustes de inventario (INV414, INV540, ajuste manual y otras tareas de inventario o ajuste). El recuento separa los ajustes positivos (unidades que se sumaron al stock) de los negativos (unidades que se restaron), con cuántos ajustes hubo de cada tipo. La barra muestra la proporción de unidades entre ambos.</dd>
+            <dt>Posiciones usadas</dt>
+            <dd>Ubicaciones de almacenamiento distintas con movimiento en el período, sin muelles de recepción ni de expedición. Sirve como base para cobrar posiciones.</dd>
+            <dt>Evolución por ciclo 21–20</dt>
+            <dd>Los 12 ciclos de facturación del año del período elegido, con el mismo ciclo del año anterior detrás en gris. Debajo de cada mes figura la variación contra el año anterior (en puntos para los indicadores en %). El ciclo en curso no muestra variación porque todavía está incompleto.</dd>
+            <dt>Mapa de calor</dt>
+            <dd>Usa la misma operativa y el mismo período. "Tarea en el mapa", tipo de ubicación y pisos solo acotan el plano, no los indicadores. Al pasar el cursor por un módulo se ven los códigos WIS reales de sus ubicaciones (por ejemplo, Y030022061), con las unidades y visitas de cada una.</dd>
+        </dl>
+    </details>
+</section>

@@ -1,0 +1,867 @@
+/* Reportes y dashboards: KPIs logísticos y comerciales. Usa la paleta de variables.css. */
+
+/* Ícono del menú: gráfica ascendente. */
+.sidebar button[data-page="reportes"]::before {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d9dedb' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 17 9 11 13 15 21 7'/%3E%3Cpolyline points='15 7 21 7 21 13'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 17px;
+}
+
+.sidebar button[data-page="reportes"].activo::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23292d2b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 17 9 11 13 15 21 7'/%3E%3Cpolyline points='15 7 21 7 21 13'/%3E%3C/svg%3E");
+}
+
+.titulo-dashboards {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.icono-dashboards {
+    display: grid;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border: 1px solid var(--verde-borde);
+    border-radius: 12px;
+    background: var(--verde-suave);
+}
+
+.icono-dashboards svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: var(--verde-profundo);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.titulo-filtros-dashboards {
+    margin: 8px 0 14px;
+    color: var(--gris-950);
+}
+
+/* Filtros que solo acotan el plano (tarea y tipo de ubicación). */
+.filtros-mapa-reportes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    margin: 4px 0 16px;
+}
+
+.filtros-mapa-reportes .campo {
+    min-width: min(100%, 240px);
+    margin-bottom: 0;
+}
+
+.filtros-mapa-reportes [hidden] {
+    display: none;
+}
+
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.filtros-dashboards {
+    margin-bottom: 26px;
+}
+
+.grilla-filtros-dashboards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.grilla-filtros-dashboards .campo {
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.estado-dashboards {
+    margin: 14px 0 0;
+}
+
+.estado-dashboards.error {
+    color: var(--rojo);
+}
+
+/* Consulta a demanda: nada se lee hasta tocar "Consultar". */
+
+.consulta-reportes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 24px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--gris-200);
+}
+
+.opcion-historial-reportes {
+    display: flex;
+    flex: 1 1 300px;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--gris-900);
+    cursor: pointer;
+}
+
+.opcion-historial-reportes input {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    margin: 2px 0 0;
+    accent-color: var(--verde-marca);
+}
+
+.opcion-historial-reportes strong {
+    display: block;
+    font-size: 14px;
+}
+
+.opcion-historial-reportes small {
+    display: block;
+    margin-top: 2px;
+    color: var(--gris-600);
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.accion-consulta-reportes {
+    display: flex;
+    flex: 1 1 320px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.estado-consulta-reportes {
+    margin: 0;
+    color: var(--gris-700);
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: right;
+}
+
+.estado-consulta-reportes:empty {
+    display: none;
+}
+
+.estado-consulta-reportes.error {
+    color: var(--rojo);
+}
+
+.boton-consultar-reportes {
+    display: inline-flex;
+    min-height: 42px;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    white-space: nowrap;
+}
+
+.boton-consultar-reportes svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 2;
+}
+
+/* Hay una selección sin consultar: el botón pide atención. */
+.boton-consultar-reportes.pendiente {
+    box-shadow:
+        0 0 0 4px var(--verde-suave),
+        0 6px 18px rgba(83, 129, 39, 0.19);
+}
+
+.boton-consultar-reportes[aria-busy="true"] {
+    cursor: progress;
+}
+
+.aviso-consulta-reportes {
+    margin-bottom: 26px;
+}
+
+.aviso-consulta-reportes h3 {
+    margin: 8px 0 6px;
+    color: var(--gris-950);
+}
+
+.aviso-consulta-reportes p {
+    max-width: 78ch;
+    margin: 0 0 8px;
+    color: var(--gris-700);
+    line-height: 1.55;
+}
+
+.aviso-consulta-reportes p:last-child {
+    margin-bottom: 0;
+}
+
+[data-resultado-reportes][hidden],
+.aviso-consulta-reportes[hidden] {
+    display: none !important;
+}
+
+/*
+ * Resultados de una selección anterior mientras se elige otra o se lee:
+ * solo opacidad (un filter crearía un bloque contenedor para los fixed).
+ */
+[data-resultado-reportes] {
+    transition: opacity 180ms ease;
+}
+
+.resultados-desactualizados {
+    opacity: 0.42;
+}
+
+.tendencia-sin-historial-dashboards p {
+    max-width: 62ch;
+    margin: 0 auto 14px;
+    line-height: 1.55;
+}
+
+.bloque-dashboards {
+    margin-bottom: 26px;
+}
+
+.cabecera-bloque-dashboards {
+    margin-bottom: 14px;
+}
+
+.cabecera-bloque-dashboards h3 {
+    margin: 8px 0 4px;
+    color: var(--gris-950);
+}
+
+.cabecera-bloque-dashboards p {
+    margin: 0;
+}
+
+/* Tarjetas de KPI */
+
+.grilla-kpi-dashboards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr));
+    gap: 16px;
+}
+
+.grilla-kpi-compacta {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr));
+}
+
+.tarjeta-kpi-dashboards {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 18px 16px;
+    overflow: hidden;
+    border: 1px solid var(--gris-200);
+    border-radius: var(--radio);
+    background: var(--blanco);
+    box-shadow: var(--sombra-suave);
+}
+
+.tarjeta-kpi-dashboards::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--verde-marca);
+    content: "";
+}
+
+.tarjeta-kpi-dashboards[data-estado="cerca"]::before {
+    background: var(--ambar);
+}
+
+.tarjeta-kpi-dashboards[data-estado="bajo"]::before {
+    background: var(--rojo);
+}
+
+.tarjeta-kpi-dashboards[data-estado="sin-datos"]::before,
+.grilla-kpi-compacta .tarjeta-kpi-dashboards::before {
+    background: var(--gris-300);
+}
+
+.cabecera-kpi-dashboards {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.cabecera-kpi-dashboards h4 {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    color: var(--gris-700);
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+}
+
+.meta-kpi-dashboards {
+    flex: 0 0 auto;
+    padding: 2px 7px;
+    border: 1px solid var(--gris-200);
+    border-radius: 999px;
+    color: var(--gris-600);
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.valor-kpi-dashboards {
+    margin: 0;
+    color: var(--gris-950);
+    font-size: clamp(25px, 2.4vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.grilla-kpi-compacta .valor-kpi-dashboards {
+    font-size: clamp(21px, 2vw, 25px);
+}
+
+/* Unidad del valor (unidades/h, h): más chica para no partir el número. */
+.unidad-kpi-dashboards {
+    margin-left: 5px;
+    color: var(--gris-600);
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+.tarjeta-kpi-dashboards[data-estado="cumple"] .valor-kpi-dashboards {
+    color: var(--verde-profundo);
+}
+
+.tarjeta-kpi-dashboards[data-estado="cerca"] .valor-kpi-dashboards {
+    color: var(--ambar);
+}
+
+.tarjeta-kpi-dashboards[data-estado="bajo"] .valor-kpi-dashboards {
+    color: var(--rojo);
+}
+
+.barra-kpi-dashboards {
+    position: relative;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--gris-100);
+}
+
+.barra-kpi-dashboards i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--verde-marca);
+}
+
+.tarjeta-kpi-dashboards[data-estado="cerca"] .barra-kpi-dashboards i {
+    background: var(--ambar);
+}
+
+.tarjeta-kpi-dashboards[data-estado="bajo"] .barra-kpi-dashboards i {
+    background: var(--rojo);
+}
+
+.barra-kpi-dashboards b {
+    position: absolute;
+    top: -3px;
+    width: 2px;
+    height: 12px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: var(--gris-800);
+}
+
+.detalle-kpi-dashboards {
+    margin: 0;
+    color: var(--gris-600);
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.variacion-kpi-dashboards {
+    margin-top: auto;
+    color: var(--gris-600);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.variacion-kpi-dashboards.positiva {
+    color: var(--verde-profundo);
+}
+
+.variacion-kpi-dashboards.negativa {
+    color: var(--rojo);
+}
+
+/* Recuento por signo (ajuste neto de inventario) */
+
+.barra-recuento-dashboards {
+    display: flex;
+    height: 6px;
+    gap: 2px;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+.barra-recuento-dashboards i {
+    display: block;
+    flex-basis: 0;
+    min-width: 3px;
+    height: 100%;
+}
+
+.barra-recuento-dashboards i[data-signo="positivo"] {
+    background: var(--verde-marca);
+}
+
+.barra-recuento-dashboards i[data-signo="negativo"] {
+    background: var(--rojo);
+}
+
+.recuento-kpi-dashboards {
+    display: grid;
+    gap: 7px;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.recuento-kpi-dashboards li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 10px;
+}
+
+.recuento-kpi-dashboards span {
+    color: var(--gris-700);
+    font-size: 12.5px;
+    font-weight: 750;
+}
+
+.recuento-kpi-dashboards b {
+    font-size: 10px;
+}
+
+.recuento-kpi-dashboards li[data-signo="positivo"] b {
+    color: var(--verde-profundo);
+}
+
+.recuento-kpi-dashboards li[data-signo="negativo"] b {
+    color: var(--rojo);
+}
+
+.recuento-kpi-dashboards strong {
+    color: var(--gris-950);
+    font-size: 14px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.recuento-kpi-dashboards small {
+    grid-column: 1 / -1;
+    color: var(--gris-600);
+    font-size: 11.5px;
+}
+
+/* Tendencia */
+
+.cabecera-tendencia-dashboards {
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.campo-metrica-dashboards {
+    width: min(100%, 270px);
+    margin-bottom: 0;
+}
+
+.grafico-tendencia-dashboards {
+    margin-top: 10px;
+}
+
+.grafico-tendencia-dashboards svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.grafico-tendencia-dashboards .guia-dashboards {
+    stroke: var(--gris-200);
+    stroke-width: 1;
+}
+
+.grafico-tendencia-dashboards .eje-dashboards {
+    fill: var(--gris-600);
+    font-size: 11px;
+}
+
+.grafico-tendencia-dashboards .eje-dashboards.actual {
+    fill: var(--gris-950);
+    font-weight: 800;
+}
+
+.grafico-tendencia-dashboards .eje-dashboards.futuro {
+    fill: var(--gris-400);
+}
+
+/* Año actual en verde; el ciclo del período, más oscuro. */
+.grafico-tendencia-dashboards .barra-dashboards {
+    fill: var(--verde-marca);
+    transition: fill 0.2s ease;
+}
+
+.grafico-tendencia-dashboards .barra-dashboards.actual {
+    fill: var(--verde-profundo);
+}
+
+.grafico-tendencia-dashboards .ciclo-tendencia-dashboards:hover .barra-dashboards {
+    fill: var(--verde-hover);
+}
+
+/* Año anterior detrás, en gris translúcido y difuminado. */
+.grafico-tendencia-dashboards .barra-anterior-dashboards {
+    fill: var(--gris-600);
+    fill-opacity: 0.3;
+    transition: fill-opacity 0.2s ease;
+}
+
+.grafico-tendencia-dashboards .ciclo-tendencia-dashboards:hover .barra-anterior-dashboards {
+    fill-opacity: 0.45;
+}
+
+.grafico-tendencia-dashboards .zona-ciclo-tendencia-dashboards {
+    fill: transparent;
+}
+
+.grafico-tendencia-dashboards .ciclo-tendencia-dashboards:hover .zona-ciclo-tendencia-dashboards {
+    fill: var(--gris-100);
+    fill-opacity: 0.6;
+}
+
+.grafico-tendencia-dashboards .variacion-ciclo-dashboards {
+    fill: var(--gris-600);
+    font-size: 10.5px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+.grafico-tendencia-dashboards .variacion-ciclo-dashboards.positiva {
+    fill: var(--verde-profundo);
+}
+
+.grafico-tendencia-dashboards .variacion-ciclo-dashboards.negativa {
+    fill: var(--rojo);
+}
+
+.grafico-tendencia-dashboards .valor-barra-dashboards {
+    fill: var(--gris-800);
+    font-size: 10.5px;
+    font-weight: 750;
+}
+
+.grafico-tendencia-dashboards .meta-dashboards {
+    stroke: var(--ambar);
+    stroke-dasharray: 6 5;
+    stroke-width: 1.5;
+}
+
+.grafico-tendencia-dashboards .texto-meta-dashboards {
+    fill: var(--ambar);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.vacio-dashboards {
+    padding: 28px 12px;
+    color: var(--gris-600);
+    text-align: center;
+}
+
+/* Comparación diaria contra el período anterior */
+
+.leyenda-comparacion-dashboards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    color: var(--gris-600);
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.leyenda-comparacion-dashboards > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.leyenda-comparacion-dashboards i {
+    display: block;
+    width: 24px;
+    border-top: 3px solid var(--verde-profundo);
+}
+
+.leyenda-comparacion-dashboards .muestra-anterior-dashboards {
+    border-top: 2px dashed var(--gris-600);
+}
+
+.leyenda-comparacion-dashboards .muestra-pico-dashboards {
+    color: var(--gris-950);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* Leyenda de la evolución por ciclo: muestras de barra en lugar de línea. */
+.leyenda-tendencia-dashboards {
+    margin-top: 4px;
+}
+
+.leyenda-tendencia-dashboards i {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 3px;
+}
+
+.leyenda-tendencia-dashboards .muestra-barra-actual-dashboards {
+    background: var(--verde-marca);
+}
+
+.leyenda-tendencia-dashboards .muestra-barra-anterior-dashboards {
+    background: var(--gris-600);
+    opacity: 0.35;
+    filter: blur(0.6px);
+}
+
+.leyenda-tendencia-dashboards .muestra-variacion-dashboards {
+    color: var(--verde-profundo);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.grafico-comparacion-dashboards svg {
+    overflow: visible;
+}
+
+.grafico-comparacion-dashboards path,
+.grafico-comparacion-dashboards circle,
+.grafico-comparacion-dashboards text {
+    pointer-events: none;
+}
+
+.grafico-comparacion-dashboards .columna-comparacion-dashboards rect {
+    fill: transparent;
+}
+
+.grafico-comparacion-dashboards .columna-comparacion-dashboards line {
+    stroke: var(--gris-400);
+    stroke-dasharray: 3 3;
+    stroke-width: 1;
+    opacity: 0;
+}
+
+.grafico-comparacion-dashboards .columna-comparacion-dashboards:hover line {
+    opacity: 1;
+}
+
+.grafico-comparacion-dashboards .area-comparacion-dashboards {
+    fill: var(--verde-marca);
+    fill-opacity: 0.14;
+}
+
+.grafico-comparacion-dashboards .area-anterior-comparacion-dashboards {
+    fill: var(--gris-600);
+    fill-opacity: 0.06;
+}
+
+.grafico-comparacion-dashboards .trazo-comparacion-dashboards {
+    fill: none;
+    stroke: var(--verde-profundo);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+}
+
+.grafico-comparacion-dashboards .trazo-anterior-comparacion-dashboards {
+    fill: none;
+    stroke: var(--gris-600);
+    stroke-dasharray: 7 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    opacity: 0.75;
+}
+
+.grafico-comparacion-dashboards .punto-comparacion-dashboards {
+    fill: var(--verde-marca);
+    stroke: var(--blanco);
+    stroke-width: 1.5;
+}
+
+.grafico-comparacion-dashboards .marca-pico-comparacion-dashboards {
+    fill: var(--verde-profundo);
+    stroke: var(--blanco);
+    stroke-width: 2;
+}
+
+.grafico-comparacion-dashboards .marca-pico-anterior-comparacion-dashboards {
+    fill: var(--blanco);
+    stroke: var(--gris-600);
+    stroke-width: 1.5;
+}
+
+/* El halo del color de la tarjeta separa el número de las líneas. */
+.grafico-comparacion-dashboards .pico-comparacion-dashboards,
+.grafico-comparacion-dashboards .pico-anterior-comparacion-dashboards {
+    paint-order: stroke;
+    stroke: var(--blanco);
+    stroke-linejoin: round;
+    stroke-width: 3px;
+    font-variant-numeric: tabular-nums;
+}
+
+.grafico-comparacion-dashboards .pico-comparacion-dashboards {
+    fill: var(--gris-950);
+    font-size: 11.5px;
+    font-weight: 800;
+}
+
+.grafico-comparacion-dashboards .pico-anterior-comparacion-dashboards {
+    fill: var(--gris-600);
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+/* Tabla comercial */
+
+.tabla-comercial-dashboards th,
+.tabla-comercial-dashboards td {
+    white-space: nowrap;
+}
+
+.tabla-comercial-dashboards td {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.tabla-comercial-dashboards td.vacio-dashboards {
+    text-align: center;
+}
+
+.tabla-comercial-dashboards tbody th {
+    color: var(--gris-900);
+    font-weight: 750;
+    text-align: left;
+}
+
+.tabla-comercial-dashboards tbody th small {
+    display: block;
+    color: var(--gris-600);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.tabla-comercial-dashboards tfoot th,
+.tabla-comercial-dashboards tfoot td {
+    border-top: 2px solid var(--verde-borde);
+    background: var(--verde-suave);
+    color: var(--verde-profundo);
+    font-weight: 800;
+}
+
+/* Metodología */
+
+.metodologia-dashboards summary {
+    color: var(--gris-900);
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.metodologia-dashboards dl {
+    display: grid;
+    grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+    gap: 10px 18px;
+    margin: 18px 0 0;
+}
+
+.metodologia-dashboards dt {
+    color: var(--gris-900);
+    font-weight: 750;
+}
+
+.metodologia-dashboards dd {
+    margin: 0;
+    color: var(--gris-700);
+    line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+    .titulo-dashboards {
+        gap: 12px;
+    }
+
+    .icono-dashboards {
+        flex-basis: 40px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .metodologia-dashboards dl {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .metodologia-dashboards dd {
+        margin-bottom: 10px;
+    }
+
+    .accion-consulta-reportes {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .estado-consulta-reportes {
+        text-align: left;
+    }
+
+    .boton-consultar-reportes {
+        justify-content: center;
+    }
+
+    /* En pantallas angostas los gráficos se desplazan dentro de la tarjeta. */
+    .grafico-comparacion-dashboards,
+    #grafico-tendencia-dashboards {
+        overflow-x: auto;
+    }
+
+    .grafico-comparacion-dashboards svg,
+    #grafico-tendencia-dashboards svg {
+        min-width: 560px;
+    }
+}

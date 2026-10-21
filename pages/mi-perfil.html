@@ -1,0 +1,69 @@
+<section class="pagina pagina-mi-perfil">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Mi perfil</h2>
+            <p>Información personal y de contacto asociada a tu cuenta.</p>
+        </div>
+    </div>
+
+    <div class="perfil-grid">
+        <aside class="tarjeta perfil-identidad">
+            <div class="perfil-foto-contenedor">
+                <img id="foto-mi-perfil" class="perfil-foto" alt="Foto de perfil" hidden>
+                <div id="iniciales-mi-perfil" class="perfil-iniciales" aria-hidden="true">?</div>
+            </div>
+            <h3 id="nombre-visible-mi-perfil">Mi perfil</h3>
+            <p id="usuario-visible-mi-perfil" class="texto-secundario"></p>
+            <label class="boton-secundario boton-foto-perfil" for="archivo-foto-mi-perfil">Cambiar foto</label>
+            <input id="archivo-foto-mi-perfil" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+            <button id="quitar-foto-mi-perfil" type="button" class="boton-texto" hidden>Quitar foto</button>
+            <small class="ayuda-perfil">JPG, PNG o WebP. La imagen se optimiza antes de guardarse.</small>
+        </aside>
+
+        <div class="tarjeta perfil-formulario">
+            <form id="form-mi-perfil" autocomplete="on">
+                <div class="form-grid">
+                    <div class="campo">
+                        <label for="nombre-mi-perfil">Nombre visible</label>
+                        <input id="nombre-mi-perfil" type="text" maxlength="100" autocomplete="name" required>
+                    </div>
+                    <div class="campo">
+                        <label for="email-mi-perfil">Correo electrónico</label>
+                        <input id="email-mi-perfil" type="email" maxlength="150" autocomplete="email" placeholder="nombre@empresa.com">
+                    </div>
+                    <div class="campo">
+                        <label for="telefono-mi-perfil">Teléfono</label>
+                        <input id="telefono-mi-perfil" type="tel" maxlength="30" autocomplete="tel" placeholder="Número de contacto">
+                    </div>
+                    <div class="campo">
+                        <label for="interno-mi-perfil">Interno</label>
+                        <input id="interno-mi-perfil" type="text" maxlength="15" inputmode="numeric" placeholder="Ej.: 203">
+                    </div>
+                    <div class="campo">
+                        <label for="ubicacion-mi-perfil">Ubicación habitual</label>
+                        <input id="ubicacion-mi-perfil" type="text" maxlength="100" placeholder="Sede, oficina o sector">
+                    </div>
+                    <div class="campo">
+                        <label for="preferencia-contacto-mi-perfil">Contacto preferido</label>
+                        <select id="preferencia-contacto-mi-perfil">
+                            <option value="email">Correo electrónico</option>
+                            <option value="telefono">Teléfono</option>
+                            <option value="teams">Microsoft Teams</option>
+                        </select>
+                    </div>
+                    <div class="campo campo-amplio">
+                        <label for="descripcion-mi-perfil">Descripción profesional</label>
+                        <textarea id="descripcion-mi-perfil" rows="4" maxlength="200" placeholder="Contá brevemente en qué trabajás o cómo pueden contactarte."></textarea>
+                        <div class="contador-perfil"><span id="contador-descripcion-mi-perfil">0</span>/200 caracteres</div>
+                    </div>
+                </div>
+                <div class="acciones-formulario">
+                    <button type="submit" class="boton-primario">Guardar mi perfil</button>
+                    <button id="restablecer-mi-perfil" type="button" class="boton-secundario">Descartar cambios</button>
+                </div>
+            </form>
+            <p id="mensaje-mi-perfil" class="mensaje" aria-live="polite"></p>
+            <p class="aviso-informativo aviso-privacidad-perfil">Esta información se guarda actualmente en este navegador. No incluyas datos sensibles o confidenciales.</p>
+        </div>
+    </div>
+</section>

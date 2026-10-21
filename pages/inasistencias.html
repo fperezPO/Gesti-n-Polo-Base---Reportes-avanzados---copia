@@ -1,0 +1,179 @@
+<section class="pagina">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Inasistencias</h2>
+            <p>Registro de ausencias, motivos y documentación de respaldo.</p>
+        </div>
+
+        <button
+            type="button"
+            class="boton-exportar"
+            data-exportar-excel="inasistencias"
+        >
+            Exportar Excel
+        </button>
+    </div>
+
+    <div id="aviso-inasistencias-lectura" class="aviso-informativo" hidden>
+        Estás consultando únicamente tus propios registros. Solo un
+        administrador puede registrar o eliminar inasistencias.
+    </div>
+
+    <div class="tarjeta" data-requiere-admin-inasistencias>
+        <h3>Registrar inasistencia</h3>
+
+        <form id="form-inasistencia" autocomplete="off">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="operario-inasistencia">Operario</label>
+                    <select id="operario-inasistencia" required></select>
+                </div>
+
+                <div class="campo">
+                    <label for="motivo-inasistencia">Motivo</label>
+                    <select id="motivo-inasistencia" required></select>
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-desde-inasistencia">Fecha desde</label>
+                    <input
+                        id="fecha-desde-inasistencia"
+                        type="date"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-hasta-inasistencia">Fecha hasta</label>
+                    <input
+                        id="fecha-hasta-inasistencia"
+                        type="date"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="duracion-inasistencia">Duración</label>
+                    <select id="duracion-inasistencia" required>
+                        <option value="completa">Jornada completa</option>
+                        <option value="parcial">Ausencia parcial</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="horario-inasistencia" class="form-grid" hidden>
+                <div class="campo">
+                    <label for="hora-desde-inasistencia">Hora desde</label>
+                    <input id="hora-desde-inasistencia" type="time">
+                </div>
+
+                <div class="campo">
+                    <label for="hora-hasta-inasistencia">Hora hasta</label>
+                    <input id="hora-hasta-inasistencia" type="time">
+                </div>
+            </div>
+
+            <div class="campo campo-amplio">
+                <label for="detalle-inasistencia">Observaciones</label>
+                <textarea
+                    id="detalle-inasistencia"
+                    rows="3"
+                    placeholder="Información adicional o motivo específico"
+                ></textarea>
+            </div>
+
+            <div class="campo campo-archivo">
+                <label for="certificado-inasistencia">
+                    Certificado o documentación
+                </label>
+                <input
+                    id="certificado-inasistencia"
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                >
+                <small>
+                    Opcional. PDF, JPG o PNG, con un máximo de 5 MB.
+                </small>
+            </div>
+
+            <button type="submit" class="boton-primario">
+                Guardar inasistencia
+            </button>
+        </form>
+
+        <p id="sin-operarios-inasistencias" class="aviso-informativo" hidden>
+            Primero debés registrar al menos un operario.
+        </p>
+        <p id="mensaje-inasistencias" class="mensaje" aria-live="polite"></p>
+    </div>
+
+    <div class="dashboard resumen-inasistencias">
+        <div class="tarjeta-resumen" data-calculo="inasistencias-registros">
+            <h3>Registros</h3>
+            <p id="total-registros-inasistencias" class="numero-resumen">0</p>
+            <span>Según los filtros aplicados</span>
+        </div>
+
+        <div class="tarjeta-resumen" data-calculo="inasistencias-certificaciones">
+            <h3>Certificaciones médicas</h3>
+            <p id="total-certificaciones" class="numero-resumen">0</p>
+            <span>Ausencias por certificación</span>
+        </div>
+
+        <div class="tarjeta-resumen" data-calculo="inasistencias-pendientes">
+            <h3>Documentación pendiente</h3>
+            <p id="total-documentos-pendientes" class="numero-resumen">0</p>
+            <span>Certificados aún no adjuntados</span>
+        </div>
+    </div>
+
+    <div class="tarjeta">
+        <div class="cabecera-listado">
+            <div>
+                <h3>Historial de inasistencias</h3>
+                <p id="resultado-filtro-inasistencias" class="detalle-filtro"></p>
+            </div>
+        </div>
+
+        <div class="filtros-inasistencias">
+            <div class="campo campo-filtro" data-filtro-admin-inasistencias>
+                <label for="filtro-operario-inasistencias">Operario</label>
+                <select id="filtro-operario-inasistencias"></select>
+            </div>
+
+            <div class="campo campo-filtro" data-filtro-admin-inasistencias>
+                <label for="filtro-operativa-inasistencias">Operativa</label>
+                <select id="filtro-operativa-inasistencias"></select>
+            </div>
+
+            <div class="campo campo-filtro">
+                <label for="filtro-motivo-inasistencias">Motivo</label>
+                <select id="filtro-motivo-inasistencias"></select>
+            </div>
+
+            <div class="campo campo-filtro" data-rango-fechas>
+                <label class="etiqueta-rango-fechas">Período</label>
+                <input id="filtro-desde-inasistencias" type="date" data-rango-desde hidden>
+                <input id="filtro-hasta-inasistencias" type="date" data-rango-hasta hidden>
+            </div>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operario</th>
+                        <th>Operativa</th>
+                        <th>Período</th>
+                        <th>Duración</th>
+                        <th>Motivo</th>
+                        <th>Observaciones</th>
+                        <th>Documento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-inasistencias"></tbody>
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,370 @@
+<section class="pagina pagina-inicio-personalizable">
+    <div class="encabezado-pagina encabezado-inicio-personalizable">
+        <div>
+            <h2>Inicio</h2>
+            <p>Tu tablero de actividad logística, ordenado a tu manera.</p>
+        </div>
+
+        <div class="acciones-esenciales-inicio" aria-label="Acciones esenciales">
+            <button
+                id="abrir-reportes-desde-inicio"
+                type="button"
+                class="boton-secundario boton-ir-reportes-inicio"
+            >
+                Profundizar en Reportes
+            </button>
+            <button
+                type="button"
+                class="boton-exportar"
+                data-exportar-excel="todo"
+            >
+                Exportar todo a Excel
+            </button>
+        </div>
+    </div>
+
+    <section class="barra-vista-inicio" aria-labelledby="titulo-vista-inicio">
+        <div>
+            <span class="etiqueta-estado-reporte">Vista personal</span>
+            <h3 id="titulo-vista-inicio">Tu Inicio</h3>
+            <p id="detalle-vista-inicio" class="texto-secundario">
+                Preparando tu vista recomendada…
+            </p>
+        </div>
+
+        <button
+            id="personalizar-vista-inicio"
+            type="button"
+            class="boton-secundario"
+            aria-expanded="false"
+            aria-controls="panel-personalizar-inicio"
+        >
+            Personalizar vista
+        </button>
+    </section>
+
+    <section
+        id="panel-personalizar-inicio"
+        class="panel-personalizar-inicio"
+        aria-labelledby="titulo-personalizar-inicio"
+        hidden
+    >
+        <div class="cabecera-personalizar-inicio">
+            <div>
+                <span class="etiqueta-estado-reporte">Configuración</span>
+                <h3 id="titulo-personalizar-inicio">Elegí qué ver y en qué orden</h3>
+                <p>
+                    Podés partir de una vista recomendada y luego mostrar,
+                    ocultar o mover cada sección.
+                </p>
+            </div>
+            <div class="acciones-guardar-vista-inicio">
+                <button
+                    id="guardar-vista-inicio"
+                    type="button"
+                    class="boton-primario"
+                >
+                    Guardar mi vista
+                </button>
+                <button
+                    id="cerrar-personalizar-inicio"
+                    type="button"
+                    class="boton-secundario"
+                >
+                    Listo
+                </button>
+            </div>
+        </div>
+
+        <div class="plantillas-vista-inicio" role="group" aria-label="Vistas recomendadas">
+            <button type="button" data-aplicar-vista-inicio="operario">
+                <strong>Operario</strong>
+                <span>Mi actividad básica</span>
+            </button>
+            <button type="button" data-aplicar-vista-inicio="administrativo">
+                <strong>Administrativo</strong>
+                <span>Números, fechas y ciclo 21–20</span>
+            </button>
+            <button type="button" data-aplicar-vista-inicio="supervisor">
+                <strong>Supervisor</strong>
+                <span>Vista completa del depósito</span>
+            </button>
+        </div>
+
+        <div id="lista-personalizar-inicio" class="lista-personalizar-inicio"></div>
+
+        <div class="pie-personalizar-inicio">
+            <p id="mensaje-personalizar-inicio" aria-live="polite"></p>
+            <button
+                id="restaurar-vista-inicio"
+                type="button"
+                class="boton-secundario"
+            >
+                Restaurar mi vista recomendada
+            </button>
+        </div>
+    </section>
+
+    <div id="tablero-inicio-personalizable" class="tablero-inicio-personalizable">
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-completo"
+            data-inicio-widget="gestion"
+            data-inicio-categoria="Resumen"
+        >
+            <div class="cabecera-widget-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Resumen</span>
+                    <h3>Gestión general</h3>
+                    <p>Horas, inasistencias y embarques que siguen activos.</p>
+                </div>
+                <button type="button" class="asa-widget-inicio" aria-label="Mover Gestión general">↕</button>
+            </div>
+
+            <div class="dashboard indicadores-gestion-inicio">
+                <div class="tarjeta-resumen" data-calculo="inicio-horas">
+                    <h3>Horas</h3>
+                    <p id="total-horas" class="numero-resumen">0</p>
+                    <span id="detalle-horas-inicio">Todas las operativas</span>
+                </div>
+                <div class="tarjeta-resumen" data-calculo="inicio-inasistencias">
+                    <h3>Inasistencias</h3>
+                    <p id="total-inasistencias" class="numero-resumen">0</p>
+                    <span id="detalle-inasistencias-inicio">Todas las operativas</span>
+                </div>
+                <div class="tarjeta-resumen" data-calculo="inicio-embarques-activos">
+                    <h3>Embarques activos</h3>
+                    <p id="total-embarques-activos" class="numero-resumen">0</p>
+                    <span id="detalle-embarques-inicio">Todas las operativas</span>
+                </div>
+            </div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-completo"
+            data-inicio-widget="filtros"
+            data-inicio-categoria="Filtros y período"
+        >
+            <div class="cabecera-widget-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Filtros y período</span>
+                    <h3>Período de análisis</h3>
+                    <p>Definí la operativa, la tarea y las fechas que querés consultar.</p>
+                </div>
+                <button type="button" class="asa-widget-inicio" aria-label="Mover Período de análisis">↕</button>
+            </div>
+
+            <div class="filtros-actividad-inicio">
+                <div class="campo">
+                    <label for="filtro-operativa-grafico-inicio">Operativa</label>
+                    <select id="filtro-operativa-grafico-inicio">
+                        <option value="Todas">Todas las operativas</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="filtro-aplicacion-grafico-inicio">Tarea operativa</label>
+                    <select id="filtro-aplicacion-grafico-inicio">
+                        <option value="Todas">Todas las tareas</option>
+                    </select>
+                    <small>Recepción, almacenamiento, expedición y picking.</small>
+                </div>
+                <div class="campo">
+                    <label for="mes-grafico-inicio">Mes de referencia</label>
+                    <input id="mes-grafico-inicio" type="month">
+                </div>
+                <div class="campo" data-rango-fechas>
+                    <label class="etiqueta-rango-fechas">Período</label>
+                    <input id="filtro-desde-grafico-inicio" type="date" data-rango-desde hidden>
+                    <input id="filtro-hasta-grafico-inicio" type="date" data-rango-hasta hidden>
+                </div>
+            </div>
+
+            <div class="acciones-periodo-inicio">
+                <span>Períodos rápidos:</span>
+                <button
+                    id="aplicar-ciclo-grafico-inicio"
+                    type="button"
+                    class="boton-secundario boton-periodo-inicio activo"
+                    aria-pressed="true"
+                >
+                    Ciclo 21–20
+                </button>
+                <button
+                    id="aplicar-mes-grafico-inicio"
+                    type="button"
+                    class="boton-secundario boton-periodo-inicio"
+                    aria-pressed="false"
+                >
+                    Mes completo
+                </button>
+                <strong id="detalle-modo-periodo-inicio">Período activo: ciclo de facturación</strong>
+            </div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-completo"
+            data-inicio-widget="indicadores"
+            data-inicio-categoria="Resumen"
+        >
+            <div class="cabecera-widget-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Resumen</span>
+                    <h3>Indicadores operativos</h3>
+                    <p>Unidades, personas, ubicaciones y productividad de la selección actual.</p>
+                </div>
+                <button type="button" class="asa-widget-inicio" aria-label="Mover Indicadores operativos">↕</button>
+            </div>
+
+            <p id="estado-grafico-inicio" class="detalle-filtro estado-grafico-inicio" aria-live="polite">
+                Cargando actividad…
+            </p>
+
+            <div class="dashboard resumen-actividad-inicio">
+                <div class="tarjeta-resumen tarjeta-resumen-compacta" data-calculo="inicio-unidades">
+                    <h3>Cantidad de unidades</h3>
+                    <p id="total-unidades-inicio" class="numero-resumen">0</p>
+                    <span>Movimientos incluidos, en valor absoluto</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-resumen-compacta" data-calculo="inicio-usuarios">
+                    <h3>Usuarios activos</h3>
+                    <p id="total-usuarios-inicio" class="numero-resumen">0</p>
+                    <span>Personas con actividad</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-resumen-compacta" data-calculo="inicio-visitas">
+                    <h3>Visitas por ubicación</h3>
+                    <p id="total-ubicaciones-inicio" class="numero-resumen">0</p>
+                    <span>Cada operación de mapa con ubicación válida</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-resumen-compacta" data-calculo="inicio-productividad">
+                    <h3>Productividad por hora</h3>
+                    <p id="total-productividad-inicio" class="numero-resumen">—</p>
+                    <span id="detalle-productividad-inicio">Cruce Trace WIS y Tareas activas</span>
+                </div>
+            </div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-completo"
+            data-inicio-widget="tendencia"
+            data-inicio-categoria="Análisis"
+        >
+            <div class="cabecera-widget-inicio cabecera-grafico-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Análisis</span>
+                    <h3 data-calculo="inicio-tendencia" data-calculo-en-linea><span id="titulo-grafico-inicio">Cantidad de unidades por día</span></h3>
+                    <p id="detalle-grafico-inicio" class="detalle-filtro"></p>
+                </div>
+                <div class="controles-tendencia-inicio">
+                    <span id="pico-grafico-inicio" class="insignia"></span>
+                    <button type="button" class="asa-widget-inicio" aria-label="Mover Tendencia diaria">↕</button>
+                </div>
+            </div>
+            <div class="leyenda-comparacion-inicio" aria-label="Referencias del gráfico">
+                <span><i class="muestra-periodo-actual-inicio"></i>Período seleccionado</span>
+                <span><i class="muestra-periodo-anterior-inicio"></i><span id="etiqueta-periodo-anterior-inicio">Período anterior</span></span>
+            </div>
+            <div id="grafico-operativo-inicio" class="grafico-operativo-inicio" role="img" aria-label="Evolución diaria de la cantidad de unidades"></div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-medio contenedor-tareas-inicio"
+            data-inicio-widget="distribucion"
+            data-inicio-categoria="Análisis"
+        >
+            <div class="cabecera-widget-inicio cabecera-grafico-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Análisis</span>
+                    <h3 data-calculo="inicio-distribucion" data-calculo-en-linea><span id="titulo-distribucion-inicio">Unidades movidas por tarea</span></h3>
+                    <p id="detalle-distribucion-inicio" class="detalle-filtro">Suma de unidades movidas según cada tarea.</p>
+                </div>
+                <div class="acciones-widget-inicio">
+                    <span id="pico-distribucion-inicio" class="insignia"></span>
+                    <button type="button" class="asa-widget-inicio" aria-label="Mover Unidades por tarea">↕</button>
+                </div>
+            </div>
+            <div id="grafico-distribucion-inicio" class="grafico-operativo-inicio grafico-distribucion-inicio" role="img" aria-label="Distribución de unidades movidas por tarea"></div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-medio resumen-embarques-inicio"
+            data-inicio-widget="embarques"
+            data-inicio-categoria="Logística"
+            aria-labelledby="titulo-embarques-periodo-inicio"
+        >
+            <div class="cabecera-widget-inicio cabecera-grafico-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Logística</span>
+                    <h3 id="titulo-embarques-periodo-inicio">Embarques del período</h3>
+                    <p id="detalle-embarques-periodo-inicio" class="detalle-filtro">Llegadas confirmadas según los filtros.</p>
+                </div>
+                <button type="button" class="asa-widget-inicio" aria-label="Mover Embarques del período">↕</button>
+            </div>
+            <div class="cifras-embarques-inicio">
+                <div data-calculo="inicio-embarques-recibidos">
+                    <span>Recibidos</span>
+                    <strong id="embarques-recibidos-inicio">0</strong>
+                    <small>Llegada confirmada</small>
+                </div>
+            </div>
+            <div class="metas-embarques-inicio">
+                <div><span data-calculo="inicio-meta-control" data-calculo-en-linea>Control / ingreso · 48 h</span><strong id="meta-control-inicio">Sin recepciones</strong></div>
+                <div><span data-calculo="inicio-meta-crossdocking" data-calculo-en-linea>Crossdocking · 48 h</span><strong id="meta-crossdocking-inicio">Sin recepciones</strong></div>
+                <div><span data-calculo="inicio-meta-almacenamiento" data-calculo-en-linea>Almacenamiento · 72 h</span><strong id="meta-almacenamiento-inicio">Sin recepciones</strong></div>
+            </div>
+        </article>
+
+        <article
+            class="bloque-inicio-personalizable bloque-inicio-completo top-operarios-inicio"
+            data-inicio-widget="equipo"
+            data-inicio-categoria="Análisis"
+            aria-labelledby="titulo-top-operarios-inicio"
+        >
+            <div class="cabecera-widget-inicio cabecera-top-operarios-inicio">
+                <div>
+                    <span class="categoria-widget-inicio">Análisis</span>
+                    <h3 data-calculo="inicio-top-operarios" data-calculo-en-linea><span id="titulo-top-operarios-inicio">Top de operarios</span></h3>
+                    <p id="detalle-top-operarios-inicio" class="detalle-filtro">Mismo período, operativa y tarea del resumen superior.</p>
+                </div>
+                <div class="acciones-widget-inicio">
+                    <div class="campo campo-metrica-top-inicio">
+                        <label for="metrica-top-operarios-inicio">Ordenar por</label>
+                        <select id="metrica-top-operarios-inicio">
+                            <option value="unidades">Cantidad de unidades</option>
+                            <option value="visitas">Visitas por ubicación</option>
+                        </select>
+                    </div>
+                    <button type="button" class="asa-widget-inicio" aria-label="Mover Top de operarios">↕</button>
+                </div>
+            </div>
+            <div class="contenedor-tabla contenedor-tabla-top-inicio">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Operario / usuario WMS</th>
+                            <th data-calculo="inicio-top-unidades" data-calculo-en-linea>Cantidad de unidades</th>
+                            <th data-calculo="inicio-top-visitas" data-calculo-en-linea>Visitas por ubicación</th>
+                            <th data-calculo="inicio-top-horas" data-calculo-en-linea>Horas productivas</th>
+                            <th data-calculo="inicio-top-productividad" data-calculo-en-linea>Productividad por hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-top-operarios-inicio"></tbody>
+                </table>
+            </div>
+            <p class="nota-productividad-top-inicio">
+                La productividad cruza usuario, actividad y horario del Trace WIS con Tareas activas, usando 10 minutos de tolerancia al inicio.
+            </p>
+        </article>
+    </div>
+    <section class="tarjeta resumen-embarques-inicio" aria-labelledby="titulo-resumen-embarques-inicio" data-calculo="inicio-cumplimiento-embarques">
+        <div class="cabecera-listado"><div><span class="etiqueta-seccion-embarques">Embarques</span><h3 id="titulo-resumen-embarques-inicio">Cumplimiento de metas</h3><p id="detalle-resumen-embarques-inicio" class="detalle-filtro">Según el período y operativa seleccionados.</p></div></div>
+        <div class="cuerpo-resumen-embarques-inicio">
+            <div id="grafico-cumplimiento-embarques-inicio" class="grafico-torta-inicio" role="img" aria-label="Sin embarques recibidos"><div class="centro-grafico-inicio"><strong id="porcentaje-embarques-meta-inicio">0%</strong><span>en meta</span></div></div>
+            <div class="metricas-embarques-inicio">
+                <div><span class="punto-leyenda cumplida"></span><span>En meta</span><strong id="embarques-en-meta-inicio">0</strong></div>
+                <div><span class="punto-leyenda incumplida"></span><span>Fuera de meta</span><strong id="embarques-fuera-meta-inicio">0</strong></div>
+                <div><span class="punto-leyenda pendiente"></span><span>Evaluación pendiente</span><strong id="embarques-meta-pendiente-inicio">0</strong></div>
+                <div class="pendientes-llegada-inicio"><span data-calculo="inicio-pendientes-llegada" data-calculo-en-linea>Contenedores pendientes por llegar</span><strong id="embarques-pendientes-llegada-inicio">0</strong></div>
+            </div>
+        </div>
+    </section>
+</section>

@@ -1,0 +1,13 @@
+{
+  "name": "polo-oeste-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor local mínimo para la web operativa de Polo Oeste",
+  "scripts": {
+    "start": "node backend/server.js",
+    "check": "node --check backend/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,527 @@
+<section class="pagina catalogo-reglas-wis">
+<div class="encabezado-pagina">
+        <div>
+            <h2>Actividades</h2>
+            <p>
+                Catálogo central para vincular la aplicación Android con las
+                horas trabajadas por actividad, día, semana y mes.
+            </p>
+        </div>
+    </div>
+
+    <div class="flujo-integracion-actividades" aria-label="Flujo de actividades y horas">
+        <div class="paso-integracion-actividad">
+            <span>Paso 1</span>
+            <strong>Catálogo de actividades</strong>
+            <p>Define códigos estables y qué actividades están disponibles.</p>
+        </div>
+        <div class="paso-integracion-actividad">
+            <span>Paso 2</span>
+            <strong>Aplicación Android</strong>
+            <p>El operario selecciona la actividad antes de iniciar el contador.</p>
+        </div>
+        <div class="paso-integracion-actividad">
+            <span>Paso 3</span>
+            <strong>Horas y productividad</strong>
+            <p>Cruza usuario, actividad y horario con los movimientos del Trace WIS.</p>
+        </div>
+    </div>
+
+    <div class="cabecera-seccion-catalogo">
+        <div>
+            <span class="sobrelinea-catalogo">Catálogo web</span>
+            <h3>Actividades para el registro de horas</h3>
+            <p>
+                Los administradores pueden crear, modificar o quitar actividades
+                manuales. Las aplicaciones WIS aparecen automáticamente y quedan
+                protegidas y se sincronizan con el selector del handheld.
+            </p>
+        </div>
+        <span class="insignia-fuente-catalogo manual">Administración web</span>
+    </div>
+
+    <div class="dashboard resumen-actividades-android">
+        <div class="tarjeta-resumen" data-calculo="actividades-manuales">
+            <h3>Actividades manuales</h3>
+            <p id="total-actividades-android" class="numero-resumen">0</p>
+            <span>Agregadas por administradores</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="actividades-activas">
+            <h3>Activas</h3>
+            <p id="total-actividades-android-activas" class="numero-resumen">0</p>
+            <span>Disponibles en el handheld</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="actividades-wis">
+            <h3>Aplicaciones WIS</h3>
+            <p id="total-aplicaciones-wis-protegidas" class="numero-resumen">0</p>
+            <span>Vinculadas automáticamente</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="actividades-catalogo">
+            <h3>Catálogo disponible</h3>
+            <p id="total-catalogo-actividades" class="numero-resumen">0</p>
+            <span>Actividades activas y aplicaciones WIS</span>
+        </div>
+    </div>
+
+    <div id="aviso-lectura-actividades-android" class="aviso-informativo" hidden>
+        Tenés acceso de consulta. Solo un administrador puede agregar, editar
+        o quitar actividades manuales.
+    </div>
+
+    <div id="panel-form-actividad-android" class="tarjeta" hidden>
+        <div class="cabecera-listado">
+            <div>
+                <h3 id="titulo-form-actividad-android">Nueva actividad</h3>
+                <p class="detalle-filtro">
+                    El código identifica la actividad dentro de la web. Su
+                    equivalencia se utiliza en el selector del handheld.
+                </p>
+            </div>
+        </div>
+        <form id="form-actividad-android" autocomplete="off">
+            <input id="id-actividad-android" type="hidden">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="codigo-actividad-android">Código de actividad</label>
+                    <input
+                        id="codigo-actividad-android"
+                        type="text"
+                        maxlength="40"
+                        placeholder="Ej.: CARGA_MANUAL"
+                        required
+                    >
+                </div>
+                <div class="campo">
+                    <label for="nombre-actividad-android">Nombre</label>
+                    <input
+                        id="nombre-actividad-android"
+                        type="text"
+                        maxlength="100"
+                        placeholder="Ej.: Carga manual de camión"
+                        required
+                    >
+                </div>
+                <div class="campo">
+                    <label for="operativa-actividad-android">Operativa</label>
+                    <select data-operativas-catalogo id="operativa-actividad-android" required>
+                        <option value="*">Todas</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="estado-actividad-android">Estado</label>
+                    <select id="estado-actividad-android" required>
+                        <option value="activa">Activa</option>
+                        <option value="inactiva">Inactiva</option>
+                    </select>
+                </div>
+                <div class="campo campo-descripcion-actividad">
+                    <label for="descripcion-actividad-android">Descripción</label>
+                    <textarea
+                        id="descripcion-actividad-android"
+                        rows="3"
+                        maxlength="240"
+                        placeholder="Indicá brevemente qué trabajo comprende esta actividad."
+                    ></textarea>
+                </div>
+            </div>
+            <div class="acciones-formulario">
+                <button type="submit" class="boton-primario">
+                    Guardar actividad
+                </button>
+                <button
+                    id="cancelar-edicion-actividad-android"
+                    type="button"
+                    class="boton-secundario"
+                    hidden
+                >
+                    Cancelar edición
+                </button>
+            </div>
+        </form>
+        <p id="mensaje-actividad-android" class="mensaje" aria-live="polite"></p>
+    </div>
+
+    <div class="tarjeta">
+        <div class="cabecera-listado">
+            <div>
+                <h3>Catálogo disponible</h3>
+                <p id="resultado-filtros-actividades-android" class="detalle-filtro">
+                    0 actividades
+                </p>
+            </div>
+        </div>
+        <div class="filtros-catalogo">
+            <div class="campo campo-busqueda-catalogo">
+                <label for="buscar-actividad-android">Buscar</label>
+                <input
+                    id="buscar-actividad-android"
+                    type="search"
+                    placeholder="Código, actividad o descripción"
+                >
+            </div>
+            <div class="campo">
+                <label for="filtro-origen-actividad-android">Origen</label>
+                <select id="filtro-origen-actividad-android">
+                    <option value="todos">Todos</option>
+                    <option value="manual">Manual / Web</option>
+                    <option value="wis">WIS protegido</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label for="filtro-operativa-actividad-android">Operativa</label>
+                <select data-operativas-catalogo id="filtro-operativa-actividad-android">
+                    <option value="todas">Todas</option>
+                    <option value="*">Todas las operativas</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label for="filtro-estado-actividad-android">Estado</label>
+                <select id="filtro-estado-actividad-android">
+                    <option value="todos">Todos</option>
+                    <option value="activa">Activas</option>
+                    <option value="inactiva">Inactivas</option>
+                </select>
+            </div>
+        </div>
+        <div class="contenedor-tabla">
+            <table class="tabla-actividades-android">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Actividad</th>
+                        <th>Operativa</th>
+                        <th>Origen</th>
+                        <th>Estado</th>
+                        <th>Versión</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-actividades-android"></tbody>
+            </table>
+        </div>
+        <p id="sin-actividades-android" class="aviso-informativo" hidden>
+            No hay actividades que coincidan con los filtros seleccionados.
+        </p>
+    </div>
+
+    <details class="tarjeta">
+        <summary class="cabecera-historial">Historial de actividades manuales</summary>
+        <div>
+            <p class="texto-secundario">
+                Registra el usuario, la fecha y hora, y el detalle de cada alta,
+                modificación o baja realizada por administradores.
+            </p>
+            <div class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha y hora</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Código</th>
+                            <th>Qué se modificó</th>
+                            <th>Versión</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-historial-actividades-android"></tbody>
+                </table>
+            </div>
+            <p id="sin-historial-actividades-android" class="detalle-filtro">
+                Todavía no hay cambios registrados.
+            </p>
+        </div>
+    </details>
+
+    <div class="bloque-reglas-wis">
+        <div class="cabecera-seccion-catalogo">
+            <div>
+                <span class="sobrelinea-catalogo">Fuente automática</span>
+                <h3>Aplicaciones y reglas WIS</h3>
+                <p>
+                    Las aplicaciones WIS aparecen como protegidas dentro del
+                    catálogo y en el selector del handheld. Aquí se mantienen sus reglas para
+                    reportes, indicadores y mapas.
+                </p>
+            </div>
+            <span class="insignia-fuente-catalogo wis">Aplicaciones protegidas</span>
+        </div>
+    </div>
+
+    <p class="aviso-informativo">
+        Las reglas se aplican por operativa, aplicación, descripción, signo y
+        vigencia. Una descripción exacta tiene prioridad sobre el comodín
+        <strong>*</strong>. Los cambios recalculan los reportes con el catálogo
+        vigente y quedan registrados en el historial.
+    </p>
+
+    <div class="nota-metricas" aria-label="Diferencia entre indicadores">
+        <div>
+            <strong>Cantidad de unidades</strong>
+            <span>Suma el valor absoluto de los movimientos incluidos por cada regla.</span>
+        </div>
+        <div>
+            <strong>Productividad</strong>
+            <span>Relaciona unidades con horas de Tareas activas y 10 minutos de tolerancia.</span>
+        </div>
+    </div>
+
+    <div class="dashboard resumen-catalogo">
+        <div class="tarjeta-resumen" data-calculo="reglas-total">
+            <h3>Reglas configuradas</h3>
+            <p id="total-reglas-wis" class="numero-resumen">0</p>
+            <span id="detalle-reglas-vigentes-wis">0 vigentes hoy</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="reglas-unidades">
+            <h3>Suman unidades</h3>
+            <p id="total-reglas-unidades-wis" class="numero-resumen">0</p>
+            <span>Reglas incluidas en cantidad de unidades</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="reglas-visitas">
+            <h3>Visitas por ubicación</h3>
+            <p id="total-reglas-mapa-wis" class="numero-resumen">0</p>
+            <span>Reglas que utilizan ubicación</span>
+        </div>
+        <div class="tarjeta-resumen" data-calculo="reglas-tolerancia">
+            <h3>Productividad vinculable</h3>
+            <p class="numero-resumen">10 min</p>
+            <span>Tolerancia entre inicio y primer movimiento</span>
+        </div>
+    </div>
+
+    <div id="aviso-lectura-reglas-wis" class="aviso-informativo" hidden>
+        Tenés acceso de consulta. Solo un administrador puede crear, editar,
+        eliminar o restaurar reglas.
+    </div>
+
+    <div id="panel-form-regla-wis" class="tarjeta" hidden>
+        <div class="cabecera-listado">
+            <div>
+                <h3 id="titulo-form-regla-wis">Nueva regla</h3>
+                <p class="detalle-filtro">
+                    Usá <strong>*</strong> para aplicar a todas las operativas o
+                    a cualquier descripción de la aplicación.
+                </p>
+            </div>
+            <button
+                id="restaurar-reglas-wis"
+                type="button"
+                class="boton-secundario"
+            >
+                Restaurar predeterminadas
+            </button>
+        </div>
+
+        <form id="form-regla-wis" autocomplete="off">
+            <input id="id-regla-wis" type="hidden">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="operativa-regla-wis">Operativa</label>
+                    <select data-operativas-catalogo id="operativa-regla-wis" required>
+                        <option value="*">* · Todas</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="aplicacion-regla-wis">Aplicación</label>
+                    <input
+                        id="aplicacion-regla-wis"
+                        type="text"
+                        maxlength="40"
+                        placeholder="Ej.: PRD095"
+                        required
+                    >
+                </div>
+                <div class="campo">
+                    <label for="descripcion-regla-wis">
+                        Descripción de aplicación
+                    </label>
+                    <input
+                        id="descripcion-regla-wis"
+                        type="text"
+                        maxlength="160"
+                        value="*"
+                        required
+                    >
+                </div>
+                <div class="campo">
+                    <label for="signo-regla-wis">Signo</label>
+                    <select id="signo-regla-wis" required>
+                        <option value="positivo">Positivo</option>
+                        <option value="negativo">Negativo</option>
+                        <option value="cero">Cero</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="actividad-regla-wis">Actividad logística</label>
+                    <input
+                        id="actividad-regla-wis"
+                        type="text"
+                        list="actividades-logisticas-wis"
+                        maxlength="100"
+                        placeholder="Ej.: Preparación de picking"
+                        required
+                    >
+                    <datalist id="actividades-logisticas-wis">
+                        <option value="Preparación de picking"></option>
+                        <option value="Almacenamiento agrupado"></option>
+                        <option value="Almacenamiento fraccionado"></option>
+                        <option value="Recepción"></option>
+                        <option value="Expedición"></option>
+                        <option value="Inventario"></option>
+                        <option value="Ajuste de inventario"></option>
+                        <option value="Devolución de picking"></option>
+                    </datalist>
+                </div>
+                <div class="campo">
+                    <label for="estado-regla-wis">Estado</label>
+                    <select id="estado-regla-wis" required>
+                        <option value="incluido">Incluido</option>
+                        <option value="excluido">Excluido</option>
+                        <option value="pendiente">Pendiente</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="vigencia-desde-regla-wis">Vigencia desde</label>
+                    <input id="vigencia-desde-regla-wis" type="date">
+                </div>
+                <div class="campo">
+                    <label for="vigencia-hasta-regla-wis">Vigencia hasta</label>
+                    <input id="vigencia-hasta-regla-wis" type="date">
+                </div>
+            </div>
+
+            <fieldset class="grupo-indicadores-regla">
+                <legend>Participación en indicadores</legend>
+                <label class="opcion-indicador-regla">
+                    <input id="unidades-regla-wis" type="checkbox">
+                    <span>Sumar el movimiento a Cantidad de unidades.</span>
+                </label>
+                <label class="opcion-indicador-regla">
+                    <input id="mapa-regla-wis" type="checkbox">
+                    <span>Usar su ubicación en el mapa de calor.</span>
+                </label>
+                <label class="opcion-indicador-regla">
+                    <input id="inicio-regla-wis" type="checkbox">
+                    <span>Mostrar la actividad en Inicio y sumarla a la comparación diaria de Reportes y dashboards.</span>
+                </label>
+            </fieldset>
+
+            <div class="acciones-formulario">
+                <button type="submit" class="boton-primario">
+                    Guardar regla
+                </button>
+                <button
+                    id="cancelar-edicion-regla-wis"
+                    type="button"
+                    class="boton-secundario"
+                    hidden
+                >
+                    Cancelar edición
+                </button>
+            </div>
+        </form>
+        <p id="mensaje-regla-wis" class="mensaje" aria-live="polite"></p>
+    </div>
+
+    <div class="tarjeta">
+        <div class="cabecera-listado">
+            <div>
+                <h3>Catálogo vigente</h3>
+                <p id="resultado-filtros-reglas-wis" class="detalle-filtro">
+                    0 reglas
+                </p>
+            </div>
+        </div>
+
+        <div class="filtros-catalogo">
+            <div class="campo campo-busqueda-catalogo">
+                <label for="buscar-regla-wis">Buscar</label>
+                <input
+                    id="buscar-regla-wis"
+                    type="search"
+                    placeholder="Aplicación, descripción o actividad"
+                >
+            </div>
+            <div class="campo">
+                <label for="filtro-operativa-regla-wis">Operativa</label>
+                <select data-operativas-catalogo id="filtro-operativa-regla-wis">
+                    <option value="todas">Todas</option>
+                    <option value="*">Comodín · Todas</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label for="filtro-estado-regla-wis">Estado</label>
+                <select id="filtro-estado-regla-wis">
+                    <option value="todos">Todos</option>
+                    <option value="incluido">Incluido</option>
+                    <option value="excluido">Excluido</option>
+                    <option value="pendiente">Pendiente</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label for="filtro-vigencia-regla-wis">Vigencia</label>
+                <select id="filtro-vigencia-regla-wis">
+                    <option value="todas">Todas</option>
+                    <option value="vigentes">Vigentes hoy</option>
+                    <option value="futuras">Futuras</option>
+                    <option value="vencidas">Vencidas</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label for="filtro-actividad-regla-wis">Actividad</label>
+                <select id="filtro-actividad-regla-wis">
+                    <option value="todas">Todas las actividades</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table class="tabla-reglas">
+                <thead>
+                    <tr>
+                        <th>Operativa</th>
+                        <th>Aplicación y descripción</th>
+                        <th>Signo</th>
+                        <th>Actividad</th>
+                        <th>Vigencia</th>
+                        <th>Estado</th>
+                        <th>Indicadores</th>
+                        <th>Versión</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-reglas-wis"></tbody>
+            </table>
+        </div>
+        <p id="sin-reglas-wis" class="aviso-informativo" hidden>
+            No hay reglas que coincidan con los filtros seleccionados.
+        </p>
+    </div>
+
+    <details class="tarjeta">
+        <summary class="cabecera-historial">Historial de cambios</summary>
+        <div>
+            <p class="texto-secundario">
+                Auditoría local de altas, modificaciones, eliminaciones y
+                restauraciones. Se conservan los últimos 500 eventos.
+            </p>
+            <div class="contenedor-tabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Acción</th>
+                            <th>Regla</th>
+                            <th>Versión</th>
+                            <th>Usuario</th>
+                            <th>Cambio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-historial-reglas-wis"></tbody>
+                </table>
+            </div>
+            <p id="sin-historial-reglas-wis" class="detalle-filtro">
+                Todavía no hay cambios manuales registrados.
+            </p>
+        </div>
+    </details>
+</section>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polo Oeste | Handheld web</title>
+    <link rel="icon" type="image/png" href="assets/img/polo-oeste-marca.png">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/handheld-web.css?v=20260828-5">
+</head>
+<body class="handheld-web-body">
+    <section id="acceso-handheld-web" class="acceso-handheld-web">
+        <div class="marca-acceso-handheld">
+            <img src="assets/img/polo-oeste-marca.png" alt="">
+            <div>
+                <strong>Polo Oeste</strong>
+                <span>Handheld web</span>
+            </div>
+        </div>
+        <form id="form-login-handheld" class="tarjeta-login-handheld">
+            <span class="etiqueta-handheld">Acceso operativo</span>
+            <h1>Iniciar sesión</h1>
+            <p>Ingresá con tu cuenta de funcionario.</p>
+            <label>
+                Usuario
+                <input id="usuario-login-handheld" type="text" autocomplete="username" required>
+            </label>
+            <label>
+                Contraseña
+                <input id="clave-login-handheld" type="password" autocomplete="current-password" required>
+            </label>
+            <button type="submit">Ingresar al handheld</button>
+            <p id="mensaje-login-handheld" class="mensaje-handheld" aria-live="polite"></p>
+        </form>
+    </section>
+
+    <div id="aplicacion-handheld-web" class="aplicacion-handheld-web" hidden>
+        <header class="cabecera-aplicacion-handheld">
+            <div class="marca-aplicacion-handheld">
+                <img src="assets/img/polo-oeste-marca.png" alt="">
+                <div>
+                    <strong>Polo Oeste</strong>
+                    <span id="usuario-sesion-handheld">Handheld web</span>
+                </div>
+            </div>
+            <div class="estado-dispositivo-handheld">
+                <span id="conexion-handheld" class="conexion-handheld"><i></i> En línea</span>
+            </div>
+        </header>
+
+        <main class="panel-handheld-web">
+            <section class="presentacion-handheld">
+                <span>Actividad operativa</span>
+                <h1>Control de actividad</h1>
+                <p>Iniciá, pausá o reanudá tu actividad desde este dispositivo.</p>
+            </section>
+
+            <section class="configuracion-tarea-handheld">
+                <label>
+                    Colector
+                    <input
+                        id="colector-handheld-web"
+                        type="text"
+                        maxlength="30"
+                        value="WEB-01"
+                        placeholder="Identificador"
+                    >
+                </label>
+                <label>
+                    Actividad
+                    <select id="actividad-handheld-web" required>
+                        <option value="">Seleccionar actividad</option>
+                    </select>
+                </label>
+            </section>
+
+            <section class="estado-actividad-handheld">
+                <span>Estado actual</span>
+                <strong id="estado-actividad-handheld">Sin actividad</strong>
+                <p id="detalle-actividad-handheld">Aún no has iniciado una actividad.</p>
+                <div class="tiempo-actividad-handheld">
+                    <span>Tiempo activo</span>
+                    <strong id="tiempo-actividad-handheld">00:00:00</strong>
+                </div>
+                <div class="datos-actividad-handheld">
+                    <div>
+                        <span>Pausas</span>
+                        <strong id="pausas-actividad-handheld">0</strong>
+                    </div>
+                    <div>
+                        <span>Colector</span>
+                        <strong id="colector-actividad-visible">—</strong>
+                    </div>
+                    <div>
+                        <span>Actividad</span>
+                        <strong id="actividad-visible-handheld">—</strong>
+                    </div>
+                </div>
+            </section>
+
+            <div class="acciones-principales-handheld">
+                <button id="alternar-actividad-handheld" type="button" class="boton-principal-handheld">
+                    <span id="icono-actividad-handheld">▶</span>
+                    <strong id="texto-actividad-handheld">Iniciar actividad</strong>
+                </button>
+                <button id="finalizar-actividad-handheld" type="button" class="boton-finalizar-handheld" disabled>
+                    Finalizar
+                </button>
+            </div>
+            <p id="mensaje-actividad-handheld" class="mensaje-handheld" aria-live="polite"></p>
+
+            <button id="cerrar-sesion-handheld" type="button" class="cerrar-sesion-handheld">
+                Cerrar sesión
+            </button>
+        </main>
+    </div>
+
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/reglas-trace.js?v=20260828-5"></script>
+    <script src="assets/js/catalogo-empresas.js?v=20261004-1"></script>
+    <script src="assets/js/catalogo-actividades.js?v=20261004-1"></script>
+    <script src="assets/js/tareas-activas.js?v=20261004-1"></script>
+    <script src="assets/js/handheld-web.js?v=20260828-5"></script>
+</body>
+</html>

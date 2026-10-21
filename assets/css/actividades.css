@@ -1,0 +1,68 @@
+/* Estilos específicos de pages/actividades.html */
+.catalogo-reglas-wis .resumen-catalogo{margin-bottom:24px}
+.catalogo-reglas-wis .nota-metricas{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px}
+.catalogo-reglas-wis .nota-metricas div{padding:14px 16px;border:1px solid var(--gris-200);border-radius:10px;background:var(--gris-50)}
+.catalogo-reglas-wis .nota-metricas strong,.catalogo-reglas-wis .nota-metricas span{display:block}
+.catalogo-reglas-wis .nota-metricas strong{margin-bottom:5px;color:var(--gris-900)}
+.catalogo-reglas-wis .nota-metricas span{color:var(--gris-600);font-size:13px;line-height:1.45}
+.catalogo-reglas-wis .filtros-catalogo{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin-bottom:20px}
+.catalogo-reglas-wis .campo-busqueda-catalogo{grid-column:span 2}
+.catalogo-reglas-wis .grupo-indicadores-regla{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:4px 0 20px;padding:16px;border:1px solid var(--verde-borde);border-radius:10px;background:var(--verde-suave)}
+.catalogo-reglas-wis .grupo-indicadores-regla legend{padding:0 7px;color:var(--verde-profundo);font-weight:750}
+.catalogo-reglas-wis .selector-categoria-volumen{grid-column:1/-1;max-width:520px}
+.catalogo-reglas-wis .selector-categoria-volumen small{display:block;margin-top:6px;color:var(--gris-600);line-height:1.4}
+.catalogo-reglas-wis .opcion-indicador-regla{display:flex;align-items:flex-start;gap:9px;color:var(--gris-800);font-size:13px;line-height:1.35}
+.catalogo-reglas-wis .opcion-indicador-regla input{width:17px;height:17px;margin-top:1px;accent-color:var(--verde-hover)}
+.catalogo-reglas-wis .opcion-indicador-regla input:disabled+span{color:var(--gris-400)}
+.catalogo-reglas-wis .etiquetas-regla{display:flex;flex-wrap:wrap;gap:5px;min-width:190px}
+.catalogo-reglas-wis .etiqueta-regla{display:inline-flex;padding:4px 7px;border:1px solid var(--gris-200);border-radius:999px;background:var(--gris-50);color:var(--gris-700);font-size:11px;font-weight:750;white-space:nowrap}
+.catalogo-reglas-wis .etiqueta-regla.activa{border-color:var(--verde-borde);background:var(--verde-suave);color:var(--verde-profundo)}
+.catalogo-reglas-wis .etiqueta-regla.categoria-picking{border-color:#c9cee9;background:#f0f2ff;color:#454b84}
+.catalogo-reglas-wis .etiqueta-regla.categoria-operativo{border-color:#e5d29c;background:var(--ambar-suave);color:var(--ambar)}
+.catalogo-reglas-wis .etiqueta-regla.categoria-ninguno{border-color:var(--gris-200);background:var(--gris-50);color:var(--gris-600)}
+.catalogo-reglas-wis .estado-regla{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.catalogo-reglas-wis .estado-regla.incluido{background:var(--verde-suave);color:var(--verde-profundo)}
+.catalogo-reglas-wis .estado-regla.excluido{background:var(--rojo-suave);color:var(--rojo)}
+.catalogo-reglas-wis .estado-regla.pendiente{background:var(--ambar-suave);color:var(--ambar)}
+.catalogo-reglas-wis .acciones-regla{display:flex;gap:8px}
+.catalogo-reglas-wis .acciones-regla button{min-height:34px;padding:6px 9px}
+.catalogo-reglas-wis .tabla-reglas td{vertical-align:top}
+.catalogo-reglas-wis .detalle-clave-regla{display:grid;min-width:220px;gap:4px}
+.catalogo-reglas-wis .detalle-clave-regla small,.catalogo-reglas-wis .detalle-vigencia-regla small{color:var(--gris-600)}
+.catalogo-reglas-wis .detalle-vigencia-regla{min-width:145px;line-height:1.45}
+.catalogo-reglas-wis .cabecera-historial{cursor:pointer;color:var(--gris-900);font-size:17px;font-weight:800}
+.catalogo-reglas-wis .cabecera-historial+div{margin-top:18px}
+.catalogo-reglas-wis .flujo-integracion-actividades{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 28px}
+.catalogo-reglas-wis .paso-integracion-actividad{position:relative;min-height:116px;padding:18px;border:1px solid var(--gris-200);border-radius:12px;background:#fff}
+.catalogo-reglas-wis .paso-integracion-actividad:not(:last-child)::after{content:"→";position:absolute;top:50%;right:-20px;z-index:1;width:27px;height:27px;display:grid;place-items:center;border:1px solid var(--verde-borde);border-radius:50%;background:var(--verde-suave);color:var(--verde-profundo);font-weight:900;transform:translateY(-50%)}
+.catalogo-reglas-wis .paso-integracion-actividad span,.catalogo-reglas-wis .paso-integracion-actividad strong{display:block}
+.catalogo-reglas-wis .paso-integracion-actividad span{margin-bottom:7px;color:var(--verde-profundo);font-size:12px;font-weight:850;letter-spacing:.04em;text-transform:uppercase}
+.catalogo-reglas-wis .paso-integracion-actividad strong{margin-bottom:7px;color:var(--gris-900);font-size:17px}
+.catalogo-reglas-wis .paso-integracion-actividad p{margin:0;color:var(--gris-600);font-size:13px;line-height:1.45}
+.catalogo-reglas-wis .cabecera-seccion-catalogo{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:16px}
+.catalogo-reglas-wis .cabecera-seccion-catalogo h3{margin:3px 0 5px;color:var(--gris-900);font-size:21px}
+.catalogo-reglas-wis .cabecera-seccion-catalogo p{max-width:760px;margin:0;color:var(--gris-600);line-height:1.5}
+.catalogo-reglas-wis .sobrelinea-catalogo{color:var(--verde-profundo);font-size:12px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+.catalogo-reglas-wis .insignia-fuente-catalogo,.catalogo-reglas-wis .estado-actividad-catalogo{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.catalogo-reglas-wis .insignia-fuente-catalogo.manual,.catalogo-reglas-wis .estado-actividad-catalogo.activa{border:1px solid var(--verde-borde);background:var(--verde-suave);color:var(--verde-profundo)}
+.catalogo-reglas-wis .insignia-fuente-catalogo.wis{border:1px solid #c9cee9;background:#f0f2ff;color:#454b84}
+.catalogo-reglas-wis .estado-actividad-catalogo.inactiva{border:1px solid var(--gris-200);background:var(--gris-50);color:var(--gris-600)}
+.catalogo-reglas-wis .resumen-actividades-android{margin-bottom:22px}
+.catalogo-reglas-wis .campo-descripcion-actividad{grid-column:1/-1}
+.catalogo-reglas-wis .detalle-actividad-catalogo{display:grid;min-width:230px;gap:3px}
+.catalogo-reglas-wis .detalle-actividad-catalogo strong{color:var(--gris-900)}
+.catalogo-reglas-wis .detalle-actividad-catalogo small,.catalogo-reglas-wis .codigo-actividad-catalogo small{color:var(--gris-600)}
+.catalogo-reglas-wis .detalle-cambio-actividad{min-width:320px;color:var(--gris-700);line-height:1.45;white-space:normal}
+.catalogo-reglas-wis .codigo-actividad-catalogo{display:grid;min-width:130px;gap:3px}
+.catalogo-reglas-wis .codigo-actividad-catalogo code{width:fit-content;padding:4px 7px;border-radius:6px;background:var(--gris-100);color:var(--gris-900);font-size:12px;font-weight:800}
+.catalogo-reglas-wis .acciones-actividad-catalogo{display:flex;gap:7px}
+.catalogo-reglas-wis .acciones-actividad-catalogo button{min-height:34px;padding:6px 9px}
+.catalogo-reglas-wis .fila-actividad-wis{background:#fafaff}
+.catalogo-reglas-wis .bloque-reglas-wis{margin-top:36px;padding-top:30px;border-top:2px solid var(--gris-200)}
+.catalogo-reglas-wis [hidden]{display:none!important}
+@media (max-width:720px){
+  .catalogo-reglas-wis .campo-busqueda-catalogo{grid-column:auto}
+  .catalogo-reglas-wis .flujo-integracion-actividades{grid-template-columns:1fr}
+  .catalogo-reglas-wis .paso-integracion-actividad:not(:last-child)::after{content:"↓";top:auto;right:50%;bottom:-20px;transform:translateX(50%)}
+  .catalogo-reglas-wis .cabecera-seccion-catalogo{display:grid}
+}

@@ -1,0 +1,393 @@
+<section class="pagina pagina-embarques">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Gestión de embarques</h2>
+            <p>
+                Seguimiento de llegada, control, crossdocking y almacenamiento
+                por contenedor.
+            </p>
+        </div>
+
+        <div class="acciones-cabecera-embarques">
+            <button
+                id="abrir-formulario-embarque"
+                type="button"
+                class="boton-primario"
+                data-requiere-admin-embarques
+            >
+                Nuevo embarque
+            </button>
+            <button
+                type="button"
+                class="boton-exportar"
+                data-exportar-excel="embarques"
+            >
+                Exportar Excel
+            </button>
+        </div>
+    </div>
+
+    <div id="aviso-embarques-lectura" class="aviso-informativo" hidden>
+        Tu usuario tiene acceso de lectura. Solo un administrador puede crear,
+        actualizar o eliminar embarques.
+    </div>
+
+    <div class="panel-resumen-embarques">
+        <section class="bloque-indicadores-embarques" aria-labelledby="titulo-resumen-embarques">
+            <div class="cabecera-bloque-embarques">
+                <div>
+                    <span class="etiqueta-seccion-embarques">Vista general</span>
+                    <h3 id="titulo-resumen-embarques">Resumen operativo</h3>
+                </div>
+                <p>Los indicadores responden al período y filtros seleccionados.</p>
+            </div>
+
+            <div class="dashboard resumen-gestion-embarques">
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-activos" data-calculo="embarques-activos">
+                    <h3>Embarques activos</h3>
+                    <p id="total-embarques" class="numero-resumen">0</p>
+                    <span>Pendientes o en proceso</span>
+                </div>
+
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-recibidos" data-calculo="embarques-llegadas">
+                    <h3>Llegadas confirmadas</h3>
+                    <p id="total-embarques-recibidos" class="numero-resumen">0</p>
+                    <span>Con fecha real de llegada</span>
+                </div>
+
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-vencidos" data-calculo="embarques-metas-vencidas">
+                    <h3>Metas vencidas</h3>
+                    <p id="total-embarques-metas-vencidas" class="numero-resumen">0</p>
+                    <span>Con al menos un hito vencido</span>
+                </div>
+
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-finalizados" data-calculo="embarques-finalizados">
+                    <h3>Finalizados</h3>
+                    <p id="total-embarques-finalizados" class="numero-resumen">0</p>
+                    <span>Proceso operativo completo</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-vencidos" data-calculo="embarques-retrasos">
+                    <h3>Retrasos activos</h3>
+                    <p id="total-retrasos-activos-embarques" class="numero-resumen">0</p>
+                    <span>Embarques abiertos con causa informada</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-vencidos" data-calculo="embarques-resoluciones">
+                    <h3>Resoluciones vencidas</h3>
+                    <p id="total-resoluciones-vencidas-embarques" class="numero-resumen">0</p>
+                    <span>Fecha prevista anterior a hoy</span>
+                </div>
+                <div class="tarjeta-resumen tarjeta-kpi-embarque kpi-recibidos" data-calculo="embarques-causa">
+                    <h3>Causa principal</h3>
+                    <p id="causa-principal-retrasos-embarques" class="numero-resumen texto-kpi-embarque">Sin datos</p>
+                    <span id="detalle-causa-principal-retrasos-embarques">No hay retrasos activos</span>
+                </div>
+            </div>
+        </section>
+
+        <article class="tarjeta tarjeta-grafico-embarques" aria-labelledby="titulo-grafico-cumplimiento-embarques" data-calculo="embarques-cumplimiento">
+            <div class="cabecera-grafico-embarques">
+                <div>
+                    <span class="etiqueta-seccion-embarques">Cumplimiento</span>
+                    <h3 id="titulo-grafico-cumplimiento-embarques">
+                        Metas por contenedor
+                    </h3>
+                    <p id="detalle-grafico-cumplimiento-embarques">
+                        Todos los contenedores registrados.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cuerpo-grafico-cumplimiento-embarques">
+                <div
+                    id="grafico-cumplimiento-embarques"
+                    class="grafico-torta-embarques"
+                    role="img"
+                    aria-label="Sin contenedores registrados"
+                >
+                    <div class="centro-grafico-embarques">
+                        <strong id="porcentaje-meta-cumplida-embarques">0%</strong>
+                        <span>cumplidas</span>
+                    </div>
+                </div>
+
+                <ul class="leyenda-grafico-embarques">
+                    <li class="leyenda-meta-cumplida">
+                        <span>Meta cumplida</span>
+                        <strong id="total-meta-cumplida-embarques">0</strong>
+                    </li>
+                    <li class="leyenda-meta-incumplida">
+                        <span>Meta no cumplida</span>
+                        <strong id="total-meta-incumplida-embarques">0</strong>
+                    </li>
+                    <li class="leyenda-meta-pendiente">
+                        <span>Pendiente</span>
+                        <strong id="total-meta-pendiente-embarques">0</strong>
+                    </li>
+                </ul>
+            </div>
+        </article>
+    </div>
+
+    <details
+        id="panel-formulario-embarque"
+        class="tarjeta panel-formulario-embarque"
+        data-requiere-admin-embarques
+    >
+        <summary class="resumen-formulario-embarque">
+            <span>
+                <small>Registro operativo</small>
+                <strong id="titulo-form-embarque">Registrar embarque</strong>
+                <span>
+                    Cargá los datos generales y confirmá cada hito cuando ocurra.
+                </span>
+            </span>
+            <span class="accion-resumen-formulario">
+                <span class="texto-abrir-formulario">Mostrar formulario</span>
+                <span class="texto-cerrar-formulario">Ocultar formulario</span>
+            </span>
+        </summary>
+
+        <div class="cuerpo-formulario-embarque">
+
+        <form id="form-embarque" autocomplete="off">
+            <input id="embarque-id" type="hidden">
+
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="referencia-embarque">Referencia</label>
+                    <input
+                        id="referencia-embarque"
+                        type="text"
+                        placeholder="Ejemplo: EMB-2026-001"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="operativa-embarque">Operativa</label>
+                    <select id="operativa-embarque" required>
+                        <option value="">Seleccionar operativa</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="origen-embarque">Proveedor u origen</label>
+                    <input
+                        id="origen-embarque"
+                        type="text"
+                        placeholder="Proveedor, puerto o ciudad"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="tipo-carga-embarque">Tipo de carga</label>
+                    <select id="tipo-carga-embarque" required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="Contenedor 20 pies">Contenedor 20 pies</option>
+                        <option value="Contenedor 40 pies">Contenedor 40 pies</option>
+                        <option value="Camión">Camión</option>
+                        <option value="Carga aérea">Carga aérea</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="bultos-embarque">Bultos</label>
+                    <input id="bultos-embarque" type="number" min="0" step="1">
+                </div>
+
+                                <div class="campo campo-fecha-arribo">
+                    <label for="fecha-estimada-arribo-embarque">Fecha estimada de arribo</label>
+                    <div class="control-fecha-elegante">
+                        <input id="fecha-estimada-arribo-embarque" type="date" required>
+                        <span class="icono-calendario" aria-hidden="true">â–¦</span>
+                    </div>
+                    <div class="sugerencias-fecha-arribo" aria-label="Fechas sugeridas">
+                        <button type="button" data-dias-arribo="1">MaÃ±ana</button>
+                        <button type="button" data-dias-arribo="3">+3 dÃ­as</button>
+                        <button type="button" data-dias-arribo="7">+7 dÃ­as</button>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-llegada-embarque">
+                        Confirmación de llegada
+                    </label>
+                    <input id="fecha-llegada-embarque" type="date">
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-control-ingreso-embarque">
+                        Confirmación de control / ingreso
+                    </label>
+                    <input
+                        id="fecha-control-ingreso-embarque"
+                        type="date"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-crossdocking-embarque">
+                        Confirmación de crossdocking
+                    </label>
+                    <input
+                        id="fecha-crossdocking-embarque"
+                        type="date"
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="fecha-almacenamiento-embarque">
+                        Confirmación de almacenamiento
+                    </label>
+                    <input
+                        id="fecha-almacenamiento-embarque"
+                        type="date"
+                    >
+                </div>
+            </div>
+
+            <div class="metas-formulario-embarque">
+                <strong>Metas operativas por contenedor</strong>
+                <span>Control / ingreso: 48 h desde el inicio operativo.</span>
+                <span>Crossdocking: 48 h desde el control.</span>
+                <span>Almacenamiento: 72 h desde el control.</span>
+                <span>
+                    Si llegan varios contenedores el mismo día, el inicio se
+                    escalona +24 h por orden de registro.
+                </span>
+                <p id="vista-previa-metas-embarque" aria-live="polite">
+                    Confirmá la llegada para calcular los vencimientos.
+                </p>
+            </div>
+
+            <fieldset class="grupo-cuenta">
+                <legend>Seguimiento de retrasos</legend>
+                <div class="form-grid">
+                    <div class="campo"><label for="motivo-retraso-embarque">Motivo de retraso</label><select id="motivo-retraso-embarque"><option value="">Sin retraso informado</option><option>DocumentaciÃ³n pendiente</option><option>Diferencia de cantidades</option><option>MercancÃ­a daÃ±ada</option><option>Falta de espacio</option><option>Falta de personal</option><option>Equipo no disponible</option><option>Bloqueo del sistema</option><option>Espera de proveedor</option><option>Prioridad operativa</option><option>Otro</option></select></div>
+                    <div class="campo"><label for="responsable-resolucion-embarque">Responsable de seguimiento</label><input id="responsable-resolucion-embarque" type="text" maxlength="100" placeholder="Persona o sector responsable"></div>
+                    <div class="campo"><label for="fecha-prevista-resolucion-embarque">Fecha prevista de resoluciÃ³n</label><input id="fecha-prevista-resolucion-embarque" type="date"></div>
+                </div>
+            </fieldset>            <div class="campo campo-amplio">
+                <label for="observaciones-embarque">Observaciones</label>
+                <textarea
+                    id="observaciones-embarque"
+                    rows="3"
+                    placeholder="Desvíos, prioridades, documentación pendiente u otros datos"
+                ></textarea>
+            </div>
+
+            <div class="acciones-formulario">
+                <button type="submit" class="boton-primario">
+                    Guardar embarque
+                </button>
+                <button
+                    id="cancelar-edicion-embarque"
+                    type="button"
+                    class="boton-secundario"
+                    hidden
+                >
+                    Cancelar edición
+                </button>
+            </div>
+        </form>
+
+        </div>
+    </details>
+
+    <p id="mensaje-embarques" class="mensaje mensaje-flotante-embarques" aria-live="polite"></p>
+
+    <div class="tarjeta tarjeta-plan-embarques">
+        <div class="cabecera-listado">
+            <div>
+                <span class="etiqueta-seccion-embarques">Seguimiento</span>
+                <h3>Plan de embarques</h3>
+                <p id="resultado-filtro-embarques" class="detalle-filtro"></p>
+            </div>
+            <button
+                id="limpiar-filtros-embarques"
+                type="button"
+                class="boton-secundario"
+            >
+                Limpiar filtros
+            </button>
+        </div>
+
+        <div class="panel-ciclo-embarques">
+            <div class="descripcion-ciclo-embarques">
+                <span class="etiqueta-seccion-embarques">Facturación</span>
+                <strong>Ciclo 21–20</strong>
+                <p>
+                    El mes seleccionado cierra el día 20 y comienza el día 21
+                    del mes anterior. El rango se aplica sobre la llegada
+                    confirmada.
+                </p>
+            </div>
+
+            <div class="controles-ciclo-embarques">
+                <div class="campo campo-mes-ciclo-embarques">
+                    <label for="mes-ciclo-embarques">Mes de cierre</label>
+                    <input id="mes-ciclo-embarques" type="month">
+                </div>
+                <button
+                    id="aplicar-ciclo-embarques"
+                    type="button"
+                    class="boton-primario"
+                >
+                    Aplicar ciclo 21–20
+                </button>
+            </div>
+
+            <p id="detalle-ciclo-embarques" class="detalle-ciclo-embarques">
+                Todos los períodos.
+            </p>
+        </div>
+
+        <div class="filtros-embarques">
+            <div class="campo campo-filtro">
+                <label for="filtro-operativa-embarques">Operativa</label>
+                <select id="filtro-operativa-embarques"></select>
+            </div>
+
+            <div class="campo campo-filtro">
+                <label for="filtro-estado-embarques">Estado</label>
+                <select id="filtro-estado-embarques"></select>
+            </div>
+            <div class="campo campo-filtro">
+                <label for="filtro-motivo-retraso-embarques">Motivo de retraso</label>
+                <select id="filtro-motivo-retraso-embarques"></select>
+            </div>
+            <div class="campo campo-filtro" data-rango-fechas>
+                <label class="etiqueta-rango-fechas">Período de llegada</label>
+                <input id="filtro-desde-embarques" type="date" data-rango-desde hidden>
+                <input id="filtro-hasta-embarques" type="date" data-rango-hasta hidden>
+            </div>
+        </div>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Referencia</th>
+                        <th>Operativa</th>
+                        <th>Proveedor / origen</th>
+                        <th>Carga</th>
+                        <th>Bultos / arribo estimado</th>
+                        <th>Llegada confirmada</th>
+                        <th data-calculo="embarques-hito-control" data-calculo-en-linea>Control / ingreso</th>
+                        <th data-calculo="embarques-hito-crossdocking" data-calculo-en-linea>Crossdocking</th>
+                        <th data-calculo="embarques-hito-almacenamiento" data-calculo-en-linea>Almacenamiento</th>
+                        <th data-calculo="embarques-estado" data-calculo-en-linea>Estado</th>
+                        <th>Motivo de retraso</th>
+                        <th>Responsable</th>
+                        <th>ResoluciÃ³n prevista</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-embarques"></tbody>
+            </table>
+        </div>
+    </div>
+</section>

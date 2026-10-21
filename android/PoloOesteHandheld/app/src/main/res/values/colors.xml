@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde_marca">#82BD3A</color>
+    <color name="verde_profundo">#3D6E20</color>
+    <color name="gris_fondo">#F3F6F4</color>
+    <color name="gris_oscuro">#292D2B</color>
+    <color name="gris_texto">#626A66</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="rojo">#C83D50</color>
+</resources>

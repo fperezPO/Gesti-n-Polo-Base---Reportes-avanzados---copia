@@ -1,0 +1,245 @@
+/*
+ * Refinamiento visual: movimiento y respuesta de los controles.
+ * Se carga después del resto de las hojas. No modifica la paleta: usa las
+ * variables de variables.css (y sus valores del modo oscuro).
+ */
+
+:root {
+    --curva-suave: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --duracion-rapida: 140ms;
+    --duracion-media: 220ms;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Foco visible y consistente al navegar con teclado. */
+:where(button, a, summary, select, input, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--verde-marca);
+    outline-offset: 2px;
+}
+
+:where(input[type="checkbox"], input[type="radio"], input[type="range"]) {
+    accent-color: var(--verde-marca);
+}
+
+/* Botones: elevación leve al pasar el cursor y respuesta al presionar. */
+:is(
+    .boton-primario,
+    .boton-secundario,
+    .boton-eliminar,
+    .boton-exportar,
+    .boton-tema,
+    .botones-modo-mapa button,
+    .controles-zoom-mapa button,
+    .busqueda-ubicacion-mapa button
+) {
+    transition:
+        background-color var(--duracion-rapida) ease,
+        border-color var(--duracion-rapida) ease,
+        color var(--duracion-rapida) ease,
+        box-shadow var(--duracion-media) var(--curva-suave),
+        transform var(--duracion-rapida) var(--curva-suave);
+}
+
+.boton-primario:hover:not(:disabled) {
+    box-shadow: 0 10px 22px rgba(83, 129, 39, 0.24);
+}
+
+:is(.boton-secundario, .boton-exportar, .boton-tema):hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(41, 45, 43, 0.08);
+}
+
+/* Desplazamientos solo si el sistema no pide reducir el movimiento. */
+@media (prefers-reduced-motion: no-preference) {
+    :is(.boton-primario, .boton-secundario, .boton-exportar, .boton-tema):hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
+
+    :is(
+        .boton-primario,
+        .boton-secundario,
+        .boton-eliminar,
+        .boton-exportar,
+        .boton-tema,
+        .botones-modo-mapa button,
+        .controles-zoom-mapa button,
+        .busqueda-ubicacion-mapa button
+    ):active:not(:disabled) {
+        transform: translateY(0) scale(0.98);
+        transition-duration: 60ms;
+    }
+
+    .tarjeta-resumen:hover {
+        transform: translateY(-2px);
+    }
+
+    .sidebar button:hover:not(.activo)::before {
+        transform: scale(1.06);
+    }
+}
+
+:is(.boton-primario, .boton-secundario, .boton-eliminar):disabled {
+    transform: none;
+    box-shadow: none;
+}
+
+/* El subrayado deriva del color del texto: sirve en tema claro y oscuro. */
+.boton-enlace {
+    transition:
+        color var(--duracion-rapida) ease,
+        text-decoration-color var(--duracion-rapida) ease;
+    text-decoration-color: currentColor;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.boton-enlace:hover:not(:disabled) {
+    text-decoration-color: currentColor;
+}
+
+/* Navegación lateral: desplazamiento y submenús más suaves. */
+.sidebar button {
+    transition:
+        background-color var(--duracion-media) ease,
+        border-color var(--duracion-media) ease,
+        color var(--duracion-media) ease,
+        box-shadow var(--duracion-media) var(--curva-suave),
+        transform var(--duracion-media) var(--curva-suave);
+}
+
+.sidebar button::before {
+    transition:
+        background-color var(--duracion-media) ease,
+        border-color var(--duracion-media) ease,
+        transform var(--duracion-media) var(--curva-suave);
+}
+
+.sidebar .submenu-menu:not([hidden]) {
+    animation: despliegue-submenu var(--duracion-media) var(--curva-suave) backwards;
+}
+
+/* Tarjetas e indicadores. */
+:is(.tarjeta, .tarjeta-resumen, .panel-filtro) {
+    transition:
+        box-shadow var(--duracion-media) var(--curva-suave),
+        border-color var(--duracion-media) ease,
+        transform var(--duracion-media) var(--curva-suave);
+}
+
+/* Campos. */
+:is(.campo input, .campo select, .campo textarea, td select, .grupo-herramienta-mapa select) {
+    transition:
+        border-color var(--duracion-rapida) ease,
+        background-color var(--duracion-rapida) ease,
+        box-shadow var(--duracion-media) var(--curva-suave);
+}
+
+/* Tablas: el resaltado de fila acompaña al cursor sin saltos. */
+tbody td {
+    transition: background-color var(--duracion-rapida) ease;
+}
+
+/*
+ * Entrada de página escalonada. router.js agrega .pagina-entrando solo al
+ * navegar, así los redibujos posteriores de una página no repiten la animación.
+ * "backwards" aplica solo el estado inicial: al terminar no queda ninguna
+ * transformación que altere el posicionamiento.
+ */
+#contenido > .pagina-entrando > :not(dialog) {
+    animation: entrada-bloque 340ms var(--curva-suave) backwards;
+}
+
+#contenido > .pagina-entrando > :nth-child(2) { animation-delay: 30ms; }
+#contenido > .pagina-entrando > :nth-child(3) { animation-delay: 60ms; }
+#contenido > .pagina-entrando > :nth-child(4) { animation-delay: 90ms; }
+#contenido > .pagina-entrando > :nth-child(5) { animation-delay: 120ms; }
+#contenido > .pagina-entrando > :nth-child(n + 6) { animation-delay: 150ms; }
+
+.tarjeta-autenticacion:not([hidden]) {
+    animation: entrada-bloque 380ms var(--curva-suave) backwards;
+}
+
+/* Mensajes y avisos aparecen con un fundido breve. */
+.mensaje:not(:empty) {
+    animation: aparicion-mensaje var(--duracion-media) ease-out backwards;
+}
+
+/* Diálogos: aparición con leve escala y fondo que se oscurece gradualmente. */
+dialog[open] {
+    animation: aparicion-dialogo var(--duracion-media) var(--curva-suave) backwards;
+}
+
+dialog[open]::backdrop {
+    animation: aparicion-fondo var(--duracion-media) ease-out backwards;
+}
+
+/* Menús desplegables (details). */
+details[open] > :not(summary) {
+    animation: despliegue-submenu var(--duracion-media) var(--curva-suave) backwards;
+}
+
+/* Barras de desplazamiento discretas. */
+* {
+    scrollbar-color: rgba(116, 122, 118, 0.45) transparent;
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: rgba(116, 122, 118, 0.42) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(116, 122, 118, 0.62);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@keyframes entrada-bloque {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@keyframes despliegue-submenu {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes aparicion-mensaje {
+    from {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes aparicion-dialogo {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.98);
+    }
+}
+
+@keyframes aparicion-fondo {
+    from {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}

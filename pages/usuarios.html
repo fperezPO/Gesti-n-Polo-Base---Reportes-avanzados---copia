@@ -1,0 +1,152 @@
+<section class="pagina">
+    <div class="encabezado-pagina">
+        <div>
+            <h2>Usuarios</h2>
+            <p>Administración de accesos y permisos.</p>
+        </div>
+
+        <button
+            type="button"
+            class="boton-exportar"
+            data-exportar-excel="usuarios"
+        >
+            Exportar Excel
+        </button>
+    </div>
+
+    <div class="tarjeta tarjeta-importacion-usuarios">
+        <div class="cabecera-listado">
+            <div>
+                <span class="etiqueta-estado-reporte">Alta masiva</span>
+                <h3>Importar usuarios WIS</h3>
+                <p class="texto-secundario">
+                    Creá Personal y sus cuentas web utilizando exactamente el
+                    mismo usuario de WIS.
+                </p>
+            </div>
+
+            <div class="acciones-importacion-usuarios">
+                <button
+                    id="descargar-plantilla-usuarios"
+                    type="button"
+                    class="boton-secundario"
+                >
+                    Descargar plantilla
+                </button>
+                <button
+                    id="importar-usuarios-excel"
+                    type="button"
+                    class="boton-primario"
+                >
+                    Importar Excel
+                </button>
+                <input
+                    id="archivo-importacion-usuarios"
+                    type="file"
+                    accept=".xlsx"
+                    hidden
+                >
+            </div>
+        </div>
+
+        <div class="aviso-informativo aviso-clave-importacion">
+            Las cuentas importadas se crean con la contraseña
+            <strong>initialpass</strong>. Cada usuario deberá cambiarla al
+            iniciar sesión por primera vez.
+        </div>
+        <p
+            id="mensaje-importacion-usuarios"
+            class="mensaje"
+            aria-live="polite"
+        ></p>
+    </div>
+
+    <div class="tarjeta">
+        <h3>Crear cuenta para un operario existente</h3>
+        <p class="texto-secundario">
+            Utilizá este formulario para los operarios registrados antes de
+            incorporar el inicio de sesión.
+        </p>
+
+        <form id="form-usuario" autocomplete="off">
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="operario-usuario">Operario</label>
+                    <select id="operario-usuario" required></select>
+                </div>
+
+                <div class="campo">
+                    <label for="nombre-nuevo-usuario">Usuario</label>
+                    <input
+                        id="nombre-nuevo-usuario"
+                        type="text"
+                        minlength="3"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="clave-nuevo-usuario">Contraseña inicial</label>
+                    <input
+                        id="clave-nuevo-usuario"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="confirmar-clave-nuevo-usuario">
+                        Confirmar contraseña
+                    </label>
+                    <input
+                        id="confirmar-clave-nuevo-usuario"
+                        type="password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="rol-nuevo-usuario">Tipo de usuario</label>
+                    <select id="rol-nuevo-usuario" required>
+                        <option value="normal">Usuario normal</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="boton-primario">
+                Crear usuario
+            </button>
+        </form>
+
+        <p id="sin-operarios-disponibles" class="aviso-informativo" hidden>
+            Todos los operarios registrados ya tienen una cuenta.
+        </p>
+        <p id="mensaje-usuarios" class="mensaje" aria-live="polite"></p>
+    </div>
+
+    <div class="tarjeta">
+        <h3>Usuarios registrados</h3>
+
+        <div class="contenedor-tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Operario vinculado</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-usuarios"></tbody>
+            </table>
+        </div>
+    </div>
+</section>

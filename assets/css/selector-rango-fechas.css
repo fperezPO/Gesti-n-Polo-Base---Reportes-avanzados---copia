@@ -1,0 +1,276 @@
+/* Selector de período en un único calendario (assets/js/selector-rango-fechas.js). */
+
+.etiqueta-rango-fechas {
+    display: block;
+}
+
+/* El disparador replica el aspecto de los inputs de .campo. */
+.disparador-rango-fechas {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #cbd2cd;
+    border-radius: 9px;
+    background: #fcfdfc;
+    color: var(--gris-900);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.disparador-rango-fechas:hover {
+    border-color: var(--gris-400);
+}
+
+.disparador-rango-fechas:focus-visible,
+.disparador-rango-fechas[aria-expanded="true"] {
+    border-color: var(--verde-marca);
+    background: var(--blanco);
+    box-shadow: 0 0 0 3px rgba(130, 189, 58, 0.16);
+    outline: 0;
+}
+
+.disparador-rango-fechas svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: var(--verde-profundo);
+    stroke-linecap: round;
+    stroke-width: 1.8;
+}
+
+.texto-rango-fechas {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.disparador-rango-fechas.sin-rango .texto-rango-fechas {
+    color: var(--gris-600);
+}
+
+/* Panel flotante */
+.calendario-rango {
+    position: fixed;
+    z-index: 9000;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    padding: 16px 16px 12px;
+    border: 1px solid var(--gris-200);
+    border-radius: 14px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-elevada);
+    color: var(--gris-900);
+    animation: calendario-rango-entrar 160ms ease-out;
+}
+
+.calendario-rango-meses {
+    display: flex;
+    gap: 22px;
+}
+
+.calendario-rango-mes {
+    width: 266px;
+    max-width: 100%;
+}
+
+.calendario-rango-mes header {
+    display: grid;
+    grid-template-columns: 32px 1fr 32px;
+    align-items: center;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.calendario-rango-mes header strong {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.calendario-rango-nav {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--gris-200);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--gris-700);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.calendario-rango-nav:hover {
+    border-color: var(--verde-marca);
+    color: var(--verde-profundo);
+}
+
+.calendario-rango-semana,
+.calendario-rango-dias {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendario-rango-semana span {
+    padding: 4px 0;
+    color: var(--gris-600);
+    font-size: 11px;
+    font-weight: 750;
+    text-align: center;
+}
+
+.calendario-rango-dias {
+    row-gap: 3px;
+}
+
+.dia-rango {
+    position: relative;
+    height: 36px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--gris-900);
+    font: inherit;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+}
+
+.dia-rango:hover:not(.es-inicio):not(.es-fin) {
+    border-radius: 8px;
+    background: var(--gris-100);
+}
+
+.dia-rango:focus-visible {
+    z-index: 1;
+    border-radius: 8px;
+    outline: 2px solid var(--verde-marca);
+    outline-offset: -2px;
+}
+
+.dia-rango.es-hoy {
+    font-weight: 800;
+}
+
+.dia-rango.es-hoy::after {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--verde-marca);
+    content: "";
+    transform: translateX(-50%);
+}
+
+.dia-rango.en-rango {
+    background: var(--verde-suave);
+}
+
+.dia-rango.es-provisorio {
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--verde-suave) 0 6px,
+        transparent 6px 9px
+    );
+}
+
+.dia-rango.es-inicio,
+.dia-rango.es-fin {
+    border-radius: 9px;
+    background: var(--verde-marca);
+    color: #fff;
+    font-weight: 800;
+}
+
+.dia-rango.es-inicio.en-rango:not(.es-fin) {
+    border-radius: 9px 0 0 9px;
+}
+
+.dia-rango.es-fin.en-rango:not(.es-inicio) {
+    border-radius: 0 9px 9px 0;
+}
+
+.dia-rango.es-inicio::after,
+.dia-rango.es-fin::after {
+    background: #fff;
+}
+
+/* width 0 + min-width 100 %: el texto no ensancha el panel, se adapta a los meses. */
+.calendario-rango-ayuda {
+    width: 0;
+    min-width: calc(100% - 4px);
+    margin: 12px 2px 0;
+    color: var(--gris-600);
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.calendario-rango-ayuda strong {
+    color: var(--gris-900);
+}
+
+.calendario-rango-pie {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--gris-200);
+}
+
+.calendario-rango-pie .boton-secundario {
+    min-height: 34px;
+    margin-left: auto;
+    padding: 6px 14px;
+}
+
+@keyframes calendario-rango-entrar {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+/* Modo oscuro */
+body.modo-oscuro .disparador-rango-fechas {
+    border-color: #465249;
+    background: #121814;
+    color: #e8ede9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.26) inset;
+}
+
+body.modo-oscuro .disparador-rango-fechas[aria-expanded="true"],
+body.modo-oscuro .disparador-rango-fechas:focus-visible {
+    border-color: var(--verde-marca);
+    background: #171e19;
+}
+
+body.modo-oscuro .calendario-rango {
+    border-color: #39453d;
+    background: #181f1a;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+}
+
+body.modo-oscuro .dia-rango.es-inicio,
+body.modo-oscuro .dia-rango.es-fin {
+    color: #10150f;
+}
+
+body.modo-oscuro .dia-rango.es-inicio::after,
+body.modo-oscuro .dia-rango.es-fin::after {
+    background: #10150f;
+}
+
+@media (max-width: 640px) {
+    .calendario-rango-mes {
+        width: min(300px, calc(100vw - 58px));
+    }
+}

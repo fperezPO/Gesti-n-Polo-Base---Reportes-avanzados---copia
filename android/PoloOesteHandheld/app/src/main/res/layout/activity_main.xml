@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="@color/gris_oscuro"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="POLO OESTE\nHANDHELD"
+                android:textColor="@color/blanco"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/connectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● Sin conexión"
+                android:textColor="#C9D0CC"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loginPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACCESO OPERATIVO"
+                android:textColor="@color/verde_profundo"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="Iniciar sesión"
+                android:textColor="@color/gris_oscuro"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/serverInput"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_input"
+                android:hint="Dirección del servidor"
+                android:inputType="textUri"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/userInput"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Usuario"
+                android:inputType="text"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/collectorInput"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Colector (ej. C608)"
+                android:inputType="textCapCharacters"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_button_green"
+                android:text="Ingresar al handheld"
+                android:textAllCaps="false"
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activityPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/userLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Funcionario · Colector"
+                android:textColor="@color/verde_profundo"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Control de actividad"
+                android:textColor="@color/gris_oscuro"
+                android:textSize="29sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="ACTIVIDAD"
+                android:textColor="@color/verde_profundo"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/activitySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bg_input"
+                android:paddingHorizontal="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_state"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ESTADO ACTUAL"
+                    android:textColor="#BFC8C1"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/stateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="Sin actividad"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/timeLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:gravity="center"
+                    android:text="00:00:00"
+                    android:textColor="#FFFFFF"
+                    android:textSize="42sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pauseLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:gravity="center"
+                    android:text="0 pausas"
+                    android:textColor="#CDD5D0"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/toggleButton"
+                android:layout_width="match_parent"
+                android:layout_height="62dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_button_green"
+                android:text="▶  Iniciar actividad"
+                android:textAllCaps="false"
+                android:textColor="@color/gris_oscuro"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/finishButton"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_button_outline"
+                android:enabled="false"
+                android:text="Finalizar"
+                android:textAllCaps="false"
+                android:textColor="@color/gris_oscuro"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="18dp"
+                android:background="@android:color/transparent"
+                android:text="Cerrar sesión"
+                android:textAllCaps="false"
+                android:textColor="@color/gris_texto" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/messageLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:textColor="@color/rojo"
+            android:textSize="13sp" />
+    </LinearLayout>
+</ScrollView>
