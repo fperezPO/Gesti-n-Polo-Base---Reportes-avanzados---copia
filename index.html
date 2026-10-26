@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="assets/css/reportes.css?v=20261005-2">
     <link rel="stylesheet" href="assets/css/selector-rango-fechas.css?v=20261004-1">
     <link rel="stylesheet" href="assets/css/dashboards.css?v=20261019-1">
-    <link rel="stylesheet" href="assets/css/refinamiento-visual.css?v=20261003-3">
+    <link rel="stylesheet" href="assets/css/refinamiento-visual.css?v=20261022-1">
+    <link rel="stylesheet" href="assets/css/navegacion-lateral.css?v=20261021-1">
     <link rel="stylesheet" href="assets/css/explicaciones-calculo.css?v=20261016-2">
     <link rel="stylesheet" href="assets/css/intro-logo.css?v=20261004-2">
     <style>
@@ -266,7 +267,16 @@
 
         <div class="layout">
             <aside class="sidebar">
-                <nav>
+                <button
+                    type="button"
+                    class="alternar-navegacion"
+                    aria-expanded="false"
+                    aria-controls="navegacion-principal"
+                    aria-label="Desplegar el menú de navegación"
+                >
+                    <span>Contraer menú</span>
+                </button>
+                <nav id="navegacion-principal">
                     <button type="button" data-page="inicio">
                         Inicio
                     </button>
@@ -374,6 +384,7 @@
     <script src="assets/js/mi-perfil.js?v=20260902-1"></script>
     <script src="assets/js/organizacion.js?v=20260903-1"></script>
     <script src="assets/js/explicaciones-calculo.js?v=20261019-1"></script>
+    <script src="assets/js/navegacion-lateral.js?v=20261021-1"></script>
     <script>
         document.querySelectorAll(".boton-grupo-menu").forEach((boton) => {
             const submenu = document.getElementById(boton.getAttribute("aria-controls"));

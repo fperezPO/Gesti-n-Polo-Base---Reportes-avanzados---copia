@@ -41,6 +41,9 @@ function jsonAscii(datos) {
 
 async function sincronizarUsuariosServidor(usuarios = obtenerUsuarios()) {
     if (typeof location === "undefined") return false;
+    /* Un navegador sin usuarios (por ejemplo, la primera vez que se entra
+       desde el portal) no debe vaciar las cuentas que usa la app Android. */
+    if (!usuarios.length) return false;
     try {
         const operarios = obtenerOperarios();
         const usuariosCompartidos = usuarios.map((usuario) => {

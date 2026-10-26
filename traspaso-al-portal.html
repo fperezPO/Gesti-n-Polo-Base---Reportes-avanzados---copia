@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<!--
+    TEMPORAL (21/10/2026): pasa los usuarios y operarios de Gestión guardados en
+    esta dirección (por ejemplo http://127.0.0.1:8765) al portal de aplicaciones
+    (http://localhost:8080). Los datos viajan de una ventana a la otra dentro
+    del navegador (postMessage), sin pasar por ningún servidor ni archivo.
+    Borrar este archivo una vez hecho el traspaso.
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Pasar usuarios al portal · Gestión</title>
+    <style>
+        :root { --fondo: #f3f5f3; --tarjeta: #ffffff; --borde: #e2e6e3; --texto: #292d2b; --suave: #5f6561; --verde: #426c25; --marca: #82bd3a; --rojo: #9b1c2b; }
+        @media (prefers-color-scheme: dark) {
+            :root { --fondo: #141a16; --tarjeta: #1d241f; --borde: #354039; --texto: #e8ede9; --suave: #a8b3ab; --verde: #a7d47e; --rojo: #ffb3bb; }
+        }
+        * { box-sizing: border-box; }
+        body { display: grid; min-height: 100vh; margin: 0; place-items: center; padding: 16px;
+               background: var(--fondo); color: var(--texto); font: 15px/1.5 Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .tarjeta { width: min(560px, 100%); padding: 26px 28px; border: 1px solid var(--borde); border-radius: 14px; background: var(--tarjeta); }
+        h1 { margin: 0 0 6px; font-size: 20px; letter-spacing: -0.01em; }
+        p { margin: 0 0 12px; color: var(--suave); }
+        strong { color: var(--texto); }
+        table { width: 100%; margin: 4px 0 16px; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 6px 8px; border-bottom: 1px solid var(--borde); text-align: left; }
+        th { color: var(--suave); font-weight: 650; }
+        button { padding: 10px 18px; border: 0; border-radius: 10px; background: var(--marca); color: #292d2b; font: inherit; font-weight: 700; cursor: pointer; }
+        button:disabled { opacity: 0.55; cursor: default; }
+        a { color: var(--verde); font-weight: 650; }
+        .ok { color: var(--verde); font-weight: 650; }
+        .error { color: var(--rojo); font-weight: 650; }
+    </style>
+</head>
+<body>
+    <main class="tarjeta">
+        <h1>Pasar usuarios al portal</h1>
+        <div id="contenido"><p>Leyendo los datos de esta dirección…</p></div>
+        <p id="estado" aria-live="polite"></p>
+    </main>
+
+    <script>
+        const DESTINO = "http://localhost:8080";
+        const contenido = document.getElementById("contenido");
+        const estado = document.getElementById("estado");
+
+        function leer(clave) {
+            try {
+                const valor = JSON.parse(localStorage.getItem(clave) || "[]");
+                return Array.isArray(valor) ? valor : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function texto(etiqueta, valor) {
+            const elemento = document.createElement(etiqueta);
+            elemento.textContent = valor;
+            return elemento;
+        }
+
+        function avisar(mensaje, clase = "") {
+            estado.className = clase;
+            estado.textContent = mensaje;
+        }
+
+        const usuarios = leer("gestion_personal_usuarios");
+        const operarios = leer("gestion_personal_operarios");
+        const otraDireccion = location.href.includes("127.0.0.1")
+            ? location.href.replace("127.0.0.1", "localhost")
+            : location.href.replace("localhost", "127.0.0.1");
+
+        if (location.port === "8080" || location.pathname.startsWith("/gestion-")) {
+            contenido.replaceChildren(texto("p", "Esta página se abre en la dirección vieja de Gestión, no desde el portal."));
+        } else if (!usuarios.length) {
+            const enlace = texto("a", otraDireccion);
+            enlace.href = otraDireccion;
+            const parrafo = texto("p", `En esta dirección (${location.origin}) no hay usuarios de Gestión guardados. Si la usabas con otra dirección, abrí esta misma página ahí: `);
+            parrafo.append(enlace);
+            contenido.replaceChildren(parrafo);
+        } else {
+            const resumen = document.createElement("p");
+            resumen.append("En ", texto("strong", location.origin), ` hay ${usuarios.length} usuario${usuarios.length === 1 ? "" : "s"} y ${operarios.length} operario${operarios.length === 1 ? "" : "s"}.`);
+
+            const tabla = document.createElement("table");
+            const cabecera = tabla.createTHead().insertRow();
+            ["Nombre", "Usuario", "Rol", "Activo"].forEach((titulo) => cabecera.append(texto("th", titulo)));
+            const cuerpo = tabla.createTBody();
+            for (const usuario of usuarios) {
+                const fila = cuerpo.insertRow();
+                [usuario.nombre, usuario.nombreUsuario, usuario.rol, usuario.activo === false ? "No" : "Sí"]
+                    .forEach((valor) => fila.append(texto("td", valor ?? "")));
+            }
+
+            const nota = texto("p", "Se copian con sus contraseñas, junto con los operarios (de su cargo depende qué ve cada usuario). Acá no se borra nada.");
+            const boton = texto("button", "Pasar al portal");
+            boton.type = "button";
+            contenido.replaceChildren(resumen, tabla, nota, boton);
+
+            let ventana = null;
+            boton.addEventListener("click", () => {
+                ventana = window.open(`${DESTINO}/_portal/traspaso-gestion.html`, "traspaso-gestion");
+                if (!ventana) {
+                    avisar("El navegador bloqueó la ventana nueva. Permitila y probá de nuevo.", "error");
+                    return;
+                }
+                boton.disabled = true;
+                avisar("Se abrió el portal en otra pestaña: confirmá ahí.");
+            });
+
+            window.addEventListener("message", (evento) => {
+                if (evento.origin !== DESTINO || !ventana || evento.source !== ventana) return;
+                if (evento.data?.tipo === "traspaso-listo") {
+                    ventana.postMessage({ tipo: "traspaso-datos", usuarios, operarios }, DESTINO);
+                } else if (evento.data?.tipo === "traspaso-guardado") {
+                    avisar("Listo: los usuarios ya están en el portal. Podés cerrar esta pestaña.", "ok");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
