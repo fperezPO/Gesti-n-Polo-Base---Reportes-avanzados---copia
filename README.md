@@ -588,6 +588,42 @@ embarques de 2025 y uno de cada 33 de 2026 se demora en una etapa y queda fuera
 de meta, con su motivo: el SLA queda cerca del 91 % en 2025 y del 97 % en 2026.
 `eliminarEmbarquesDemoHistorico()` los borra.
 
+Las demos de agosto a octubre de 2026 solo traen Forum y Decathlon. Para que esos
+meses no queden por debajo de 2025, `assets/js/datos-demo-embarques-recientes.js`
+agrega, con el mismo ritmo, los embarques de las otras operativas de Mezzanine
+desde el 1/8/2026, y los de todas desde noviembre, hasta 4 semanas después del
+día de la carga (como máximo el 31/12/2026). Las etapas posteriores a ese día
+quedan sin fecha, así hay embarques en curso y pendientes de llegada. Tienen
+referencias `DEMO-R-2026-NNN`; `eliminarEmbarquesDemoRecientes()` los borra.
+
+### Personal e inasistencias de ejemplo (2026)
+
+`assets/js/datos-demo-personal.js` agrega un plantel sintético y sus
+inasistencias de 2026, para que Personal, Inasistencias e Inicio tengan datos.
+No son personas reales: los legajos son `DEMO-001` a `DEMO-076`.
+
+- Plantel: 76 personas de las operativas de Mezzanine, Integra, Vehículos y
+  Paraguay (operarios, supervisores operativos y administrativos operativos),
+  más dos técnicos de mantenimiento y un analista administrativo sin operativa.
+  Cada una tiene área, turno y operativa física. En 2026 hay 4 altas y 3 bajas,
+  que figuran como inactivas. No se crean cuentas de usuario, porque se
+  enviarían al servidor local y servirían para entrar a la app Android.
+- Inasistencias: del 2/1/2026 hasta el día anterior a la carga (unas 370 a fin
+  de octubre), más las licencias, los trámites y las faltas con aviso de las 3
+  semanas siguientes. Hay jornadas completas, ausencias parciales al inicio o al
+  final del turno y certificados de varios días. Las certificaciones y las
+  enfermedades sin certificado suben en invierno, algunas personas faltan sin
+  aviso más seguido, supervisores y administrativos faltan menos, y solo el
+  personal de depósito tiene accidentes laborales.
+- Las certificaciones médicas y los accidentes laborales traen un PDF sintético
+  que dice "DATO DE DEMOSTRACIÓN". Parte de las certificaciones de la última
+  semana quedan como documentación pendiente.
+
+Se crean una sola vez por navegador. `eliminarPersonalDemo()` los borra (también
+los PDF) y no se vuelven a crear; conserva a las personas que tengan una cuenta
+vinculada o inasistencias cargadas a mano. `regenerarPersonalDemo()` los arma
+de nuevo.
+
 ### Horas de ejemplo en Tareas activas
 
 Para ver la productividad por operario de Inicio (`Productividad por hora` y el
