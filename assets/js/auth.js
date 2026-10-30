@@ -10,6 +10,17 @@ const PAGINAS_RESTRINGIDAS_POR_CLASIFICACION = {
     administrativo: new Set(),
     supervisor: new Set()
 };
+/*
+ * Secciones inhabilitadas para todos los usuarios: no aparecen en el menú ni
+ * se pueden abrir, e Inicio y la exportación completa omiten sus datos. Lo
+ * guardado no se borra; para habilitar una sección, sacala de este conjunto.
+ */
+const PAGINAS_INHABILITADAS = new Set([
+    "operarios",
+    "horas",
+    "inasistencias",
+    "directorio"
+]);
 
 let usuarioCambioClavePendiente = null;
 
@@ -192,8 +203,12 @@ function obtenerClasificacionUsuario(usuario = obtenerUsuarioActual()) {
         : CLASIFICACION_ADMINISTRATIVO;
 }
 
+function paginaInhabilitada(pagina) {
+    return PAGINAS_INHABILITADAS.has(pagina);
+}
+
 function puedeUsuarioAccederPagina(pagina, usuario = obtenerUsuarioActual()) {
-    if (!usuario) {
+    if (!usuario || paginaInhabilitada(pagina)) {
         return false;
     }
 

@@ -80,13 +80,23 @@ function obtenerHojasExportacion(tipo) {
             return obtenerHojasExportacionDashboards();
 
         case "todo": {
-            const hojas = [crearHojaResumen(), crearHojaPersonal()];
+            // Las secciones inhabilitadas (auth.js) no se exportan.
+            const hojas = [crearHojaResumen()];
+
+            if (!paginaInhabilitada("operarios")) {
+                hojas.push(crearHojaPersonal());
+            }
 
             if (esAdministrador()) {
                 hojas.push(crearHojaUsuarios());
             }
 
-            hojas.push(crearHojaEmbarques(), crearHojaInasistencias());
+            hojas.push(crearHojaEmbarques());
+
+            if (!paginaInhabilitada("inasistencias")) {
+                hojas.push(crearHojaInasistencias());
+            }
+
             return hojas;
         }
 
@@ -108,17 +118,31 @@ function crearHojaResumen() {
             ESTADO_EMBARQUE_FINALIZADO;
     });
 
+    const filas = [
+        ["Indicador", "Valor"],
+        ["Fecha de exportación", formatearFechaHoraExcel(new Date())]
+    ];
+
+    if (!paginaInhabilitada("operarios")) {
+        filas.push(
+            ["Operarios registrados", operarios.length],
+            ["Operarios activos", activos.length]
+        );
+    }
+
+    if (!paginaInhabilitada("horas")) {
+        filas.push(["Horas acumuladas", obtenerTotalHoras()]);
+    }
+
+    filas.push(["Embarques activos", embarquesActivos.length]);
+
+    if (!paginaInhabilitada("inasistencias")) {
+        filas.push(["Inasistencias visibles", inasistencias.length]);
+    }
+
     return {
         nombre: "Resumen",
-        filas: [
-            ["Indicador", "Valor"],
-            ["Fecha de exportación", formatearFechaHoraExcel(new Date())],
-            ["Operarios registrados", operarios.length],
-            ["Operarios activos", activos.length],
-            ["Horas acumuladas", obtenerTotalHoras()],
-            ["Embarques activos", embarquesActivos.length],
-            ["Inasistencias visibles", inasistencias.length]
-        ]
+        filas
     };
 }
 

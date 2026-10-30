@@ -56,6 +56,7 @@ let estadoMapa3D = {
     calle: "Todas",
     separacionPisos: 12,
     ocultarSinActividad: false,
+    ocultarInactivas: false,
     mostrarEstructura: false
 };
 let preferenciasMapa3DCargadas = false;
@@ -162,6 +163,13 @@ function inicializarMapaCalor3D() {
             reconstruirMapa3D();
         });
 
+    document.getElementById("ocultar-inactivas-mapa-3d")
+        ?.addEventListener("change", (evento) => {
+            estadoMapa3D.ocultarInactivas = evento.target.checked;
+            guardarPreferenciasMapa3D();
+            reconstruirMapa3D();
+        });
+
     document.getElementById("mostrar-estructura-mapa-3d")
         ?.addEventListener("change", (evento) => {
             estadoMapa3D.mostrarEstructura = evento.target.checked;
@@ -258,6 +266,7 @@ function cargarPreferenciasMapa3D() {
                 ? Math.min(30, Math.max(0, guardadas.separacionPisos))
                 : estadoMapa3D.separacionPisos,
             ocultarSinActividad: Boolean(guardadas.ocultarSinActividad),
+            ocultarInactivas: Boolean(guardadas.ocultarInactivas),
             mostrarEstructura: Boolean(guardadas.mostrarEstructura)
         };
     } catch (error) {
@@ -274,6 +283,7 @@ function guardarPreferenciasMapa3D() {
             alturas: [...estadoMapa3D.alturas],
             separacionPisos: estadoMapa3D.separacionPisos,
             ocultarSinActividad: estadoMapa3D.ocultarSinActividad,
+            ocultarInactivas: estadoMapa3D.ocultarInactivas,
             mostrarEstructura: estadoMapa3D.mostrarEstructura
         }));
     } catch (error) {
@@ -314,6 +324,9 @@ function sincronizarControlesMapa3D() {
         "grupo-separacion-pisos-mapa-3d"
     );
     const ocultar = document.getElementById("ocultar-sin-actividad-mapa-3d");
+    const ocultarInactivas = document.getElementById(
+        "ocultar-inactivas-mapa-3d"
+    );
     const estructura = document.getElementById("mostrar-estructura-mapa-3d");
 
     if (calle) {
@@ -337,6 +350,10 @@ function sincronizarControlesMapa3D() {
 
     if (ocultar) {
         ocultar.checked = estadoMapa3D.ocultarSinActividad;
+    }
+
+    if (ocultarInactivas) {
+        ocultarInactivas.checked = estadoMapa3D.ocultarInactivas;
     }
 
     if (estructura) {
@@ -970,11 +987,21 @@ function construirElementosMapa3D(contexto) {
             : elemento.valor;
     });
 
-    const visibles = estadoMapa3D.ocultarSinActividad
-        ? elementos.filter((elemento) => {
-            return elemento.metrica > 0 || elemento.inactiva || elemento.nunca;
-        })
-        : elementos;
+    /*
+     * «Ocultar sin actividad» quita solo los bloques grises; los violetas
+     * (inactivos 3 meses o nunca movidos) se quitan con su propia opción.
+     */
+    const visibles = elementos.filter((elemento) => {
+        const violeta = elemento.inactiva || elemento.nunca;
+
+        if (estadoMapa3D.ocultarInactivas && violeta) {
+            return false;
+        }
+
+        return !estadoMapa3D.ocultarSinActividad ||
+            elemento.metrica > 0 ||
+            violeta;
+    });
     const referencia = calcularReferenciaEscalaMapa3D(visibles);
 
     visibles.forEach((elemento) => {

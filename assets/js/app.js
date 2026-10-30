@@ -32,4 +32,10 @@ function aplicarPermisosNavegacion() {
                 usuario
             );
         });
+
+    // Un grupo del menú sin opciones permitidas tampoco se muestra.
+    document.querySelectorAll(".grupo-menu").forEach((grupo) => {
+        grupo.hidden = [...grupo.querySelectorAll("[data-page]")]
+            .every((elemento) => elemento.hidden);
+    });
 }

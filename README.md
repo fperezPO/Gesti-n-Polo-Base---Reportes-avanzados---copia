@@ -421,6 +421,15 @@ Supervisores mantienen acceso a las secciones operativas. La administración de
 Usuarios continúa reservada exclusivamente a cuentas con rol Administrador.
 Las restricciones se validan también al intentar abrir una página directamente.
 
+Operarios, Horas, Inasistencias y Directorio están inhabilitadas para todos los
+usuarios (`PAGINAS_INHABILITADAS` en `assets/js/auth.js`): no aparecen en el
+menú, no se pueden abrir, Inicio no muestra las tarjetas de horas e
+inasistencias y la exportación completa no incluye las hojas Personal e
+Inasistencias. Los datos guardados se conservan, y los operarios se siguen
+usando para la clasificación de cada cuenta, la importación de usuarios y
+Tareas activas. Usuarios queda como opción propia del menú. Para volver a
+habilitar una sección, basta con quitarla de ese conjunto.
+
 ## Resumen operativo en Inicio
 
 La pantalla `Inicio` consulta el Trace WIS guardado en `Reportes y dashboards`
@@ -431,7 +440,8 @@ del mes de referencia, mientras que `Mes completo` selecciona automáticamente
 desde el primer hasta el último día del mes.
 
 Inicio utiliza un único selector de operativa. Este filtro actualiza el gráfico
-y también los indicadores de horas, inasistencias y embarques activos. Las
+y también los indicadores de horas, inasistencias y embarques activos (mientras
+Horas e Inasistencias estén inhabilitadas, solo se ven los embarques). Las
 tarjetas de cantidad de operarios y operarios activos no forman parte de este
 resumen; esa información continúa disponible en la sección `Personal`.
 
@@ -685,7 +695,8 @@ aplicación principal está visible.
 Las secciones Inicio, Personal, Usuarios, Gestión de embarques e Inasistencias
 permiten descargar
 archivos `.xlsx`. La exportación completa de Inicio crea hojas separadas para
-el resumen y cada conjunto de datos disponible. Las hojas incluyen encabezados,
+el resumen y cada conjunto de datos disponible, sin las secciones
+inhabilitadas. Las hojas incluyen encabezados,
 filtros, primera fila fija y anchos de columna adaptados al contenido.
 
 Los archivos médicos adjuntos, las contraseñas derivadas y los datos internos

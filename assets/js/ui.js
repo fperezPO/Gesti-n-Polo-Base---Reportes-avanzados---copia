@@ -65,6 +65,14 @@ function inicializarPagina(pagina) {
 }
 
 function inicializarInicio() {
+    // Las tarjetas de secciones inhabilitadas (auth.js) no se muestran.
+    document.querySelectorAll("[data-pagina-relacionada]")
+        .forEach((tarjeta) => {
+            tarjeta.hidden = paginaInhabilitada(
+                tarjeta.dataset.paginaRelacionada
+            );
+        });
+
     actualizarResumenInicio();
 
     if (typeof inicializarResumenOperativoInicio === "function") {
