@@ -1,0 +1,129 @@
+/*
+ * Menú de navegación contraído (pantallas anchas): una columna angosta con
+ * los íconos. Al tocarla se despliega encima del contenido, con los nombres
+ * y los submenús (navegacion-lateral.js); así el contenido no se reacomoda.
+ * En pantallas angostas sigue siendo la fila desplazable de estilos.css.
+ */
+
+/* .sidebar delante: si no, ".sidebar button" de estilos.css lo vuelve a mostrar en el celular. */
+.sidebar .alternar-navegacion {
+    display: none;
+}
+
+@media (min-width: 821px) {
+    .layout {
+        grid-template-columns: 78px minmax(0, 1fr);
+    }
+
+    .sidebar {
+        z-index: 40;
+        display: flex;
+        width: 78px;
+        flex-direction: column;
+        padding: 18px 13px 22px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        transition:
+            width var(--duracion-media) var(--curva-suave),
+            box-shadow var(--duracion-media) ease;
+    }
+
+    /* El menú ocupa el alto que queda debajo del botón ☰; el Backlog sigue al
+       pie (margin-top: auto del separador, en el <style> de index.html). */
+    .layout .sidebar nav {
+        flex: 1 0 auto;
+        min-height: 0;
+    }
+
+    .sidebar.desplegada {
+        width: 272px;
+        box-shadow: 18px 0 44px rgba(20, 24, 22, 0.3);
+    }
+
+    /* Contraída, sin barra de desplazamiento (igual se desplaza con la rueda). */
+    .sidebar:not(.desplegada) {
+        cursor: pointer;
+        scrollbar-width: none;
+    }
+
+    .sidebar:not(.desplegada)::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Los nombres quedan recortados detrás del ícono mientras está contraído. */
+    .sidebar button {
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .sidebar:not(.desplegada) button {
+        width: 52px;
+        padding-right: 11px;
+        padding-left: 11px;
+        color: transparent;
+    }
+
+    .sidebar:not(.desplegada) button:hover {
+        transform: none;
+    }
+
+    .sidebar:not(.desplegada) nav::before,
+    .sidebar:not(.desplegada) button::after,
+    .sidebar:not(.desplegada) .indicador-grupo-menu {
+        display: none;
+    }
+
+    .sidebar:not(.desplegada) .submenu-menu {
+        display: none !important;
+    }
+
+    .sidebar:not(.desplegada) .separador-menu {
+        margin-right: 4px;
+        margin-left: 4px;
+    }
+
+    /* Contraído, si la página abierta está dentro de un grupo, el grupo se marca en verde. */
+    .sidebar:not(.desplegada) .grupo-menu:has(.submenu-menu button.activo) > .boton-grupo-menu {
+        border-color: rgba(183, 217, 144, 0.72);
+        background: var(--verde-marca);
+    }
+
+    .sidebar:not(.desplegada) .grupo-menu:has(.submenu-menu button.activo) > .boton-grupo-menu::before {
+        border-color: rgba(41, 45, 43, 0.15);
+        background: rgba(255, 255, 255, 0.4);
+        color: var(--gris-950);
+    }
+
+    .sidebar .alternar-navegacion {
+        display: flex;
+        flex-shrink: 0;
+        margin-bottom: 8px;
+    }
+
+    .sidebar .alternar-navegacion::before {
+        content: "☰";
+        font-size: 14px;
+    }
+
+    .sidebar.desplegada .alternar-navegacion::before {
+        content: "«";
+        font-size: 17px;
+    }
+
+    .sidebar .alternar-navegacion span {
+        color: rgba(238, 241, 239, 0.72);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .sidebar:not(.desplegada) .alternar-navegacion span {
+        color: transparent;
+    }
+}
+
+@media (min-width: 821px) and (prefers-reduced-motion: reduce) {
+    .sidebar {
+        transition: none;
+    }
+}
