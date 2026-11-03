@@ -1,5 +1,9 @@
 param(
-    [switch]$NoBrowser
+    [switch]$NoBrowser,
+    # Con -SoloLocal el servidor escucha solo en 127.0.0.1 (no en la red). Útil
+    # donde no se usa el handheld Android. El control real de exposición sigue
+    # siendo el firewall / la segmentación de red.
+    [switch]$SoloLocal
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,6 +20,16 @@ $activitiesDataPath = Join-Path $dataDirectory "actividades-compartidas.json"
 $listener = $null
 $selectedPort = $null
 $androidSessions = @{}
+
+# Carpeta data/ en su forma canónica: se compara contra la ruta ya resuelta,
+# no contra el texto de la URL (que se puede codificar de varias formas).
+$resolvedDataDir = [System.IO.Path]::GetFullPath($dataDirectory)
+$dataPrefix = $resolvedDataDir.TrimEnd('\', '/') +
+    [System.IO.Path]::DirectorySeparatorChar
+
+# Secreto de este arranque: se inyecta en el HTML servido y se exige en los
+# endpoints que escriben datos, para que no cualquiera en la red los reescriba.
+$apiToken = [Guid]::NewGuid().ToString("N") + [Guid]::NewGuid().ToString("N")
 
 if (-not (Test-Path -LiteralPath $dataDirectory -PathType Container)) {
     New-Item -ItemType Directory -Path $dataDirectory | Out-Null
@@ -47,8 +61,13 @@ foreach ($candidatePort in 8765..8785) {
         finally {
             $portProbe.Dispose()
         }
+        $bindAddress = if ($SoloLocal) {
+            [System.Net.IPAddress]::Loopback
+        } else {
+            [System.Net.IPAddress]::Any
+        }
         $candidate = [System.Net.Sockets.TcpListener]::new(
-            [System.Net.IPAddress]::Any,
+            $bindAddress,
             $candidatePort
         )
         $candidate.Start()
@@ -99,9 +118,7 @@ function Send-Response {
         "Content-Type: $ContentType"
         "Content-Length: $($Body.Length)"
         "Cache-Control: no-store"
-        "Access-Control-Allow-Origin: *"
-        "Access-Control-Allow-Headers: Content-Type, Authorization"
-        "Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS"
+        "X-Content-Type-Options: nosniff"
         "Connection: close"
         ""
         ""
@@ -172,6 +189,12 @@ function Get-AndroidSession {
     $token = $authorization.Substring(7).Trim()
     if (-not $androidSessions.ContainsKey($token)) { return $null }
     return $androidSessions[$token]
+}
+
+function Test-ApiToken {
+    param([hashtable]$Headers)
+    $enviado = Get-HeaderValue $Headers "X-Polo-Token"
+    return $enviado -ceq $script:apiToken
 }
 
 function Test-UserPassword {
@@ -294,7 +317,13 @@ try {
         $client = $listener.AcceptTcpClient()
 
         try {
+            # Una conexión que no completa su pedido se corta sola en vez de
+            # dejar colgado al resto (mitiga el bloqueo por una conexión ociosa).
+            $client.ReceiveTimeout = 15000
+            $client.SendTimeout = 15000
             $stream = $client.GetStream()
+            $stream.ReadTimeout = 15000
+            $stream.WriteTimeout = 15000
             $reader = [System.IO.StreamReader]::new(
                 $stream,
                 [System.Text.Encoding]::UTF8,
@@ -356,6 +385,18 @@ try {
 
             $rawPath = $requestParts[1].Split('?')[0]
             $apiPath = [System.Uri]::UnescapeDataString($rawPath).TrimEnd('/')
+
+            # Los endpoints que reescriben datos compartidos exigen el token de
+            # este arranque (lo tiene la página servida por este mismo servidor).
+            if (
+                $method -eq "PUT" -and
+                $apiPath -in @("/api/usuarios", "/api/actividades", "/api/tareas-activas")
+            ) {
+                if (-not (Test-ApiToken $headers)) {
+                    Send-JsonResponse $stream @{ error = "No autorizado." } 403 "Forbidden"
+                    continue
+                }
+            }
 
             if ($apiPath -eq "/api/estado" -and $method -eq "GET") {
                 Send-JsonResponse $stream ([ordered]@{
@@ -430,6 +471,12 @@ try {
                 } | Select-Object -First 1
                 if (-not $user -or -not (Test-UserPassword $user $password)) {
                     Send-JsonResponse $stream @{ error = "Usuario o contraseña incorrectos. Abrí primero la web para sincronizar las cuentas." } 401 "Unauthorized"
+                    continue
+                }
+                # Una cuenta con la contraseña temporal sin cambiar no entra por
+                # el handheld: primero tiene que cambiarla ingresando a la web.
+                if ($user.debeCambiarClave -eq $true) {
+                    Send-JsonResponse $stream @{ error = "Primero cambiá tu contraseña ingresando a la web." } 403 "Forbidden"
                     continue
                 }
                 if ([string]::IsNullOrWhiteSpace($collector)) {
@@ -685,6 +732,34 @@ try {
                 continue
             }
 
+            # Se compara la ruta ya resuelta (no el texto de la URL): así quedan
+            # bloqueados data/, los dotfiles (.git, .gitignore) y el registro de
+            # seguridad, sin importar cómo se codifique la URL (., %2e, %5c…).
+            $esRutaProtegida = $false
+            if (
+                $requestedPath.StartsWith($dataPrefix, [System.StringComparison]::OrdinalIgnoreCase) -or
+                $requestedPath.Equals($resolvedDataDir, [System.StringComparison]::OrdinalIgnoreCase)
+            ) {
+                $esRutaProtegida = $true
+            }
+            if ([System.IO.Path]::GetFileName($requestedPath).Equals(
+                "HALLAZGOS-SEGURIDAD.md", [System.StringComparison]::OrdinalIgnoreCase
+            )) {
+                $esRutaProtegida = $true
+            }
+            $relativoProtegido = $requestedPath.Substring($resolvedRoot.Length).TrimStart('\', '/')
+            foreach ($segmento in $relativoProtegido.Split([char[]]('\', '/'))) {
+                if ($segmento.StartsWith('.')) {
+                    $esRutaProtegida = $true
+                    break
+                }
+            }
+            if ($esRutaProtegida) {
+                $body = [System.Text.Encoding]::UTF8.GetBytes("Acceso denegado")
+                Send-Response $stream 403 "Forbidden" $body
+                continue
+            }
+
             if (Test-Path -LiteralPath $requestedPath -PathType Container) {
                 $requestedPath = Join-Path $requestedPath "index.html"
             }
@@ -695,8 +770,19 @@ try {
                 continue
             }
 
-            $fileBytes = [System.IO.File]::ReadAllBytes($requestedPath)
-            Send-Response $stream 200 "OK" $fileBytes (Get-ContentType $requestedPath)
+            $contentType = Get-ContentType $requestedPath
+            if ([System.IO.Path]::GetExtension($requestedPath).ToLowerInvariant() -eq ".html") {
+                # El token de este arranque se inyecta en la página que se sirve.
+                $htmlText = [System.IO.File]::ReadAllText(
+                    $requestedPath, [System.Text.Encoding]::UTF8
+                )
+                $htmlText = $htmlText.Replace("__POLO_TOKEN__", $apiToken)
+                $fileBytes = [System.Text.Encoding]::UTF8.GetBytes($htmlText)
+            }
+            else {
+                $fileBytes = [System.IO.File]::ReadAllBytes($requestedPath)
+            }
+            Send-Response $stream 200 "OK" $fileBytes $contentType
         }
         catch {
             Write-Host "Error del servidor: $($_.Exception.Message)" -ForegroundColor Red

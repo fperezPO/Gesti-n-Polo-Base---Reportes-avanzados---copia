@@ -50,15 +50,21 @@
         </div>
 
         <div class="aviso-informativo aviso-clave-importacion">
-            Las cuentas importadas se crean con la contraseña
-            <strong>initialpass</strong>. Cada usuario deberá cambiarla al
-            iniciar sesión por primera vez.
+            Cada cuenta importada recibe una <strong>contraseña temporal
+            distinta</strong>, que se muestra una sola vez al terminar la
+            importación. Entregásela a cada persona por un medio seguro: deberá
+            cambiarla en su primer ingreso a la web.
         </div>
         <p
             id="mensaje-importacion-usuarios"
             class="mensaje"
             aria-live="polite"
         ></p>
+        <div
+            id="credenciales-temporales-usuarios"
+            class="credenciales-temporales-usuarios"
+            hidden
+        ></div>
     </div>
 
     <div class="tarjeta" data-vista-bloque="crear" data-vista-titulo="Crear cuenta para un operario existente" data-vista-categoria="Alta individual">

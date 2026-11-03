@@ -50,7 +50,9 @@
         try {
             const respuesta = await fetch("api/tareas-activas", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: typeof cabecerasEscrituraServidorPolo === "function"
+                    ? cabecerasEscrituraServidorPolo()
+                    : { "Content-Type": "application/json" },
                 body: typeof jsonAscii === "function"
                     ? jsonAscii(reales)
                     : JSON.stringify(reales)

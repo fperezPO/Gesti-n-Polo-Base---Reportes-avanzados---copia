@@ -55,6 +55,18 @@ function resolvePublicPath(urlPath) {
     return null;
   }
 
+  // No se sirven data/ (hashes de contraseñas) ni dotfiles (.git, .gitignore),
+  // cualquiera sea la codificación de la URL, porque ya se comparó la ruta
+  // resuelta. También se bloquea el registro interno de seguridad.
+  const segmentos = relativeToRoot.split(/[\\/]/);
+  if (
+    segmentos[0] === 'data' ||
+    segmentos.some((segmento) => segmento.startsWith('.')) ||
+    path.basename(requestedPath).toLowerCase() === 'hallazgos-seguridad.md'
+  ) {
+    return null;
+  }
+
   return requestedPath;
 }
 

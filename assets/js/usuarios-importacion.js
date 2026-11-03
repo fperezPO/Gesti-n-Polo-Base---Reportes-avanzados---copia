@@ -79,14 +79,16 @@ async function manejarImportacionUsuarios(evento) {
         validarArchivoImportacionUsuarios(archivo);
         const filas = await leerFilasImportacionUsuarios(archivo);
         const registros = validarFilasImportacionUsuarios(filas);
-        await crearUsuariosImportados(registros);
+        const credenciales = await crearUsuariosImportados(registros);
         actualizarSelectorOperariosSinUsuario();
         mostrarUsuarios();
         mostrarMensajeImportacionUsuarios(
             `${registros.length.toLocaleString("es-UY")} usuarios y registros ` +
-                "de Personal importados. Contraseña inicial: initialpass.",
+                "de Personal importados. Anotá las contraseñas temporales: se " +
+                "muestran una sola vez.",
             "exito"
         );
+        mostrarCredencialesTemporalesImportacion(credenciales);
     } catch (error) {
         console.warn(error.message || error);
         mostrarMensajeImportacionUsuarios(
@@ -298,12 +300,38 @@ function validarFilasImportacionUsuarios(filas) {
     return registros;
 }
 
+/*
+ * Contraseña temporal al azar para cada cuenta importada. Reemplaza a la clave
+ * fija que antes estaba escrita en el código. Se le muestra al administrador
+ * una sola vez, después de importar, y cada usuario la cambia en su primer
+ * ingreso a la web (lo exige `debeCambiarClave`). Sin caracteres ambiguos
+ * (0/O, 1/l/I) para que sea fácil de dictar.
+ */
+function generarContrasenaTemporalImportacion() {
+    const alfabeto = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+    const largo = 12;
+    const valores = new Uint32Array(largo);
+    crypto.getRandomValues(valores);
+    let clave = "";
+
+    for (let indice = 0; indice < largo; indice += 1) {
+        clave += alfabeto[valores[indice] % alfabeto.length];
+    }
+
+    return clave;
+}
+
+/*
+ * Crea operarios y cuentas. Devuelve la lista de credenciales temporales
+ * { usuario, nombre, contrasena } para mostrarla una vez al administrador.
+ */
 async function crearUsuariosImportados(registros) {
     const operariosAnteriores = obtenerOperarios();
     const usuariosAnteriores = obtenerUsuarios();
     const fechaImportacion = new Date().toISOString();
     const nuevosOperarios = [];
     const nuevosUsuarios = [];
+    const credencialesTemporales = [];
 
     for (let indice = 0; indice < registros.length; indice += 1) {
         const registro = registros[indice];
@@ -318,12 +346,11 @@ async function crearUsuariosImportados(registros) {
             origen: "Importación WIS",
             fechaRegistro: fechaImportacion
         };
+        const contrasenaTemporal = generarContrasenaTemporalImportacion();
         const usuario = await crearRegistroUsuario({
             nombre: registro.nombre,
             nombreUsuario: registro.usuario,
-            contrasena: typeof CONTRASENA_INICIAL_IMPORTADA === "string"
-                ? CONTRASENA_INICIAL_IMPORTADA
-                : "initialpass",
+            contrasena: contrasenaTemporal,
             rol: registro.rol,
             operarioId: operario.id,
             activo: registro.estado === "Activo",
@@ -333,6 +360,11 @@ async function crearUsuariosImportados(registros) {
         usuario.fechaImportacion = fechaImportacion;
         nuevosOperarios.push(operario);
         nuevosUsuarios.push(usuario);
+        credencialesTemporales.push({
+            usuario: registro.usuario,
+            nombre: registro.nombre,
+            contrasena: contrasenaTemporal
+        });
 
         if ((indice + 1) % 10 === 0) {
             mostrarMensajeImportacionUsuarios(
@@ -350,6 +382,8 @@ async function crearUsuariosImportados(registros) {
         guardarOperarios(operariosAnteriores);
         throw new Error("No fue posible guardar las cuentas importadas.");
     }
+
+    return credencialesTemporales;
 }
 
 function bloquearImportacionUsuarios(bloquear) {
@@ -363,6 +397,79 @@ function bloquearImportacionUsuarios(bloquear) {
             boton.disabled = bloquear;
         }
     });
+}
+
+/*
+ * Muestra una sola vez las contraseñas temporales recién generadas, con un
+ * botón para copiarlas. Se arma con nodos de texto (no innerHTML con datos) y
+ * no se guarda en ningún lado: al recargar la página desaparece.
+ */
+function mostrarCredencialesTemporalesImportacion(credenciales) {
+    const contenedor = document.getElementById("credenciales-temporales-usuarios");
+
+    if (!contenedor) {
+        return;
+    }
+
+    contenedor.replaceChildren();
+
+    if (!Array.isArray(credenciales) || !credenciales.length) {
+        contenedor.hidden = true;
+        return;
+    }
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = "Contraseñas temporales (se muestran una sola vez)";
+
+    const aviso = document.createElement("p");
+    aviso.className = "texto-secundario";
+    aviso.textContent = "Entregáselas a cada persona por un medio seguro. " +
+        "Cada una deberá cambiarla en su primer ingreso a la web; hasta " +
+        "entonces no puede entrar desde el handheld.";
+
+    const copiar = document.createElement("button");
+    copiar.type = "button";
+    copiar.className = "boton-secundario";
+    copiar.textContent = "Copiar lista";
+    copiar.addEventListener("click", () => {
+        const texto = credenciales
+            .map((fila) => `${fila.usuario}\t${fila.contrasena}`)
+            .join("\n");
+        navigator.clipboard?.writeText(texto).then(
+            () => { copiar.textContent = "Copiado"; },
+            () => { copiar.textContent = "No se pudo copiar"; }
+        );
+    });
+
+    const tabla = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML =
+        "<tr><th>Usuario</th><th>Nombre</th><th>Contraseña temporal</th></tr>";
+    const tbody = document.createElement("tbody");
+
+    credenciales.forEach((fila) => {
+        const tr = document.createElement("tr");
+        [fila.usuario, fila.nombre, fila.contrasena].forEach((valor, columna) => {
+            const td = document.createElement("td");
+            td.textContent = valor;
+
+            if (columna === 2) {
+                td.className = "contrasena-temporal-usuarios";
+            }
+
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+
+    tabla.append(thead, tbody);
+
+    const envoltorio = document.createElement("div");
+    envoltorio.className = "contenedor-tabla";
+    envoltorio.appendChild(tabla);
+
+    contenedor.append(titulo, aviso, copiar, envoltorio);
+    contenedor.hidden = false;
 }
 
 function mostrarMensajeImportacionUsuarios(texto, tipo) {

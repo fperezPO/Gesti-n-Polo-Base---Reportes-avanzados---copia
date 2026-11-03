@@ -5064,6 +5064,31 @@ tbody tr:hover td {
     margin: 18px 0 0;
 }
 
+.credenciales-temporales-usuarios {
+    margin-top: 18px;
+    padding: 16px;
+    border: 1px solid var(--verde-borde);
+    border-radius: var(--radio);
+    background: var(--verde-suave);
+}
+
+.credenciales-temporales-usuarios h4 {
+    margin: 0 0 4px;
+}
+
+.credenciales-temporales-usuarios .texto-secundario {
+    margin: 0 0 12px;
+}
+
+.credenciales-temporales-usuarios .contenedor-tabla {
+    margin-top: 12px;
+}
+
+.contrasena-temporal-usuarios {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    letter-spacing: 0.04em;
+}
+
 .insignia-clave-pendiente {
     margin-left: 5px;
     white-space: nowrap;

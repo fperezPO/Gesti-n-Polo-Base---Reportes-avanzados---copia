@@ -1,0 +1,7 @@
+# Registro interno de seguridad: no debe publicarse.
+HALLAZGOS-SEGURIDAD.md
+
+# Datos compartidos del servidor (incluyen hashes de contraseñas reales).
+# Nota: estos archivos YA están versionados; agregarlos acá no los quita del
+# historial. Para dejar de rastrearlos: git rm --cached data/*.json
+data/*.json

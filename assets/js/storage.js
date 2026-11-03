@@ -39,6 +39,26 @@ function jsonAscii(datos) {
     });
 }
 
+/*
+ * Token de este arranque del servidor: el servidor lo inyecta en la página al
+ * servirla (meta polo-token) y lo exige en los endpoints que escriben datos.
+ */
+function obtenerTokenServidorPolo() {
+    try {
+        return document.querySelector('meta[name="polo-token"]')?.content || "";
+    } catch (error) {
+        return "";
+    }
+}
+
+/* Cabeceras para un PUT a la API, con el token de escritura. */
+function cabecerasEscrituraServidorPolo() {
+    return {
+        "Content-Type": "application/json",
+        "X-Polo-Token": obtenerTokenServidorPolo()
+    };
+}
+
 async function sincronizarUsuariosServidor(usuarios = obtenerUsuarios()) {
     if (typeof location === "undefined") return false;
     /* Un navegador sin usuarios (por ejemplo, la primera vez que se entra
@@ -56,7 +76,7 @@ async function sincronizarUsuariosServidor(usuarios = obtenerUsuarios()) {
         });
         const respuesta = await fetch("api/usuarios", {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: cabecerasEscrituraServidorPolo(),
             body: jsonAscii(usuariosCompartidos)
         });
         return respuesta.ok;

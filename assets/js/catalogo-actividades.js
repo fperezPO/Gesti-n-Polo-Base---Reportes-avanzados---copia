@@ -413,7 +413,9 @@
                 }));
             const respuesta = await fetch("api/actividades", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: typeof cabecerasEscrituraServidorPolo === "function"
+                    ? cabecerasEscrituraServidorPolo()
+                    : { "Content-Type": "application/json" },
                 body: JSON.stringify(actividades).replace(
                     /[\u007f-\uffff]/g,
                     (caracter) => {

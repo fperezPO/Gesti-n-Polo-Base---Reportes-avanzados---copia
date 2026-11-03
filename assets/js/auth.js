@@ -1,7 +1,6 @@
 const ROL_ADMINISTRADOR = "administrador";
 const ROL_NORMAL = "normal";
 const ITERACIONES_CLAVE = 120000;
-const CONTRASENA_INICIAL_IMPORTADA = "initialpass";
 const CLASIFICACION_OPERARIO = "operario";
 const CLASIFICACION_ADMINISTRATIVO = "administrativo";
 const CLASIFICACION_SUPERVISOR = "supervisor";
@@ -465,19 +464,26 @@ async function cambiarClaveEnPrimerIngreso(evento) {
         return;
     }
 
-    if (nueva === CONTRASENA_INICIAL_IMPORTADA) {
+    if (nueva !== confirmacion) {
         mostrarMensajeAutenticacion(
             "mensaje-cambio-clave",
-            "Elegí una contraseña diferente de initialpass.",
+            "Las contraseñas no coinciden.",
             "error"
         );
         return;
     }
 
-    if (nueva !== confirmacion) {
+    // No se puede dejar la misma contraseña temporal: se compara contra el hash
+    // guardado, sin necesidad de conocer la clave temporal en texto.
+    if (
+        usuarioCambioClavePendiente.salt &&
+        usuarioCambioClavePendiente.hashClave &&
+        (await derivarClave(nueva, usuarioCambioClavePendiente.salt)) ===
+            usuarioCambioClavePendiente.hashClave
+    ) {
         mostrarMensajeAutenticacion(
             "mensaje-cambio-clave",
-            "Las contraseñas no coinciden.",
+            "Elegí una contraseña distinta de la temporal.",
             "error"
         );
         return;
