@@ -454,6 +454,22 @@ visitas y ligado a los mismos filtros, con horas productivas y unidades por hora
 y período (ciclo, mes completo o rango); la tarea elegida pasa a `Tarea en el
 mapa`.
 
+## Vista personal en los apartados
+
+Además de Inicio, los apartados con varias secciones tienen la barra `Vista
+personal` con el botón `Personalizar vista`: Reportes y dashboards, Gestión de
+embarques, Tareas activas, Consulta de tareas y Usuarios. El panel permite
+mostrar u ocultar cada sección y cambiar su orden con las flechas o
+arrastrándola en la página; en modo edición cada sección muestra su nombre y
+una `×` para quitarla. La elección se guarda por usuario y por apartado en el
+navegador, y `Restaurar la vista original` vuelve a mostrar todo en el orden
+de siempre. A diferencia de Inicio, no hay vistas recomendadas por cargo.
+
+Lo que no es una sección queda fijo: la cabecera, los filtros y el botón
+`Consultar` de Reportes, los avisos y el formulario de Gestión de embarques,
+que se abre desde `Nuevo embarque` y al editar un embarque. En Reportes, una
+sección quitada sigue oculta aunque se consulte.
+
 ## Cómo se calcula cada indicador
 
 Cada indicador, gráfico y columna calculada muestra un ícono ⓘ: en la esquina

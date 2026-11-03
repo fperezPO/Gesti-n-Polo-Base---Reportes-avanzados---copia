@@ -62,6 +62,10 @@ function inicializarPagina(pagina) {
     if (typeof inicializarExportacionPagina === "function") {
         inicializarExportacionPagina(pagina);
     }
+
+    if (typeof inicializarVistaPersonalizable === "function") {
+        inicializarVistaPersonalizable(pagina);
+    }
 }
 
 function inicializarInicio() {

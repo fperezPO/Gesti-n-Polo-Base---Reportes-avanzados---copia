@@ -176,7 +176,7 @@
         </p>
     </section>
 
-    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-servicio" data-resultado-reportes hidden>
+    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-servicio" data-resultado-reportes hidden data-vista-bloque="kpis" data-vista-titulo="KPIs principales" data-vista-categoria="Nivel de servicio">
         <div class="cabecera-bloque-dashboards">
             <span class="etiqueta-estado-reporte">Nivel de servicio</span>
             <h3 id="titulo-kpi-servicio">KPIs principales</h3>
@@ -185,7 +185,7 @@
         <div id="kpis-principales-dashboards" class="grilla-kpi-dashboards"></div>
     </section>
 
-    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-operacion" data-resultado-reportes hidden>
+    <section class="bloque-dashboards" aria-labelledby="titulo-kpi-operacion" data-resultado-reportes hidden data-vista-bloque="flujo" data-vista-titulo="Flujo del depósito" data-vista-categoria="Operación">
         <div class="cabecera-bloque-dashboards">
             <span class="etiqueta-estado-reporte">Operación</span>
             <h3 id="titulo-kpi-operacion">Flujo del depósito</h3>
@@ -194,7 +194,7 @@
         <div id="kpis-operacion-dashboards" class="grilla-kpi-dashboards grilla-kpi-compacta"></div>
     </section>
 
-    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comparacion-dashboards" data-resultado-reportes hidden>
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comparacion-dashboards" data-resultado-reportes hidden data-vista-bloque="comparacion" data-vista-titulo="Unidades por día" data-vista-categoria="Comparación">
         <div class="cabecera-listado cabecera-tendencia-dashboards">
             <div>
                 <span class="etiqueta-estado-reporte">Comparación</span>
@@ -217,6 +217,9 @@
         aria-labelledby="titulo-plano-mapa"
         data-resultado-reportes
         hidden
+        data-vista-bloque="mapa"
+        data-vista-titulo="Mapa de ubicaciones"
+        data-vista-categoria="Mapa de calor"
     >
         <div class="cabecera-listado cabecera-mapa-calor">
             <div>
@@ -559,7 +562,7 @@
         </div>
     </section>
 
-    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-tendencia-dashboards" data-resultado-reportes hidden>
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-tendencia-dashboards" data-resultado-reportes hidden data-vista-bloque="tendencia" data-vista-titulo="Evolución por ciclo 21–20" data-vista-categoria="Tendencia">
         <div class="cabecera-listado cabecera-tendencia-dashboards">
             <div>
                 <span class="etiqueta-estado-reporte">Tendencia</span>
@@ -589,7 +592,7 @@
         <div id="grafico-tendencia-dashboards" class="grafico-tendencia-dashboards" role="img" aria-label="Evolución por ciclo"></div>
     </section>
 
-    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comercial-dashboards" data-resultado-reportes hidden>
+    <section class="tarjeta bloque-dashboards" aria-labelledby="titulo-comercial-dashboards" data-resultado-reportes hidden data-vista-bloque="comercial" data-vista-titulo="Base facturable por operativa" data-vista-categoria="Comercial">
         <div class="cabecera-listado">
             <div>
                 <span class="etiqueta-estado-reporte">Comercial</span>
@@ -619,7 +622,7 @@
         </div>
     </section>
 
-    <div class="tarjeta">
+    <div class="tarjeta" data-vista-bloque="historial" data-vista-titulo="Historial de importaciones" data-vista-categoria="Archivos">
         <div class="cabecera-listado">
             <div>
                 <h3>Historial de importaciones</h3>
@@ -649,7 +652,7 @@
         </div>
     </div>
 
-    <details class="tarjeta metodologia-dashboards">
+    <details class="tarjeta metodologia-dashboards" data-vista-bloque="metodologia" data-vista-titulo="¿Cómo se calcula cada indicador?" data-vista-categoria="Ayuda">
         <summary>¿Cómo se calcula cada indicador?</summary>
         <dl>
             <dt>Carga de datos</dt>

@@ -28,7 +28,7 @@ async function cargarPagina(pagina) {
 
     try {
         const respuesta = await fetch(
-            `pages/${pagina}.html?v=20261030-2`,
+            `pages/${pagina}.html?v=20261030-3`,
             { cache: "no-store" }
         );
 

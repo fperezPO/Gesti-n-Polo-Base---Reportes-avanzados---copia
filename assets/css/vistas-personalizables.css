@@ -1,0 +1,64 @@
+/*
+ * «Personalizar vista» en los apartados (vistas-personalizables.js). La barra
+ * y el panel reutilizan los estilos de Inicio (estilos.css); acá van los
+ * bloques quitados y los bloques en modo edición, con sus controles.
+ */
+
+.bloque-oculto-vista {
+    display: none !important;
+}
+
+.controles-bloque-vista {
+    display: none;
+}
+
+.modo-edicion-vista > [data-vista-bloque] {
+    position: relative;
+    outline: 2px dashed var(--verde-borde);
+    outline-offset: 5px;
+    cursor: grab;
+}
+
+/* Sobre el borde punteado y con el nombre de la sección: en un bloque con
+   varias tarjetas queda claro que se mueve o se quita el bloque entero. */
+.modo-edicion-vista .controles-bloque-vista {
+    position: absolute;
+    z-index: 6;
+    top: -23px;
+    right: 18px;
+    display: flex;
+    max-width: calc(100% - 36px);
+    align-items: center;
+    gap: 8px;
+    padding: 3px 3px 3px 11px;
+    border: 1px solid var(--verde-borde);
+    border-radius: 999px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-suave);
+    color: var(--verde-profundo);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: none;
+}
+
+.titulo-bloque-vista {
+    overflow: hidden;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.controles-bloque-vista .quitar-widget-inicio {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.bloque-vista-arrastrando {
+    opacity: 0.45;
+    cursor: grabbing !important;
+}
