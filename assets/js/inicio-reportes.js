@@ -151,7 +151,7 @@ async function cargarResumenOperativoInicio(recargarDatos = false) {
     const rango = obtenerRangoSeleccionadoInicio();
     const rangoComparacion = obtenerRangoComparacionInicio(rango);
 
-    mostrarEstadoGraficoInicio("Cargando movimientos del Trace WIS…");
+    mostrarCargaGraficoInicio("Cargando movimientos del Trace WIS…");
 
     if (!rango) {
         mostrarEstadoGraficoInicio(
@@ -1440,6 +1440,14 @@ function mostrarEstadoGraficoInicio(texto, esError = false) {
 
     estado.textContent = texto;
     estado.classList.toggle("error", esError);
+}
+
+/* Mientras se leen los movimientos, con la animación de espera. */
+function mostrarCargaGraficoInicio(texto) {
+    const estado = document.getElementById("estado-grafico-inicio");
+
+    estado?.classList.remove("error");
+    mostrarEsperaPolo(estado, texto);
 }
 
 function actualizarGraficoEmbarquesInicio(todosOperativa, recibidos, rango) {

@@ -11,7 +11,7 @@ function inicializarExportacionPagina() {
     boton.addEventListener("click", async () => {
         const textoOriginal = boton.textContent.trim();
         boton.disabled = true;
-        boton.textContent = "Generando Excel...";
+        mostrarEsperaPolo(boton, "Generando Excel…");
 
         try {
             await exportarExcel(boton.dataset.exportarExcel);

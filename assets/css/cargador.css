@@ -1,0 +1,116 @@
+/*
+ * Animación de espera con los colores del logo (cargador.js): tres pelotitas
+ * que rebotan, gris · verde · gris, como los triángulos del logo. La grande va
+ * en las áreas que se están cargando; .cargador-polo-linea, delante del texto
+ * de un mensaje o de un botón.
+ */
+
+.cargador-polo {
+    --gris-cargador-polo: #6f7072;
+    display: flex;
+    width: 100px;
+    height: 50px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+body.modo-oscuro .cargador-polo {
+    --gris-cargador-polo: #a4a8aa;
+}
+
+.cargador-polo > span {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 auto;
+    border-radius: 100%;
+    background-color: var(--gris-cargador-polo);
+    animation: rebote-cargador-polo 1s ease-in-out infinite;
+}
+
+.cargador-polo > span:nth-child(2) {
+    background-color: var(--verde-marca);
+    animation-delay: 0.33s;
+}
+
+.cargador-polo > span:nth-child(3) {
+    animation-delay: 0.66s;
+}
+
+.cargador-polo-linea {
+    display: inline-flex;
+    width: auto;
+    height: 1em;
+    margin: 0 0.6em 0 0;
+    align-items: flex-end;
+    gap: 0.3em;
+    vertical-align: -0.1em;
+}
+
+.cargador-polo-linea > span {
+    width: 0.65em;
+    height: 0.65em;
+    animation-name: rebote-cargador-polo-linea;
+}
+
+/* Mientras espera, un botón no muestra su ícono decorativo (la flecha de los Excel). */
+button:has(> .cargador-polo-linea)::before {
+    display: none;
+}
+
+@keyframes rebote-cargador-polo {
+    0%, 75%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes rebote-cargador-polo-linea {
+    0%, 75%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-0.55em);
+    }
+}
+
+/* Sin rebote: las pelotitas se encienden de a una. */
+@keyframes pulso-cargador-polo {
+    0%, 75%, 100% {
+        opacity: 0.35;
+    }
+    25% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cargador-polo > span {
+        animation-name: pulso-cargador-polo;
+    }
+}
+
+/* La página que tarda en llegar (router.js). */
+.carga-pagina-polo {
+    display: flex;
+    min-height: 50vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--gris-600);
+    font-weight: 700;
+}
+
+/* En el centro de la vista 3D, la grande arriba del texto. */
+.estado-mapa-3d .cargador-polo {
+    margin-bottom: 4px;
+}
+
+.estado-mapa-3d .texto-espera-polo {
+    display: block;
+    text-align: center;
+}

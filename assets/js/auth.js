@@ -343,6 +343,11 @@ async function registrarAdministradorInicial(evento) {
         return;
     }
 
+    const restaurarBoton = esperarEnBotonPolo(
+        evento.target.querySelector("button[type='submit']"),
+        "Creando administrador…"
+    );
+
     try {
         const administrador = await crearRegistroUsuario({
             nombre,
@@ -364,6 +369,8 @@ async function registrarAdministradorInicial(evento) {
             error.message,
             "error"
         );
+    } finally {
+        restaurarBoton();
     }
 }
 
@@ -375,8 +382,7 @@ async function iniciarSesion(evento) {
         .getElementById("usuario-login")
         .value;
     const contrasena = document.getElementById("clave-login").value;
-
-    boton.disabled = true;
+    const restaurarBoton = esperarEnBotonPolo(boton, "Ingresando…");
 
     try {
         const usuario = await autenticarUsuario(
@@ -410,7 +416,7 @@ async function iniciarSesion(evento) {
             "error"
         );
     } finally {
-        boton.disabled = false;
+        restaurarBoton();
     }
 }
 
@@ -477,7 +483,7 @@ async function cambiarClaveEnPrimerIngreso(evento) {
         return;
     }
 
-    boton.disabled = true;
+    const restaurarBoton = esperarEnBotonPolo(boton, "Guardando…");
 
     try {
         const usuarios = obtenerUsuarios();
@@ -511,7 +517,7 @@ async function cambiarClaveEnPrimerIngreso(evento) {
             "error"
         );
     } finally {
-        boton.disabled = false;
+        restaurarBoton();
     }
 }
 

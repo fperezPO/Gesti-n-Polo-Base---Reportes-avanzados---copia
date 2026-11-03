@@ -72,7 +72,7 @@ async function manejarImportacionUsuarios(evento) {
     bloquearImportacionUsuarios(true);
     mostrarMensajeImportacionUsuarios(
         `Validando ${archivo.name}…`,
-        ""
+        "cargando"
     );
 
     try {
@@ -337,7 +337,7 @@ async function crearUsuariosImportados(registros) {
         if ((indice + 1) % 10 === 0) {
             mostrarMensajeImportacionUsuarios(
                 `Preparando cuentas: ${indice + 1} de ${registros.length}…`,
-                ""
+                "cargando"
             );
         }
     }
@@ -374,7 +374,12 @@ function mostrarMensajeImportacionUsuarios(texto, tipo) {
         return;
     }
 
-    mensaje.textContent = texto;
+    if (tipo === "cargando") {
+        mostrarEsperaPolo(mensaje, texto);
+    } else {
+        mensaje.textContent = texto;
+    }
+
     mensaje.className = `mensaje ${tipo || ""}`.trim();
 }
 

@@ -737,10 +737,7 @@ async function manejarArchivoReporte(evento) {
     }
 
     bloquearAccionesReportes(true);
-    mostrarMensajeReportes(
-        `Validando ${archivo.name}...`,
-        ""
-    );
+    mostrarMensajeReportes(`Importando ${archivo.name}…`, "cargando");
 
     try {
         const configuracion = obtenerConfiguracionReporteActivo();
@@ -1943,7 +1940,7 @@ async function ejecutarConsultaReportes() {
         if (faltantes.length) {
             const nuevas = await leerImportacionesTraceWis(
                 faltantes,
-                (posicion) => mostrarEstadoConsultaReportes(
+                (posicion) => mostrarCargaConsultaReportes(
                     `Leyendo ${posicion + 1} de ${faltantes.length} ` +
                         `${faltantes.length === 1 ? "archivo" : "archivos"} ` +
                         "del Trace WIS…"
@@ -1952,7 +1949,7 @@ async function ejecutarConsultaReportes() {
             agregarFilasTraceWis(nuevas, faltantes);
         }
 
-        mostrarEstadoConsultaReportes("Calculando indicadores…");
+        mostrarCargaConsultaReportes("Calculando indicadores…");
         // Deja pintar el aviso antes del cálculo, que bloquea la pantalla
         // (con la pestaña en segundo plano no hay cuadros: sigue igual).
         await new Promise((resolve) => {
@@ -1971,7 +1968,7 @@ async function ejecutarConsultaReportes() {
         }
 
         mostrarHistorialImportaciones();
-        mostrarEstadoConsultaReportes("Dibujando el mapa de calor…");
+        mostrarCargaConsultaReportes("Dibujando el mapa de calor…");
         await asegurarMapaReportes();
         return true;
     } catch (error) {
@@ -2171,6 +2168,14 @@ function mostrarEstadoConsultaReportes(texto, esError = false) {
         estado.textContent = texto;
         estado.classList.toggle("error", esError);
     }
+}
+
+/* El avance de una consulta, con la animación de espera. */
+function mostrarCargaConsultaReportes(texto) {
+    const estado = document.getElementById("estado-consulta-reportes");
+
+    estado?.classList.remove("error");
+    mostrarEsperaPolo(estado, texto);
 }
 
 /*
@@ -2380,6 +2385,7 @@ async function exportarIndicadoresReportes(boton) {
     }
 
     boton.disabled = true;
+    mostrarMensajeReportes("Generando el Excel de indicadores…", "cargando");
 
     try {
         await exportarExcel("dashboards");
@@ -2519,6 +2525,8 @@ async function eliminarImportacionReporte(importacionId) {
         return;
     }
 
+    mostrarMensajeReportes("Eliminando la importación…", "cargando");
+
     try {
         await eliminarImportacionDeBase(importacionId);
         // Saca sus filas de memoria y, si hay una consulta a la vista, la rehace.
@@ -2623,7 +2631,13 @@ function mostrarMensajeReportes(texto, tipo) {
     }
 
     clearTimeout(temporizadorMensajeReportes);
-    mensaje.textContent = texto;
+
+    if (tipo === "cargando") {
+        mostrarEsperaPolo(mensaje, texto);
+    } else {
+        mensaje.textContent = texto;
+    }
+
     mensaje.className = `mensaje${tipo ? ` ${tipo}` : ""}`;
 
     if (tipo === "exito") {

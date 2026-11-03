@@ -679,7 +679,7 @@
             const firma = crearFirmaArchivoReporte(archivo);
             if (firmasExistentes.has(firma)) continue;
 
-            avisar(`Cargando datos de demostración de Mezzanine: ${mes} (${numero} de ${totalMeses})…`);
+            avisar(`Cargando datos de demostración de Mezzanine: ${mes} (${numero} de ${totalMeses})…`, "cargando");
             const importacion = {
                 ...crearImportacionReporte(archivo, firma, filas, "", configuracion),
                 esDatoDemo: true,

@@ -483,8 +483,13 @@ function mostrarEstadoCargaMapa3D(texto, esError = false) {
     }
 
     estado.hidden = !texto;
-    estado.textContent = texto;
     estado.classList.toggle("error", esError);
+
+    if (texto && !esError) {
+        mostrarEsperaPolo(estado, texto, false);
+    } else {
+        estado.textContent = texto;
+    }
 }
 
 function cargarLibreriaMapa3D() {

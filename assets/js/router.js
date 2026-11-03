@@ -26,11 +26,19 @@ async function cargarPagina(pagina) {
         return;
     }
 
+    // Si la página tarda en llegar, en lugar de la anterior se ve la animación.
+    const esperaPagina = setTimeout(() => {
+        const aviso = document.createElement("div");
+        aviso.className = "carga-pagina-polo";
+        aviso.append(crearCargadorPolo(false), "Abriendo la página…");
+        contenedor.replaceChildren(aviso);
+    }, 300);
+
     try {
         const respuesta = await fetch(
-            `pages/${pagina}.html?v=20261030-3`,
+            `pages/${pagina}.html?v=20261103-1`,
             { cache: "no-store" }
-        );
+        ).finally(() => clearTimeout(esperaPagina));
 
         if (!respuesta.ok) {
             throw new Error(`No se pudo cargar pages/${pagina}.html`);

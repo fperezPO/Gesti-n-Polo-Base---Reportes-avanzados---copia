@@ -742,6 +742,17 @@ suavemente al cursor, reduce su densidad en pantallas pequeñas, respeta la
 preferencia de movimiento reducido del dispositivo y se detiene mientras la
 aplicación principal está visible.
 
+Las esperas muestran una animación propia, con los colores del logo: tres
+pelotitas que rebotan, gris, verde y gris (`assets/js/cargador.js` y
+`assets/css/cargador.css`). La versión chica acompaña el aviso de lo que se
+está haciendo: la consulta, la importación, el borrado y la exportación de
+Reportes y dashboards, la preparación del mapa de calor, la carga de Inicio,
+la generación de cada Excel, la importación de usuarios y los botones de
+inicio de sesión, contraseña inicial y administrador inicial. La grande se ve
+en el centro de la vista 3D mientras se prepara y en lugar de la página
+anterior cuando una sección tarda más de 300 ms en abrir. Con movimiento
+reducido, las pelotitas se encienden de a una en lugar de rebotar.
+
 ## Exportaciones Excel
 
 Las secciones Inicio, Personal, Usuarios, Gestión de embarques e Inasistencias

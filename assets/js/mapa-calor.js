@@ -829,7 +829,7 @@ function mostrarCargaMapaMezzanine() {
 
     mostrarMensajeMapaCalor(
         "Cargando la estructura de pisos, calles y módulos…",
-        ""
+        "cargando"
     );
 }
 
@@ -2650,6 +2650,11 @@ function mostrarMensajeMapaCalor(texto, tipo) {
         return;
     }
 
-    mensaje.textContent = texto;
+    if (tipo === "cargando") {
+        mostrarEsperaPolo(mensaje, texto);
+    } else {
+        mensaje.textContent = texto;
+    }
+
     mensaje.className = `mensaje${tipo ? ` ${tipo}` : ""}`;
 }
